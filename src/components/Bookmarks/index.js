@@ -7,46 +7,35 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { TextField } from '@material-ui/core';
 import Navigation from '../Navigation';
-import axios from 'axios';
-import { connect } from 'react-redux';
-import { getPosts, addPost } from '../../actions/PostActions';
-import PropTypes from 'prop-types';
 
-class Posts extends Component {
+class Bookmarks extends Component {
     constructor(props) {
         super(props);
         this.state = {
             items: [],
             showAddDialog: false
         }
+        this.toggleAddDialog = this.toggleAddDialog.bind(this);
+        this.addBookmark = this.addBookmark.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
     componentWillMount() {
-        this.props.getPosts();
+        fetch('https://jsonplaceholder.typicode.com/posts')
+        .then(res => res.json())
+        .then(data => this.setState({items: data}));
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.newPost && Object.keys(nextProps.newPost).length !== 0) {
-            this.props.posts.unshift(nextProps.newPost);
-        }
-    }
-
-    toggleAddDialog = () => {
+    toggleAddDialog() {
         this.setState({
             showAddDialog: !this.state.showAddDialog
         })
     }
 
-    addPost = () => {
-        axios.post('https://jsonplaceholder.typicode.com/posts',
-            {userId: 1, title: this.state.title, body: this.state.description})
-        .then(response => this.toggleAddDialog());
-        this.props.addPost({
-            title: this.state.title,
-            body: this.state.description
-        });
+    addBookmark() {
+        console.log(this.state);
     }
 
-    handleChange = (event) => {
+    handleChange(event) {
         this.setState(
             {
                 [event.currentTarget.name]: event.currentTarget.value
@@ -55,7 +44,7 @@ class Posts extends Component {
     }
 
     render() {
-        const listview = this.props.posts.map(item => (
+        const listview = this.state.items.map(item => (
             <div key={item.id}>
             <Link url={item.title} tags={item.body} />
             <br />
@@ -64,12 +53,14 @@ class Posts extends Component {
         return (
             <>
             <Navigation />
-            <div className="boxed">                
-                <button onClick={this.toggleAddDialog} className="primary block"><i className="material-icons">add</i>Add Post</button>
+            <div className="boxed">
+                
+                <button onClick={this.toggleAddDialog} className="primary block"><i className="material-icons">add</i>Add New Bookmark</button>
                 <Dialog open={this.state.showAddDialog} onClose={this.toggleAddDialog} aria-labelledby="form-dialog-title">
-                    <DialogTitle id="form-dialog-title">New Post</DialogTitle>
+                    <DialogTitle id="form-dialog-title">New Bookmark</DialogTitle>
                     <DialogContent>
                         <DialogContentText>
+                            Provide details to create new bookmark. Use tags for better categorization
                         </DialogContentText>
                         <TextField
                             id="outlined-uncontrolled"
@@ -78,6 +69,15 @@ class Posts extends Component {
                             fullWidth
                             variant="outlined"
                             name="title"
+                            onChange={e => this.handleChange(e)}
+                        />
+                        <TextField
+                            id="outlined-uncontrolled"
+                            label="URL"
+                            margin="normal"
+                            name="url"
+                            fullWidth
+                            variant="outlined"
                             onChange={e => this.handleChange(e)}
                         />
                         <TextField
@@ -91,12 +91,21 @@ class Posts extends Component {
                             rows="5"
                             onChange={e => this.handleChange(e)}
                         />
+                        <TextField
+                            id="outlined-uncontrolled"
+                            label="Tags"
+                            margin="normal"
+                            fullWidth
+                            name="tags"
+                            variant="outlined"
+                            onChange={e => this.handleChange(e)}
+                        />
                     </DialogContent>
                     <DialogActions>
                         <button onClick={this.toggleAddDialog} className="primary">
                             Cancel
                         </button>
-                        <button onClick={this.addPost} className="primary block">
+                        <button onClick={this.addBookmark} className="primary block">
                             Add
                         </button>
                     </DialogActions>
@@ -108,16 +117,4 @@ class Posts extends Component {
     }
 }
 
-Posts.propTypes = {
-    getPosts: PropTypes.func.isRequired,
-    addPost: PropTypes.func.isRequired,
-    posts: PropTypes.array.isRequired,
-    newPost: PropTypes.object.isRequired
-}
-
-const mapStateToProps = state => ({
-    posts: state.posts.items,
-    newPost: state.posts.item
-})
-
-export default connect(mapStateToProps, { getPosts, addPost })(Posts);
+export default Bookmarks;

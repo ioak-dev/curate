@@ -4,7 +4,8 @@ import { Provider } from 'react-redux';
 import store from '../../store';
 import './style.scss';
 import Home from '../../components/Home';
-import Posts from '../Posts';
+import Bookmarks from '../Bookmarks';
+import Notes from '../Notes';
 import { HashRouter } from 'react-router-dom/cjs/react-router-dom.min';
 import Login from '../Auth/Login';
 import PrivateRoute from '../Auth/PrivateRoute';
@@ -22,7 +23,8 @@ class App extends Component {
                     <Route exact path="/" component={Home} />
                     <Route path="/home" component={Home} />
                     <Route path="/login" component={Login} />
-                    <PrivateRoute path="/posts" component={Posts}/>
+                    <PrivateRoute path="/bookmarks" component={Bookmarks}/>
+                    <PrivateRoute path="/notes" component={Notes} />
                 </div>
               </div>
             </HashRouter>
