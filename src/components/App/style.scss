@@ -1,43 +1,27 @@
+@import "../../theme.scss";
+
 .App {
   width: 100%;
   margin: auto;
-}
 
-.App .body .content {
-  width: 100%;
-  margin: auto;
-}
-
-@media (min-width: 768px) {
-  .App .body .content .boxed {
-    width: 60%;
+  .body .content {
+    width: 100%;
     margin: auto;
+    .boxed {
+      min-height: 100vh;
+      padding-top: 100px;
+      padding-bottom: 40px;
+
+      @media (min-width: 768px) {
+        width: 60%;
+        margin: auto;
+      }
+      @media (max-width: 767px) {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+    }
   }
-}
-@media (max-width: 767px) {
-  .App .body .content .boxed {
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-}
-
-.App .body .content .boxed {
-  min-height: 100vh;
-  padding-top: 100px;
-  padding-bottom: 40px;
-}
-
-.footer {
-  padding: 5px;
-  background-color: #9EA0AA;
-  color: white;
-  text-align: right;
-}
-
-button .material-icons {
-  vertical-align: bottom;
-  font-size: 20px;
-  margin-right: 5px;
 }
 
 button {
@@ -46,46 +30,45 @@ button {
   font-size: 1em;
   padding: 0.5em 0.5em;
   background: transparent;
-  color: var(--color-darkgrey);
-  border: 2px solid var(--color-darkgrey);
-}
+  color: $larcDarkgrey;
+  border: 2px solid $larcDarkgrey;
+  
+  &.primary {
+    color: $larcPrimary;
+    border: 2px solid $larcPrimary;
+  }
+  &.secondary {
+    color: $larcSecondary;
+    border: 2px solid $larcSecondary;
+  }
+  &.accent {
+    color: $larcAccent;
+    border: 2px solid $larcAccent;
+  }
+  &.block {
+    background-color: $larcWhite;
+    color: $larcWhite;
+    &.primary {
+      background-color: $larcPrimary;
+    }
+    &.secondary {
+      background-color: $larcSecondary;
+    }
+    &.accent {
+      background-color: $larcAccent;
+    }    
+  }
 
-button.primary {
-  color: var(--color-primary);
-  border: 2px solid var(--color-primary);
-}
+  &.icon {
+    font-size: 0.8em;
+    padding: 0em 0em;
+    background: transparent;
+    border: none;
+  }
 
-button.secondary {
-  color: var(--color-secondary);
-  border: 2px solid var(--color-secondary);
-}
-
-button.accent {
-  color: var(--color-accent);
-  border: 2px solid var(--color-accent);
-}
-
-button.block {
-  background-color: var(--color-white);
-  color: var(--color-white);
-  border: none;
-}
-
-button.block.primary {
-  background-color: var(--color-primary);
-}
-
-button.block.secondary {
-  background-color: var(--color-secondary);
-}
-
-button.block.accent {
-  background-color: var(--color-accent);
-}
-
-button.icon {
-  font-size: 0.8em;
-  padding: 0em 0em;
-  background: transparent;
-  border: none;
+  .material-icons {
+    vertical-align: bottom;
+    font-size: 20px;
+    margin-right: 5px;
+  }
 }

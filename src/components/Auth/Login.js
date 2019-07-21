@@ -25,6 +25,11 @@ class Login extends Component {
         this.success();
     }
 
+    signup = () => {
+        // Real signup
+        // this.success();
+    }
+
     success = () => {
         this.props.addAuth({
             isAuth: true,
@@ -133,7 +138,7 @@ class Login extends Component {
                             />
                         </div>
                         <br />
-                        <button className="primary block"  onClick={this.login}>Create account</button>
+                        <button className="primary block"  onClick={this.signup}>Create account</button>
                         <br /><br />
                         Already have a account? &nbsp; <button className="secondary"  onClick={this.toggle}>Sign In</button>
                     </div>}

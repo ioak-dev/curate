@@ -7,60 +7,78 @@
     -o-background-size: cover;
     background-size: cover;
     animation: slide 60s linear infinite;
-}
 
-.home .container {
-    // padding: 100px;
-    padding-top: 70px;
-}
+    .container {
+        // padding: 100px;
+        padding-top: 70px;
 
-.home .container .section1, .home .container .section5 {
-    height: calc(100vh - 70px);
-    background-color: rgba(161, 94, 73, 0.4);
-    display: grid;
-    align-content: center;
-    justify-content: right;
-    text-align: right;
-    padding-right: 50px;
-    font-size: 2rem;
-    color: white;
-}
+        .navitem {
+            text-decoration: none;
+            color: var(--color-primary);
+        }
 
-.home .container .section2, .home .container .section6 {
-    height: 100vh;
-    background-color: rgba(137, 2, 62, 0.3);
-    display: grid;
-    align-content: center;
-    justify-content: left;
-    padding-left: 50px;
-    font-size: 2rem;
-    color: white;
-}
+        .section {
+            height: calc(100vh - 70px);
+            display: grid;
+            align-content: center;
+            font-size: 2rem;
+            color: white;
 
-.home .container .section3, .home .container .section7 {
-    height: 100vh;
-    background-color: rgba(115, 147, 126, 0.6);
-    display: grid;
-    align-content: center;
-    justify-content: right;
-    text-align: right;
-    padding-right: 50px;
-    font-size: 2rem;
-    color: white;
-}
+            &.one {
+                background-color: rgba(161, 94, 73, 0.4);
+                text-align: right;
+                justify-content: right;
+                padding-right: 50px;
+            }
 
-.home .container .section4, .home .container .section8 {
-    height: 100vh;
-    background-color: rgba(49, 24, 71, 0.4);
-    display: grid;
-    align-content: center;
-    justify-content: left;
-    padding-left: 50px;
-    font-size: 2rem;
-    color: white;
-}
+            &.two {
+                background-color: rgba(137, 2, 62, 0.3);
+                text-align: left;
+                justify-content: left;
+                padding-left: 50px;
+            }
 
-.home .container .navitem {
-    text-decoration: none;
-    color: var(--color-primary);
-}
+            &.three {
+                background-color: rgba(115, 147, 126, 0.4);
+                text-align: right;
+                justify-content: right;
+                padding-right: 50px;
+            }
+
+            &.four {
+                background-color: rgba(49, 24, 71, 0.4);
+                text-align: left;
+                justify-content: left;
+                padding-left: 50px;
+            }
+
+            &.five {
+                background-color: rgba(161, 94, 73, 0.4);
+                text-align: right;
+                justify-content: right;
+                padding-right: 50px;
+            }
+
+            &.six {
+                background-color: rgba(137, 2, 62, 0.3);
+                text-align: left;
+                justify-content: left;
+                padding-left: 50px;
+            }
+
+            &.seven {
+                background-color: rgba(115, 147, 126, 0.4);
+                text-align: right;
+                justify-content: right;
+                padding-right: 50px;
+            }
+
+            &.eight {
+                background-color: rgba(49, 24, 71, 0.4);
+                text-align: left;
+                justify-content: left;
+                padding-left: 50px;
+            }
+        }
+    }    
+} 

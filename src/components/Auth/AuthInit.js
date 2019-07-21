@@ -5,10 +5,6 @@ import PropTypes from 'prop-types';
 import {withCookies} from 'react-cookie';
 
 class AuthInit extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     componentWillMount() {
         if (!this.props.authorization.isAuth && this.props.cookies.get('isAuth')) {
             this.props.addAuth({

@@ -49,6 +49,8 @@ class Navigation extends Component {
                             <>
                             <NavLink to="/bookmarks" className="navitem" activeClassName="active">Bookmarks</NavLink>
                             <NavLink to="/notes" className="navitem" activeClassName="active">Notes</NavLink>
+                            <NavLink to="/settings" className="navitem" activeClassName="active">Settings</NavLink>
+                            <NavLink to="/help" className="navitem" activeClassName="active">Help</NavLink>
                             </>
                         }
                     </div>
@@ -84,7 +86,9 @@ class Navigation extends Component {
                             {this.props.authorization.isAuth && 
                                 <>
                                 <NavLink to="/bookmarks" className="navitem" activeClassName="active"><p><i className="material-icons">bookmarks</i>Bookmarks</p></NavLink><br />
-                                <NavLink to="/notes" className="navitem" activeClassName="active"><p><i className="material-icons">note</i>Notes</p></NavLink>
+                                <NavLink to="/notes" className="navitem" activeClassName="active"><p><i className="material-icons">note</i>Notes</p></NavLink><br />
+                                <NavLink to="/settings" className="navitem" activeClassName="active"><p><i className="material-icons">note</i>Settings</p></NavLink><br />
+                                <NavLink to="/help" className="navitem" activeClassName="active"><p><i className="material-icons">note</i>Help</p></NavLink>
                                 </>
                             }
                         </div>

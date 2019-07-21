@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Redirect } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from '../../store';
 import './style.scss';
