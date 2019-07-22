@@ -6,9 +6,9 @@ import {withCookies} from 'react-cookie';
 
 import './style.scss';
 import { NavLink } from 'react-router-dom';
-import logo_white from '../../images/placeholder-white.svg';
-import logo_white2 from '../../images/placeholder-white2.svg';
-import logo_black2 from '../../images/placeholder-black2.svg';
+import ioak_white from '../../images/ioak_white.svg';
+import curate_white from '../../images/curate_white.svg';
+import curate_black from '../../images/curate_black.svg';
 
 class Navigation extends Component {
     constructor(props) {
@@ -42,7 +42,7 @@ class Navigation extends Component {
         return (
             <div className="nav">
                 <div className={(this.props.transparent ? "navbar transparent" : "navbar")}>
-                    <div className="logo"><img src={logo_white2} alt="IOAK logo" /></div>
+                    <div className="logo"><img src={curate_white} alt="IOAK logo" /></div>
                     <div className="leftnav">
                         {/* <NavLink to="/home" className="navitem" activeClassName="active">Home</NavLink> */}
                         {this.props.authorization.isAuth &&
@@ -55,7 +55,7 @@ class Navigation extends Component {
                         }
                     </div>
                     <div className="rightlogo">
-                        <div className="logo"><img src={logo_white} alt="IOAK logo" /></div>
+                        <div className="logo"><img src={ioak_white} alt="IOAK logo" /></div>
                     </div>
                     <div className="rightnav">
                         <div className="auth">
@@ -72,7 +72,7 @@ class Navigation extends Component {
                     <div className={(this.state.visible ? "slider show" : "slider hide")} onClick={this.toggleMenu}>
                         <div className={(this.state.visible ? "": "hidetext")} onClick={this.toggleMenu}>
                             <div className="header">
-                                <div className="logo"><img src={logo_black2} alt="IOAK logo" /></div>
+                                <div className="logo"><img src={curate_black} alt="IOAK logo" /></div>
                                                                     
                             <div className="authheader">
                                     {this.props.authorization.isAuth && <div className="label">Log Out</div>}
