@@ -2,6 +2,8 @@ import { GET_AUTH, ADD_AUTH, REMOVE_AUTH } from '../actions/types';
 
 const initialState = {
     isAuth: false,
+    token: '',
+    secret: '',
     firstname: '',
     lastname: ''
 }
@@ -25,6 +27,8 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 isAuth: false,
+                token: '',
+                secret: '',
                 firstname: '',
                 lastname: ''
             };

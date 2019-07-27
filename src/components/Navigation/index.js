@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getAuth, addAuth, removeAuth } from '../../actions/AuthActions';
+import { addNotification } from '../../actions/NotificationActions';
 import PropTypes from 'prop-types';
 import {withCookies} from 'react-cookie';
+import Notification from '../Notification';
 
 import './style.scss';
 import { NavLink } from 'react-router-dom';
@@ -36,6 +38,11 @@ class Navigation extends Component {
     logout = () => {
         this.props.removeAuth();
         this.props.cookies.remove('isAuth');
+        this.props.cookies.remove('token');
+        this.props.cookies.remove('secret');
+        this.props.cookies.remove('firstname');
+        this.props.cookies.remove('lastname');
+        this.props.addNotification('success', 'You have been logged out', 3000);
     }
 
     render() {
@@ -102,6 +109,7 @@ class Navigation extends Component {
                         </div>
                     </div>
                 </div>
+                <Notification />
             </div>
         );
     }
@@ -109,6 +117,7 @@ class Navigation extends Component {
 
 
 Navigation.propTypes = {
+    addNotification: PropTypes.func.isRequired,
     getAuth: PropTypes.func.isRequired,
     addAuth: PropTypes.func.isRequired,
     removeAuth: PropTypes.func.isRequired,
@@ -119,4 +128,4 @@ const mapStateToProps = state => ({
     authorization: state.authorization
 })
 
-export default connect(mapStateToProps, { getAuth, addAuth, removeAuth })(withCookies(Navigation));
+export default connect(mapStateToProps, { getAuth, addAuth, removeAuth, addNotification })(withCookies(Navigation));

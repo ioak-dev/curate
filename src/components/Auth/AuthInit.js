@@ -9,8 +9,10 @@ class AuthInit extends Component {
         if (!this.props.authorization.isAuth && this.props.cookies.get('isAuth')) {
             this.props.addAuth({
                 isAuth: true,
-                firstname: 'Arun Kumar',
-                lastname: 'Selvaraj'
+                token: this.props.cookies.get('token'),
+                secret: this.props.cookies.get('secret'),
+                firstname: this.props.cookies.get('firstname'),
+                lastname: this.props.cookies.get('lastname')
             });
         }
         this.props.getAuth();
