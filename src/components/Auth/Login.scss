@@ -1,10 +1,9 @@
 .login {
     height: 100vh;
-    // background: url('../../images/login_bg8.jpg') no-repeat center center fixed; 
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
+    @media (min-width: 768px) {
+        background: url('../../images/login_bg.jpg') no-repeat center center;
+        background-size: cover;
+    }
 
     .container {
         .form {

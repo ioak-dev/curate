@@ -1,84 +1,143 @@
 .home {
     height: 100vh;
-    // height: 807vh;
-    // background: url('../../images/login_bg8.jpg') no-repeat center center fixed; 
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-    animation: slide 60s linear infinite;
+    overflow-x: hidden;
+    overflow-y: auto;
+    perspective: 2.2px;
 
-    .container {
-        // padding: 100px;
-        padding-top: 70px;
+    .section {
+        /* Needed for children to be absolutely positioned relative to the parent. */
+        position: relative;
+        height: 100vh;
 
-        .navitem {
-            text-decoration: none;
-            color: var(--color-primary);
+        /* For text formatting. */
+        display: grid;
+        color: white;
+        align-content: center;
+
+        @media (max-width: 767px) {
+            font-size: 1rem;
         }
 
-        .section {
-            height: calc(100vh - 70px);
-            display: grid;
-            align-content: center;
-            font-size: 2rem;
-            color: white;
+        @media (min-width: 768px) {
+            font-size: 1.5rem;
+        }
 
-            &.one {
-                background-color: rgba(161, 94, 73, 0.4);
-                text-align: right;
-                justify-content: right;
-                padding-right: 50px;
+        &.parallax::after {
+            /* Display and position the pseudo-element */
+            content: " ";
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+          
+            /* Move the pseudo-element back away from the camera,
+             * then scale it back up to fill the viewport.
+             * Because the pseudo-element is further away, it appears to move more slowly, like in real life. */
+            transform: translateZ(-1px) scale(1.5);
+            /* Force the background image to fill the whole element. */
+            background-size: 100%;
+            /* Keep the image from overlapping sibling elements. */
+            z-index: -1;
+        }
+
+        &.static {
+            height: 55vh;
+
+            @media (max-width: 767px) {
+                padding-left: 1em;
+                padding-right: 1em;
             }
 
-            &.two {
-                background-color: rgba(137, 2, 62, 0.3);
-                text-align: left;
-                justify-content: left;
-                padding-left: 50px;
-            }
+            @media (min-width: 768px) {
+                &.odd {
+                    justify-content: right;
+                    padding-right: 50px;
+                }
 
-            &.three {
-                background-color: rgba(115, 147, 126, 0.4);
-                text-align: right;
-                justify-content: right;
-                padding-right: 50px;
+                &.even {
+                    justify-content: left;
+                    padding-left: 50px;
+                }
             }
-
-            &.four {
-                background-color: rgba(49, 24, 71, 0.4);
-                text-align: left;
-                justify-content: left;
-                padding-left: 50px;
+            
+            &.bg1 {
+                background: #9b2b41; //713f54 202649
             }
-
-            &.five {
-                background-color: rgba(161, 94, 73, 0.4);
-                text-align: right;
-                justify-content: right;
-                padding-right: 50px;
+            
+            &.bg2 {
+                background: rgb(30, 109, 182);
             }
-
-            &.six {
-                background-color: rgba(137, 2, 62, 0.3);
-                text-align: left;
-                justify-content: left;
-                padding-left: 50px;
+            
+            &.bg3 {
+                background: #78583c;
             }
-
-            &.seven {
-                background-color: rgba(115, 147, 126, 0.4);
-                text-align: right;
-                justify-content: right;
-                padding-right: 50px;
+            
+            &.bg4 {
+                background: #b99d35;
             }
-
-            &.eight {
-                background-color: rgba(49, 24, 71, 0.4);
-                text-align: left;
-                justify-content: left;
-                padding-left: 50px;
+            
+            &.bg5 {
+                background: #721f0d;
+            }
+            
+            &.bg6 {
+                background: #323232;
+            }
+            
+            &.bg7 {
+                background: #dd7568;
+            }
+            
+            &.bg8 {
+                background: #0a3b5a;
             }
         }
-    }    
-} 
+
+        &.parallax {
+            &.bg1::after {
+                background: url('../../images/home_bg1.jpg') no-repeat center center;
+                background-size: cover;
+            }
+            
+            &.bg2::after {
+                background: url('../../images/home_bg2.jpg') no-repeat center center;
+                background-size: cover;
+            }
+            
+            &.bg3::after {
+                background: url('../../images/home_bg3.jpg') no-repeat center center;
+                background-size: cover;
+            }
+            
+            &.bg4::after {
+                background: url('../../images/home_bg4.jpg') no-repeat center center;
+                background-size: cover;
+            }
+            
+            &.bg5::after {
+                background: url('../../images/home_bg5.jpg') no-repeat center center;
+                background-size: cover;
+            }
+            
+            &.bg6::after {
+                background: url('../../images/home_bg6.jpg') no-repeat center center;
+                background-size: cover;
+            }
+            
+            &.bg7::after {
+                background: url('../../images/home_bg7.jpg') no-repeat center center;
+                background-size: cover;
+            }
+            
+            &.bg8::after {
+                background: url('../../images/home_bg8.jpg') no-repeat center center;
+                background-size: cover;
+            }
+        }
+}
+}
+
+
+  
+  
