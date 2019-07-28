@@ -103,7 +103,7 @@ class Login extends Component {
     render() {
         return (
             <>
-                <Navigation />
+                <Navigation transparent />
                 <div className="login">
                     {!this.state.newuser && <div className="container">
                         <h1>Log In</h1>

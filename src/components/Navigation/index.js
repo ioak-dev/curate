@@ -68,7 +68,7 @@ class Navigation extends Component {
                         <div className="auth">
                             {this.props.authorization.isAuth && <div className="label">{this.props.authorization.firstname}</div>}
                             {!this.props.authorization.isAuth && <div className="label">Log In</div>}
-                            {!this.props.authorization.isAuth && <NavLink to="/login" className="navitem" activeClassName="active"><i className="material-icons">fingerprint</i></NavLink>}
+                            {!this.props.authorization.isAuth && <NavLink to="/login" className="navitem" activeClassName="active"><i className="material-icons">face</i></NavLink>}
                             {this.props.authorization.isAuth && <button className="icon primary" onClick={this.logout}><i className="material-icons">power_settings_new</i></button>}
                         </div>
                         <div className="mobilemenu" onMouseUp={this.toggleMenu}><i className="material-icons">menu</i></div>
@@ -84,7 +84,7 @@ class Navigation extends Component {
                             <div className="authheader">
                                     {this.props.authorization.isAuth && <div className="label">Log Out</div>}
                                     {!this.props.authorization.isAuth && <div className="label">Log In</div>}
-                                    {!this.props.authorization.isAuth && <NavLink to="/login" className="navitem" activeClassName="active"><i className="material-icons">fingerprint</i></NavLink>}
+                                    {!this.props.authorization.isAuth && <NavLink to="/login" className="navitem" activeClassName="active"><i className="material-icons">face</i></NavLink>}
                                     {this.props.authorization.isAuth && <button className="icon primary" onClick={this.logout}><i className="material-icons">power_settings_new</i></button>}
                             </div>
                             </div>
