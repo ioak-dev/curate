@@ -1,22 +1,18 @@
 {
   "files": {
-    "main.css": "/static/css/main.c565485a.chunk.css",
-    "main.js": "/static/js/main.35ea36e2.chunk.js",
-    "main.js.map": "/static/js/main.35ea36e2.chunk.js.map",
+    "main.css": "/static/css/main.9bcf7c3b.chunk.css",
+    "main.js": "/static/js/main.5409b6b6.chunk.js",
+    "main.js.map": "/static/js/main.5409b6b6.chunk.js.map",
     "runtime~main.js": "/static/js/runtime~main.a8a9905a.js",
     "runtime~main.js.map": "/static/js/runtime~main.a8a9905a.js.map",
-    "static/js/2.731264d2.chunk.js": "/static/js/2.731264d2.chunk.js",
-    "static/js/2.731264d2.chunk.js.map": "/static/js/2.731264d2.chunk.js.map",
+    "static/js/2.70970361.chunk.js": "/static/js/2.70970361.chunk.js",
+    "static/js/2.70970361.chunk.js.map": "/static/js/2.70970361.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.4d1afa857b635c8f78bb7653de98cfae.js": "/precache-manifest.4d1afa857b635c8f78bb7653de98cfae.js",
+    "precache-manifest.70be46ba9e12ea379c67c5d25de0cef8.js": "/precache-manifest.70be46ba9e12ea379c67c5d25de0cef8.js",
     "service-worker.js": "/service-worker.js",
-    "static/css/main.c565485a.chunk.css.map": "/static/css/main.c565485a.chunk.css.map",
-    "static/media/curate_black.svg": "/static/media/curate_black.0f37524c.svg",
-    "static/media/curate_white.svg": "/static/media/curate_white.e95d48fd.svg",
-    "static/media/developers1.jpg": "/static/media/developers1.b75ace5c.jpg",
-    "static/media/developers2.jpg": "/static/media/developers2.cf83e454.jpg",
-    "static/media/style.scss": "/static/media/home_bg8.1833fa83.jpg",
-    "static/media/ioak_white.svg": "/static/media/ioak_white.39c878d7.svg",
-    "static/media/Login.scss": "/static/media/login_bg.3b48b22e.jpg"
+    "static/css/main.9bcf7c3b.chunk.css.map": "/static/css/main.9bcf7c3b.chunk.css.map",
+    "static/media/curate_black.svg": "/static/media/curate_black.af4a349c.svg",
+    "static/media/curate_white.svg": "/static/media/curate_white.ef310ed4.svg",
+    "static/media/ioak_white.svg": "/static/media/ioak_white.a3c6036a.svg"
   }
 }
