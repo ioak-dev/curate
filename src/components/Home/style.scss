@@ -1,6 +1,7 @@
 @import '../../theme.scss';
 
 .home {
+    font-family: 'Open Sans', sans-serif;
     height: 100vh;
     overflow-x: hidden;
     overflow-y: auto;
@@ -94,11 +95,68 @@
             }
             
             &.bg7 {
-                background: #dd7568;
+                background: #45718c; //dd7568
             }
             
             &.bg8 {
                 background: #0a3b5a;
+            }
+        }
+
+        &.developers {
+
+            height: auto;
+            // min-height: 100vh;
+            padding-top: 1em;
+            padding-bottom: 1em;
+
+            .headline {
+                display: flex;
+                font-size: 1.6em;
+                justify-content: center;
+            }
+            
+            .container {                    
+                display: grid;
+                
+                @media (min-width: 768px) {
+                    grid-template-columns: 1fr 1fr;
+                }
+                @media (max-width: 767px) {
+                    grid-template-columns: 1fr;
+                }
+
+                img {
+                    border-radius: 50%;
+                    width: 10em;
+                }
+
+                .contact {
+                    display: grid;
+                    justify-items: center;
+                    padding-top: 2em;
+                    padding-bottom: 2em;
+
+                    .name {
+                        font-size: 2em;
+                    }
+
+                    .tag {
+                        font-size: 1.2em;
+                        color: $larcSecondary;
+                    }
+
+                    .description {
+                        padding-top: 1em;
+                        width: 60%;
+                        font-size: 0.8em;
+                        text-align: justify;
+
+                        @media (max-width: 767px) {
+                            width: 90%;
+                        }
+                    }
+                }
             }
         }
 

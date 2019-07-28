@@ -3,7 +3,7 @@ import { TextField } from '@material-ui/core';
 import PropTypes from 'prop-types';
 
 function ArcTextField(props) {
-    const { id, label, value, handleChange, error, rows, multiline } = props;
+    const { id, label, value, handleChange, error, rows, multiline, ...rest } = props;
     return (
         <TextField
                 id={id}
@@ -17,6 +17,7 @@ function ArcTextField(props) {
                 error={error}
                 multiline={multiline}
                 rows={rows}
+                {...rest}
                 />
     )
 }

@@ -103,13 +103,14 @@ class Login extends Component {
     render() {
         return (
             <>
-                <Navigation transparent />
                 <div className="login">
+                <div className="nav-trans"><Navigation transparent /></div>
+                <div className="nav-block"><Navigation /></div>
                     {!this.state.newuser && <div className="container">
                         <h1>Log In</h1>
                         <div className="form">
                             <ArcTextField label="Username" id="username" handleChange={e => this.handleChange(e)} />
-                            <ArcTextField label="Password" id="password" handleChange={e => this.handleChange(e)} />
+                            <ArcTextField label="Password" id="password" type="password" handleChange={e => this.handleChange(e)} />
                         </div>
                         <br />
                         <button className="primary block"  onClick={this.signin}>Sign In</button>
@@ -123,7 +124,7 @@ class Login extends Component {
                             <ArcTextField label="First name" id="firstname" handleChange={e => this.handleChange(e)} />
                             <ArcTextField label="Last name" id="lastname" handleChange={e => this.handleChange(e)} />
                             <ArcTextField label="Username" id="username" handleChange={e => this.handleChange(e)} />
-                            <ArcTextField label="Password" id="password" handleChange={e => this.handleChange(e)} />
+                            <ArcTextField label="Password" id="password" type="password" handleChange={e => this.handleChange(e)} />
                             <ArcTextField label="Email" id="email" handleChange={e => this.handleChange(e)} />
                         </div>
                         <br />

@@ -1,11 +1,32 @@
+@import '../../theme.scss';
+
 .login {
     height: 100vh;
     @media (min-width: 768px) {
         background: url('../../images/login_bg.jpg') no-repeat center center;
         background-size: cover;
+
+        .nav-trans {
+            display: block;
+        }
+        .nav-block {
+            display: none;
+        }
+    }
+
+    @media (max-width: 767px) {
+        .nav-trans {
+            display: none;
+        }
+        .nav-block {
+            display: block;
+        }
     }
 
     .container {
+        background: $larcWhite;
+        position: absolute;
+
         .form {
             width: 15rem;
             display: grid;
@@ -13,21 +34,18 @@
         }
 
         @media (max-width: 767px) {
-            background: white;
             padding-bottom: 30px;
             padding-left: 10%;
             padding-right: 10%;
             margin-top: 100px;
             width: 80%;
-            position: absolute;
         }
 
         @media (min-width: 768px) {
-            background: white;
+            opacity: 0.9;
             padding: 30px;
             padding-left: 50px;
             padding-right: 50px;
-            position: absolute;
             top: 50%;
             left: 50%;
             -ms-transform: translateX(-50%) translateY(-50%);

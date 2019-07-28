@@ -2,6 +2,8 @@ import React from 'react';
 import Navigation from '../Navigation';
 import { NavLink } from 'react-router-dom';
 import './style.scss';
+import developers1 from '../../images/developers1.jpg';
+import developers2 from '../../images/developers2.jpg';
 
 export default class Home extends React.Component {
   render() {
@@ -51,14 +53,32 @@ export default class Home extends React.Component {
 
           <div className="section parallax bg7" />
           <div className="section static bg7 odd">
-            <h3>Tip of the iceberg</h3>
+            <h3>Travel to the future</h3>
             <p>We are evolving for the future. More features on the way. You can watch our roadmap here</p>
           </div>
 
           <div className="section parallax bg8" />
-          <div className="section static bg8 even">
-            <h3>Are you ready? Put your seat belts on</h3>
-            <p><NavLink to="/login" className="navitem" activeClassName="active">Sign up</NavLink>&nbsp;for free</p>
+          <div className="section static developers bg8">
+            <div className="headline">Meet the creators</div>
+            <div className="container">
+              <div className="contact">
+                <img src={developers2} alt="Avatar" />
+                <div className="name">Amarandra Sahoo</div>
+                <div className="tag">Backend implementation</div>
+                <div className="description">
+                  <p>Nam ipsum tortor, pellentesque et sollicitudin vel, rutrum vel est. In venenatis enim nec justo rhoncus congue sed sed dolor. Morbi sagittis mauris a elementum euismod. Maecenas orci nibh, venenatis vitae felis convallis, interdum tincidunt tortor</p>
+                </div>
+              </div>
+              <div className="contact">
+                <img src={developers1} alt="Avatar" />
+                <div className="name">Arun Kumar Selvaraj</div>
+                <div className="tag">Frontend implementation</div>
+                <div className="description">
+                  {/* <p>Nam ipsum tortor, pellentesque et sollicitudin vel, rutrum vel est. In venenatis enim nec justo rhoncus congue sed sed dolor. Morbi sagittis mauris a elementum euismod. Maecenas orci nibh, venenatis vitae felis convallis, interdum tincidunt tortor</p> */}
+                  <p>Nam ipsum tortor, pellentesque et sollicitudin vel, rutrum vel est. In venenatis enim nec justo rhoncus congue sed sed dolor. Morbi sagittis mauris a elementum euismod. Maecenas orci nibh, venenatis vitae felis convallis, interdum tincidunt tortor</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </>
