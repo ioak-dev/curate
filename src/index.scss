@@ -1,3 +1,4 @@
+@import './theme.scss';
 @import url('https://fonts.googleapis.com/css?family=Lato|Open+Sans&display=swap');
 
 * {
@@ -12,7 +13,7 @@ body {
 
 .body {
   font-family: 'Lato', sans-serif;
-  background-color: var(--color-body);
+  background-color: $larcBody;
 }
 
 code {
@@ -26,14 +27,14 @@ code {
   /* --color-accent: #EF5B5B; */
   /* --color-accent: #9B5094; */
   
-  --color-nav: #2a2e45;
-  --color-nav-variant: #505466;
-  --color-primary: #EF5B5B;
-  --color-secondary: #1B998B;
-  --color-accent: #9B5094;
-  --color-darkgrey: darkgrey;
-  --color-grey: grey;
-  --color-white: white;
+  // --color-nav: #2a2e45;
+  // --color-nav-variant: #505466;
+  // --color-primary: #EF5B5B;
+  // --color-secondary: #1B998B;
+  // --color-accent: #9B5094;
+  // --color-darkgrey: darkgrey;
+  // --color-grey: grey;
+  // --color-white: white;
   /* --color-body: #FCFCFC; */
   /* --color-primary: #fff; */
 }

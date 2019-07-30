@@ -7,6 +7,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { TextField } from '@material-ui/core';
 import Navigation from '../Navigation';
+import './style.scss';
 
 class Bookmarks extends Component {
     constructor(props) {
@@ -53,11 +54,12 @@ class Bookmarks extends Component {
         return (
             <>
             <Navigation />
-            <div className="boxed">
+            <div className="bookmarks boxed">
                 
                 <button onClick={this.toggleAddDialog} className="primary block"><i className="material-icons">add</i>Add New Bookmark</button>
                 <Dialog open={this.state.showAddDialog} onClose={this.toggleAddDialog} aria-labelledby="form-dialog-title">
-                    <DialogTitle id="form-dialog-title">New Bookmark</DialogTitle>
+                    <div  className="dialog-container dark">
+                    <DialogTitle>New Bookmark</DialogTitle>
                     <DialogContent>
                         <DialogContentText>
                             Provide details to create new bookmark. Use tags for better categorization
@@ -109,6 +111,7 @@ class Bookmarks extends Component {
                             Add
                         </button>
                     </DialogActions>
+                    </div>
                 </Dialog>
                 {listview}
             </div>

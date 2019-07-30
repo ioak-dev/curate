@@ -4,22 +4,26 @@
     font-family: 'Open Sans', sans-serif;
 
     .navbar {
-        background-color: $larcNav;
+        background-color: var(--color-nav);
         display: grid;
-        grid-template-columns: 1fr 14fr 1fr 3fr;
+        grid-template-columns: 1fr 14fr auto auto;
         align-items: center;
         justify-content: center;
         font-size: calc(10px + 2vmin);
-        color: white;
+        // color: white;
         height: 70px;
         position: fixed;
         width: 100%;
         // box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 2px 6px 0 rgba(0, 0, 0, 0.19);
-        box-shadow: inset 0 -1px 0 0 rgba(0, 0, 0, 0.2), 0 1px 5px rgba(0,0,0,0.19);
+        // box-shadow: inset 0 -1px 0 0 rgba(0, 0, 0, 0.2), 0 1px 5px rgba(0,0,0,0.19);
+        box-shadow: 0 0 5px rgba(0,0,0,.15);
+        border-bottom: 1px solid #c8c8c8;
         z-index:1;
         
         &.transparent {
             background-color: transparent;
+            box-shadow: none;
+            border-bottom: none;
         }
 
         .logo  {
@@ -56,11 +60,6 @@
                 align-items: center;
                 font-size: 0.75em;
 
-                .material-icons {
-                    font-size: 2em;
-                    color: $larcPrimary;
-                }
-
                 @media (max-width: 767px) {
                     display: none;
                 }
@@ -69,7 +68,7 @@
 
         a {
             text-decoration: none;
-            color: #fcfcfc;
+            color: $larcNavText;
             font-size: 80%;
         }
 
@@ -88,13 +87,12 @@
             .navitem{
                 &.active {
                     padding-top: 50px;
-                    color: white;
-                    background-color: $larcPrimary !important;
-                    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 2px 0 rgba(0, 0, 0, 0.19);
+                    background-color: $larcNavActive !important;
+                    // box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 2px 0 rgba(0, 0, 0, 0.19);
                 }
                 &:hover {
                     padding-top: 50px;
-                    background-color: $larcNavVariant;
+                    background-color: $larcNavHover;
                 }
             }
             @media (max-width: 767px) {
@@ -112,6 +110,20 @@
             @media (min-width: 768px) {
                 display: none;
             }
+        }
+    }
+
+    .signin  {
+        display: grid;
+        margin-right: 3vh;
+        margin-left: 1vh;
+        cursor: pointer;
+
+        img {
+            height: 30px;
+            width: auto;
+            display: grid;
+            align-items: center;
         }
     }
 
@@ -153,18 +165,18 @@
             align-items: center;
             height: 70px;
             
-            .material-icons {
-                @media (max-width: 767px) {
-                    color: $larcPrimary;
-                    font-size: 34px;
-                    margin: 0px;
-                }
-            }
+            // .material-icons {
+            //     @media (max-width: 767px) {
+            //         color: $larcNavActive;
+            //         font-size: 34px;
+            //         margin: 0px;
+            //     }
+            // }
         }
         a {
             text-decoration: none;
-            color: #fcfcfc;
-            font-size: 80%;
+            // color: #fcfcfc;
+            // font-size: 80%;
         }
         .navitem {
             margin-right: 10px;
@@ -191,22 +203,22 @@
 
             &.active {
                 p {
-                    color: $larcPrimary;
+                    color: $larcNavActive;
                 }
             }
 
-            .material-icons{
-                &:hover {
-                    color: $larcPrimary;
-                }
-            }
+            // .material-icons{
+            //     &:hover {
+            //         color: $larcNavActive;
+            //     }
+            // }
         }
         .slider {
             display: grid;
             grid-template-rows: 10fr 1fr;
             height: 100vh;
             width: 60vw;
-            background-color: white;
+            background-color: $larcNavSlider;
             position: fixed;
             box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
     
@@ -220,7 +232,7 @@
                 justify-content: center;
                 align-items: flex-end;
                 margin-bottom: 0.5em;
-                color: var(--color-grey);
+                color: $larcGrey;
             }
 
             &.hide {
@@ -236,11 +248,6 @@
 
         .hidetext {
             display: none;
-        }
-
-        h1 {
-            font-size: 3rem;
-            font-weight: 200;
         }
     }
 }

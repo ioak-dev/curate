@@ -1,8 +1,18 @@
-$larcNav: #2a2e45;
-$larcNavVariant: #505466;
-$larcPrimary: #EF5B5B;
+$larcBody: #f5f5f5;
+$larcPrimary: #F19F4D;
 $larcSecondary: #1B998B;
 $larcAccent: #9B5094;
+$larcLightgrey: darkgrey;
 $larcDarkgrey: darkgrey;
 $larcGrey: grey;
 $larcWhite: white;
+$larcSuccess: #6ABC65;
+$larcWarning: #49A078;
+$larcFailure: #BF2A3D;
+
+$larcNav: white;
+// $larcNav: #2a2e45;
+$larcNavText: black;
+$larcNavHover: rgba(239, 91, 91, 0.1);
+$larcNavActive: $larcPrimary;
+$larcNavSlider: #2a2e45;

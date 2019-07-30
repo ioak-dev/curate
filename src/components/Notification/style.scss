@@ -1,25 +1,26 @@
 @import "../../theme.scss";
 
 .notification {
-    margin-top: 70px;
+    // margin-top: 70px;
     // margin-bottom: -70px;
     height: 60px;
     width: 100%;
+    bottom: 0px;
     display: flex;
     justify-content: center;
     align-items: center;
     font-weight: 700;
     font-size: 1.5em;
-    color: white;
+    color: $larcWhite;
     position: fixed;
     z-index: 1;
 
     &.success {
-        background-color: #49A078;
+        background-color: $larcSuccess;
     }
 
-    &.error {
-        background-color: #D66475;
+    &.failure {
+        background-color: $larcFailure;
     }
 }
 

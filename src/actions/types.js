@@ -9,3 +9,6 @@ export const REMOVE_NOTIFICATION = 'REMOVE_NOTIFICATION';
 export const GET_SPINNER = 'GET_SPINNER';
 export const START_SPINNER = 'START_SPINNER';
 export const STOP_SPINNER = 'STOP_SPINNER';
+
+export const GET_PROFILE = 'GET_PROFILE';
+export const SET_PROFILE = 'SET_PROFILE';

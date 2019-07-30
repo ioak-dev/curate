@@ -36,18 +36,18 @@ class Login extends Component {
                         that.props.addNotification('success', 'Signed In successfully', 3000);
                         that.success(response.data);
                     } else if (response.status === 404) {
-                        that.props.addNotification('error', 'User name does not exist', 3000);
+                        that.props.addNotification('failure', 'User name does not exist', 3000);
                     } else if (response.status === 401) {
-                        that.props.addNotification('error', 'Incorrect passphrase', 3000);
+                        that.props.addNotification('failure', 'Incorrect passphrase', 3000);
                     } else {
-                        that.props.addNotification('error', 'Unknown response from server. Please try again or at a later time', 3000);
+                        that.props.addNotification('failure', 'Unknown response from server. Please try again or at a later time', 3000);
                     }
                 })
                 .catch((error) => {
-                    that.props.addNotification('error', 'Unknown error. Please try again or at a later time', 3000);
+                    that.props.addNotification('failure', 'Unknown error. Please try again or at a later time', 3000);
                 })
         } else {
-            this.props.addNotification('error', 'Username/password cannot be empty', 3000);
+            this.props.addNotification('failure', 'Username/password cannot be empty', 3000);
         }
     }
 
