@@ -12,7 +12,7 @@ class PrivateRoute extends Component {
   render() {
     return (
       <>
-        {this.props.authorization.isAuth && <Route path={this.props.path} component={this.props.component} />}
+        {this.props.authorization.isAuth && <Route path={this.props.path} render={this.props.render} />}
         {!this.props.authorization.isAuth && <Redirect to={{pathname: "/home"}} />}
       </>
     );

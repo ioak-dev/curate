@@ -1,7 +1,7 @@
 import { GET_PROFILE, SET_PROFILE } from '../actions/types';
 
 const initialState = {
-    theme: 'light'
+    theme: 'theme_dark'
 }
 
 export default function(state = initialState, action) {

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Link from './Link';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -58,59 +59,59 @@ class Bookmarks extends Component {
                 
                 <button onClick={this.toggleAddDialog} className="primary block"><i className="material-icons">add</i>Add New Bookmark</button>
                 <Dialog open={this.state.showAddDialog} onClose={this.toggleAddDialog} aria-labelledby="form-dialog-title">
-                    <div  className="dialog-container dark">
-                    <DialogTitle>New Bookmark</DialogTitle>
-                    <DialogContent>
-                        <DialogContentText>
-                            Provide details to create new bookmark. Use tags for better categorization
-                        </DialogContentText>
-                        <TextField
-                            id="outlined-uncontrolled"
-                            label="Title"
-                            margin="normal"
-                            fullWidth
-                            variant="outlined"
-                            name="title"
-                            onChange={e => this.handleChange(e)}
-                        />
-                        <TextField
-                            id="outlined-uncontrolled"
-                            label="URL"
-                            margin="normal"
-                            name="url"
-                            fullWidth
-                            variant="outlined"
-                            onChange={e => this.handleChange(e)}
-                        />
-                        <TextField
-                            id="outlined-uncontrolled"
-                            label="Description"
-                            margin="normal"
-                            fullWidth
-                            variant="outlined"
-                            name="description"
-                            multiline
-                            rows="5"
-                            onChange={e => this.handleChange(e)}
-                        />
-                        <TextField
-                            id="outlined-uncontrolled"
-                            label="Tags"
-                            margin="normal"
-                            fullWidth
-                            name="tags"
-                            variant="outlined"
-                            onChange={e => this.handleChange(e)}
-                        />
-                    </DialogContent>
-                    <DialogActions>
-                        <button onClick={this.toggleAddDialog} className="primary">
-                            Cancel
-                        </button>
-                        <button onClick={this.addBookmark} className="primary block">
-                            Add
-                        </button>
-                    </DialogActions>
+                    <div  className="dialog-container">
+                        <DialogTitle>New Bookmark</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText>
+                                Provide details to create new bookmark. Use tags for better categorization
+                            </DialogContentText>
+                            <TextField
+                                id="outlined-uncontrolled"
+                                label="Title"
+                                margin="normal"
+                                fullWidth
+                                variant="outlined"
+                                name="title"
+                                onChange={e => this.handleChange(e)}
+                            />
+                            <TextField
+                                id="outlined-uncontrolled"
+                                label="URL"
+                                margin="normal"
+                                name="url"
+                                fullWidth
+                                variant="outlined"
+                                onChange={e => this.handleChange(e)}
+                            />
+                            <TextField
+                                id="outlined-uncontrolled"
+                                label="Description"
+                                margin="normal"
+                                fullWidth
+                                variant="outlined"
+                                name="description"
+                                multiline
+                                rows="5"
+                                onChange={e => this.handleChange(e)}
+                            />
+                            <TextField
+                                id="outlined-uncontrolled"
+                                label="Tags"
+                                margin="normal"
+                                fullWidth
+                                name="tags"
+                                variant="outlined"
+                                onChange={e => this.handleChange(e)}
+                            />
+                        </DialogContent>
+                        <DialogActions>
+                            <button onClick={this.toggleAddDialog} className="primary">
+                                Cancel
+                            </button>
+                            <button onClick={this.addBookmark} className="primary block">
+                                Add
+                            </button>
+                        </DialogActions>
                     </div>
                 </Dialog>
                 {listview}
@@ -118,6 +119,14 @@ class Bookmarks extends Component {
             </>
         )
     }
+}
+
+Bookmarks.propTypes = {
+    startSpinner: PropTypes.func.isRequired,
+    stopSpinner: PropTypes.func.isRequired,
+    addNotification: PropTypes.func.isRequired,
+    removeNotification: PropTypes.func.isRequired,
+    profile: PropTypes.object.isRequired,
 }
 
 export default Bookmarks;

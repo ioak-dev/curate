@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Navigation from '../Navigation';
 import { NavLink } from 'react-router-dom';
 import './style.scss';
@@ -84,4 +85,12 @@ export default class Home extends React.Component {
       </>
     );
   }
+}
+
+Home.propTypes = {
+  startSpinner: PropTypes.func.isRequired,
+  stopSpinner: PropTypes.func.isRequired,
+  addNotification: PropTypes.func.isRequired,
+  removeNotification: PropTypes.func.isRequired,
+  profile: PropTypes.object.isRequired,
 }

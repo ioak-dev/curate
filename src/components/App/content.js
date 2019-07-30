@@ -10,16 +10,13 @@ import PrivateRoute from '../Auth/PrivateRoute';
 import AuthInit from '../Auth/AuthInit';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { addNotification, removeNotification, startSpinner, stopSpinner } from '../../actions/NotificationActions';
 import { getProfile } from '../../actions/ProfileActions';
 
 class Content extends Component {
     constructor(props) {
         super(props);
         this.props.getProfile();
-    }
-
-    componentWillReceiveProps(nextProps) {
-        console.log(nextProps);
     }
 
     render() {
@@ -29,11 +26,11 @@ class Content extends Component {
                 <AuthInit />
                 <div className="body">
                     <div className="content">
-                        <Route exact path="/" component={Home} />
-                        <Route path="/home" component={Home} />
-                        <Route path="/login" component={Login} />
-                        <PrivateRoute path="/bookmarks" component={Bookmarks}/>
-                        <PrivateRoute path="/notes" component={Notes} />
+                        <Route exact path="/" render={(props) => <Home {...props} {...this.props}/>} />
+                        <Route path="/home" render={(props) => <Home {...props} {...this.props}/>} />
+                        <Route path="/login" render={(props) => <Login {...props} {...this.props}/>} />
+                        <PrivateRoute path="/bookmarks" render={(props) => <Bookmarks {...props} {...this.props}/>}/>
+                        <PrivateRoute path="/notes" render={(props) => <Notes {...props} {...this.props}/>} />
                     </div>
                 </div>
                 </HashRouter>
@@ -43,12 +40,17 @@ class Content extends Component {
 }
 
 Content.propTypes = {
+    startSpinner: PropTypes.func.isRequired,
+    stopSpinner: PropTypes.func.isRequired,
+    addNotification: PropTypes.func.isRequired,
+    removeNotification: PropTypes.func.isRequired,
     getProfile: PropTypes.func.isRequired,
-    profile: PropTypes.object.isRequired,
+
+    profile: PropTypes.object.isRequired
 }
 
 const mapStateToProps = state => ({
   profile: state.profile
 })
 
-export default connect(mapStateToProps, { getProfile })(Content);
+export default connect(mapStateToProps, { addNotification, removeNotification, startSpinner, stopSpinner, getProfile })(Content);

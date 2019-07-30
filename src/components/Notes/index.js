@@ -8,7 +8,7 @@ export default class Notes extends React.Component {
       <>
         <Navigation />
         <div>
-            <Bookmarks />
+            <Bookmarks {...this.props} />
         </div>
       </>
     );

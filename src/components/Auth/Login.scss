@@ -1,5 +1,3 @@
-@import '../../theme.scss';
-
 .login {
     height: 100vh;
     @media (min-width: 768px) {
@@ -24,7 +22,7 @@
     }
 
     .container {
-        background: $larcBody;
+        background: var(--color-body);
         position: absolute;
 
         .form {

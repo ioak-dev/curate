@@ -1,8 +1,4 @@
-@import "../../theme.scss";
-
 .notification {
-    // margin-top: 70px;
-    // margin-bottom: -70px;
     height: 60px;
     width: 100%;
     bottom: 0px;
@@ -11,16 +7,16 @@
     align-items: center;
     font-weight: 700;
     font-size: 1.5em;
-    color: $larcWhite;
+    color: var(--color-white);
     position: fixed;
     z-index: 1;
 
     &.success {
-        background-color: $larcSuccess;
+        background-color: var(--color-success);
     }
 
     &.failure {
-        background-color: $larcFailure;
+        background-color: var(--color-failure);
     }
 }
 
@@ -48,8 +44,8 @@
     height: 46px;
     margin: 1px;
     border-radius: 50%;
-    border: 5px solid $larcPrimary;
-    border-color: $larcPrimary transparent $larcPrimary transparent;
+    border: 5px solid var(--color-primary);
+    border-color: var(--color-primary) transparent var(--color-primary) transparent;
     animation: lds-dual-ring 1.2s linear infinite;
 }
 
@@ -86,7 +82,7 @@
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: $larcPrimary;
+    background: var(--color-rimary);
     margin: -3px 0 0 -3px;
   }
   .lds-roller div:nth-child(1) {
@@ -172,7 +168,7 @@
     position: absolute;
     left: 6px;
     width: 13px;
-    background: $larcPrimary;
+    background: var(--color-primary);
     animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
   }
   .lds-facebook div:nth-child(1) {

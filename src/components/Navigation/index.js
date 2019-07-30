@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getAuth, addAuth, removeAuth } from '../../actions/AuthActions';
 import { addNotification } from '../../actions/NotificationActions';
+import { getProfile } from '../../actions/ProfileActions';
 import PropTypes from 'prop-types';
 import {withCookies} from 'react-cookie';
 import Notification from '../Notification';
@@ -17,6 +18,7 @@ import account_circle from '../../images/account_circle.svg';
 class Navigation extends Component {
     constructor(props) {
         super(props);
+        this.props.getProfile();
         this.state = {
             visible: false,
             mobilemenu: 'hide'
@@ -51,8 +53,8 @@ class Navigation extends Component {
         return (
             <div className="nav">
                 <div className={(this.props.transparent ? "navbar transparent" : "navbar")}>
-                    {!this.props.transparent && <div className="logo"><img src={curate_black} alt="Curate logo" /></div>}
-                    {this.props.transparent && <div className="logo"><img src={curate_white} alt="Curate logo" /></div>}
+                    {!this.props.transparent && this.props.profile.theme === 'theme_light' && <div className="logo"><img src={curate_black} alt="Curate logo" /></div>}
+                    {(this.props.transparent || this.props.profile.theme === 'theme_dark') && <div className="logo"><img src={curate_white} alt="Curate logo" /></div>}
                     <div className="leftnav">
                         {/* <NavLink to="/home" className="navitem" activeClassName="active">Home</NavLink> */}
                         {this.props.authorization.isAuth &&
@@ -65,8 +67,8 @@ class Navigation extends Component {
                         }
                     </div>
                     <div className="rightlogo">
-                        {!this.props.transparent && <div className="logo"><img src={ioak_black} alt="IOAK logo" /></div>}
-                        {this.props.transparent && <div className="logo"><img src={ioak_white} alt="IOAK logo" /></div>}
+                        {!this.props.transparent && this.props.profile.theme === 'theme_light' && <div className="logo"><img src={ioak_black} alt="IOAK logo" /></div>}
+                        {(this.props.transparent || this.props.profile.theme === 'theme_dark') && <div className="logo"><img src={ioak_white} alt="IOAK logo" /></div>}
                     </div>
                     <div className="rightnav">
                         <div className="auth">
@@ -122,17 +124,21 @@ class Navigation extends Component {
     }
 }
 
-
 Navigation.propTypes = {
     addNotification: PropTypes.func.isRequired,
     getAuth: PropTypes.func.isRequired,
     addAuth: PropTypes.func.isRequired,
     removeAuth: PropTypes.func.isRequired,
-    authorization: PropTypes.object.isRequired
+    authorization: PropTypes.object.isRequired,
+    getProfile: PropTypes.func.isRequired,
+
+    profile: PropTypes.object.isRequired
+
 }
 
 const mapStateToProps = state => ({
-    authorization: state.authorization
+    authorization: state.authorization,
+    profile: state.profile
 })
 
-export default connect(mapStateToProps, { getAuth, addAuth, removeAuth, addNotification })(withCookies(Navigation));
+export default connect(mapStateToProps, { getAuth, addAuth, removeAuth, addNotification, getProfile })(withCookies(Navigation));

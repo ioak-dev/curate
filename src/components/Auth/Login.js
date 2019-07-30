@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getAuth, addAuth, removeAuth } from '../../actions/AuthActions';
-import { addNotification, removeNotification, startSpinner } from '../../actions/NotificationActions';
 import PropTypes from 'prop-types';
 import {withCookies} from 'react-cookie';
 import './Login.scss';
@@ -32,6 +31,7 @@ class Login extends Component {
                 password: this.state.password
                 })
                 .then(function(response) {
+                    console.log(response);
                     if (response.status === 200) {
                         that.props.addNotification('success', 'Signed In successfully', 3000);
                         that.success(response.data);
@@ -44,6 +44,7 @@ class Login extends Component {
                     }
                 })
                 .catch((error) => {
+                    console.log(error);
                     that.props.addNotification('failure', 'Unknown error. Please try again or at a later time', 3000);
                 })
         } else {
@@ -140,8 +141,11 @@ class Login extends Component {
 
 Login.propTypes = {
     startSpinner: PropTypes.func.isRequired,
+    stopSpinner: PropTypes.func.isRequired,
     addNotification: PropTypes.func.isRequired,
     removeNotification: PropTypes.func.isRequired,
+    profile: PropTypes.object.isRequired,
+
     getAuth: PropTypes.func.isRequired,
     addAuth: PropTypes.func.isRequired,
     removeAuth: PropTypes.func.isRequired,
@@ -152,4 +156,4 @@ const mapStateToProps = state => ({
     authorization: state.authorization
 })
 
-export default connect(mapStateToProps, { getAuth, addAuth, removeAuth, addNotification, removeNotification, startSpinner })(withCookies(Login));
+export default connect(mapStateToProps, { getAuth, addAuth, removeAuth })(withCookies(Login));

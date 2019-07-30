@@ -1,32 +1,6 @@
-@import "../../theme.scss";
 
-.App.dark {
-  --color-nav: #2a2e45;
-  --color-nav-variant: #505466;
-  --color-primary: #EF5B5B;
-  --color-secondary: #1B998B;
-  --color-accent: #9B5094;
-  --color-darkgrey: darkgrey;
-  --color-grey: grey;
-  --color-white: white;
-}
-
-.App.light{
-  --color-nav: white;
-  --color-nav-variant: #505466;
-  --color-primary: #EF5B5B;
-  --color-secondary: #1B998B;
-  --color-accent: #9B5094;
-  --color-darkgrey: darkgrey;
-  --color-grey: grey;
-  --color-white: white;
-}
-
-.dialog-container.dark {
-  background-color: #1B998B !important;
-}
-.dialog-container.light {
-  background-color: #EF5B5B !important;
+.dialog-container {
+  background-color: var(--color-dialog) !important;
 }
 
 .App {
@@ -59,33 +33,33 @@ button {
   font-size: 1em;
   padding: 0.25em 1em;
   background: transparent;
-  color: $larcDarkgrey;
-  border: 2px solid $larcDarkgrey;
+  color: var(--color-darkgrey);
+  border: 2px solid var(--color-darkgrey);
   border-radius: 15px 2px;
   
   &.primary {
-    color: $larcPrimary;
-    border: 2px solid $larcPrimary;
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
   }
   &.secondary {
-    color: $larcSecondary;
-    border: 2px solid $larcSecondary;
+    color: var(--color-secondary);
+    border: 2px solid var(--color-secondary);
   }
   &.accent {
-    color: $larcAccent;
-    border: 2px solid $larcAccent;
+    color: var(--color-accent);
+    border: 2px solid var(--color-accent);
   }
   &.block {
-    background-color: $larcWhite;
-    color: $larcWhite;
+    background-color: var(--color-white);
+    color: var(--color-white);
     &.primary {
-      background-color: $larcPrimary;
+      background-color: var(--color-primary);
     }
     &.secondary {
-      background-color: $larcSecondary;
+      background-color: var(--color-secondary);
     }
     &.accent {
-      background-color: $larcAccent;
+      background-color: var(--color-accent);
     }    
   }
 
