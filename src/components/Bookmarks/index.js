@@ -17,9 +17,6 @@ class Bookmarks extends Component {
             items: [],
             showAddDialog: false
         }
-        this.toggleAddDialog = this.toggleAddDialog.bind(this);
-        this.addBookmark = this.addBookmark.bind(this);
-        this.handleChange = this.handleChange.bind(this);
     }
     componentWillMount() {
         fetch('https://jsonplaceholder.typicode.com/posts')
@@ -27,17 +24,17 @@ class Bookmarks extends Component {
         .then(data => this.setState({items: data}));
     }
 
-    toggleAddDialog() {
+    toggleAddDialog = () => {
         this.setState({
             showAddDialog: !this.state.showAddDialog
         })
     }
 
-    addBookmark() {
+    addBookmark = () => {
         console.log(this.state);
     }
 
-    handleChange(event) {
+    handleChange = (event) => {
         this.setState(
             {
                 [event.currentTarget.name]: event.currentTarget.value
@@ -59,18 +56,16 @@ class Bookmarks extends Component {
                 
                 <button onClick={this.toggleAddDialog} className="primary block"><i className="material-icons">add</i>Add New Bookmark</button>
                 <Dialog open={this.state.showAddDialog} onClose={this.toggleAddDialog} aria-labelledby="form-dialog-title">
-                    <div  className="dialog-container">
-                        <DialogTitle>New Bookmark</DialogTitle>
+                    <div className={"dialog-container " + this.props.profile.theme}>
+                        {/* <DialogTitle>New Bookmark</DialogTitle> */}
                         <DialogContent>
-                            <DialogContentText>
-                                Provide details to create new bookmark. Use tags for better categorization
-                            </DialogContentText>
+                            {/* <DialogContentText></DialogContentText> */}
                             <TextField
                                 id="outlined-uncontrolled"
                                 label="Title"
                                 margin="normal"
                                 fullWidth
-                                variant="outlined"
+                                variant="standard"
                                 name="title"
                                 onChange={e => this.handleChange(e)}
                             />
@@ -80,7 +75,7 @@ class Bookmarks extends Component {
                                 margin="normal"
                                 name="url"
                                 fullWidth
-                                variant="outlined"
+                                variant="standard"
                                 onChange={e => this.handleChange(e)}
                             />
                             <TextField
@@ -88,7 +83,7 @@ class Bookmarks extends Component {
                                 label="Description"
                                 margin="normal"
                                 fullWidth
-                                variant="outlined"
+                                variant="standard"
                                 name="description"
                                 multiline
                                 rows="5"
@@ -100,7 +95,7 @@ class Bookmarks extends Component {
                                 margin="normal"
                                 fullWidth
                                 name="tags"
-                                variant="outlined"
+                                variant="standard"
                                 onChange={e => this.handleChange(e)}
                             />
                         </DialogContent>

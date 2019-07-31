@@ -13,7 +13,9 @@ import ioak_white from '../../images/ioak_white.svg';
 import ioak_black from '../../images/ioak_black.svg';
 import curate_white from '../../images/curate_white.svg';
 import curate_black from '../../images/curate_black.svg';
-import account_circle from '../../images/account_circle.svg';
+import account_circle from '../../icons/mi-account_circle.svg';
+import account_circle_white from '../../icons/mi-account_circle_white.svg';
+import Theme from './Theme';
 
 class Navigation extends Component {
     constructor(props) {
@@ -72,14 +74,17 @@ class Navigation extends Component {
                     </div>
                     <div className="rightnav">
                         <div className="auth">
+                            <Theme />
                             {this.props.authorization.isAuth && <div className="label">{this.props.authorization.firstname}</div>}
                             {!this.props.authorization.isAuth && <div className="label">Log In</div>}
                             {/* {!this.props.authorization.isAuth && <NavLink to="/login" className="navitem" activeClassName="active"><i className="material-icons">face</i></NavLink>}
                             {this.props.authorization.isAuth && <button className="icon primary" onClick={this.logout}><i className="material-icons">power_settings_new</i></button>} */}
-                            {this.props.authorization.isAuth && <div className="signin" onClick={this.logout}><img src={account_circle} alt="account_circle" /></div>}
-                            {!this.props.authorization.isAuth && <div className="signin"><NavLink to="/login" className="navitem" activeClassName="active"><img src={account_circle} alt="account_circle" /></NavLink></div>}
+                            {this.props.authorization.isAuth && (this.props.transparent || this.props.profile.theme === 'theme_dark') && <div className="signin" onClick={this.logout}><img src={account_circle_white} alt="account_circle_white" /></div>}
+                            {this.props.authorization.isAuth && !this.props.transparent && this.props.profile.theme === 'theme_light' && <div className="signin" onClick={this.logout}><img src={account_circle} alt="account_circle" /></div>}
+                            {!this.props.authorization.isAuth && (this.props.transparent || this.props.profile.theme === 'theme_dark') && <div className="signin"><NavLink to="/login" className="navitem" activeClassName="active"><img src={account_circle_white} alt="account_circle" /></NavLink></div>}
+                            {!this.props.authorization.isAuth && !this.props.transparent && this.props.profile.theme === 'theme_light' && <div className="signin"><NavLink to="/login" className="navitem" activeClassName="active"><img src={account_circle} alt="account_circle" /></NavLink></div>}
                         </div>
-                        <div className="mobilemenu" onMouseUp={this.toggleMenu}><i className="material-icons">menu</i></div>
+                        <div className="mobilemenu"><Theme /><i onMouseUp={this.toggleMenu} className="material-icons">menu</i></div>
                     </div>
                 </div>
 
@@ -87,7 +92,8 @@ class Navigation extends Component {
                     <div className={(this.state.visible ? "slider show" : "slider hide")} onClick={this.toggleMenu}>
                         <div className={(this.state.visible ? "": "hidetext")} onClick={this.toggleMenu}>
                             <div className="header">
-                                <div className="logo"><img src={curate_white} alt="IOAK logo" /></div>
+                                {this.props.profile.theme === 'theme_light' && <div className="logo"><img src={curate_black} alt="IOAK logo" /></div>}
+                                {this.props.profile.theme === 'theme_dark' && <div className="logo"><img src={curate_white} alt="IOAK logo" /></div>}
                                                                     
                             <div className="authheader">
                                     {/* {this.props.authorization.isAuth && <div className="label">Log Out</div>}

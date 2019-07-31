@@ -1,6 +1,7 @@
 
 .dialog-container {
   background-color: var(--color-dialog) !important;
+  color: var(--color-body-text);
 }
 
 .App {
@@ -75,4 +76,9 @@ button {
     font-size: 20px;
     margin-right: 5px;
   }
+}
+
+
+.MuiInputLabel-root, .MuiInputBase-root {
+  color: white;
 }
