@@ -1,16 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Navigation from '../Navigation';
 import { NavLink } from 'react-router-dom';
 import './style.scss';
 import developers1 from '../../images/developers1.jpg';
 import developers2 from '../../images/developers2.jpg';
 
 export default class Home extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  componentWillMount() {
+    this.props.sendEvent('navbar-transparency');
+  }
+
+  componentWillUnmount() {
+    this.props.sendEvent('navbar-transparency', false);
+  }
+
   render() {
     return (
       <>
-        <Navigation transparent />
         <div className="home">
           <div className="section parallax bg1" />
           <div className="section static bg1 odd">
@@ -88,9 +98,7 @@ export default class Home extends React.Component {
 }
 
 Home.propTypes = {
-  startSpinner: PropTypes.func.isRequired,
-  stopSpinner: PropTypes.func.isRequired,
-  addNotification: PropTypes.func.isRequired,
-  removeNotification: PropTypes.func.isRequired,
+  sendEvent: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired,
+  event: PropTypes.object.isRequired
 }

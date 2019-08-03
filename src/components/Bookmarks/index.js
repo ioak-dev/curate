@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Link from './Link';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import { TextField } from '@material-ui/core';
 import Navigation from '../Navigation';
 import './style.scss';
+import ArcDialog from '../Ux/ArcDialog';
 
 class Bookmarks extends Component {
     constructor(props) {
@@ -50,16 +46,9 @@ class Bookmarks extends Component {
             </div>
         ))
         return (
-            <>
-            <Navigation />
             <div className="bookmarks boxed">
-                
-                <button onClick={this.toggleAddDialog} className="primary block"><i className="material-icons">add</i>Add New Bookmark</button>
-                <Dialog open={this.state.showAddDialog} onClose={this.toggleAddDialog} aria-labelledby="form-dialog-title">
-                    <div className={"dialog-container " + this.props.profile.theme}>
-                        {/* <DialogTitle>New Bookmark</DialogTitle> */}
-                        <DialogContent>
-                            {/* <DialogContentText></DialogContentText> */}
+                <button onClick={this.toggleAddDialog} className="primary block">Add Bookmark</button>
+                <ArcDialog visible={this.state.showAddDialog} toggleVisibility={this.toggleAddDialog}>
                             <TextField
                                 id="outlined-uncontrolled"
                                 label="Title"
@@ -98,30 +87,25 @@ class Bookmarks extends Component {
                                 variant="standard"
                                 onChange={e => this.handleChange(e)}
                             />
-                        </DialogContent>
-                        <DialogActions>
-                            <button onClick={this.toggleAddDialog} className="primary">
+                        <div className="actions">
+                            <button onClick={this.toggleAddDialog} className="">
                                 Cancel
                             </button>
-                            <button onClick={this.addBookmark} className="primary block">
+                            <button onClick={this.addBookmark} className="primary">
                                 Add
                             </button>
-                        </DialogActions>
-                    </div>
-                </Dialog>
+                        </div>
+                    </ArcDialog>
                 {listview}
             </div>
-            </>
         )
     }
 }
 
 Bookmarks.propTypes = {
-    startSpinner: PropTypes.func.isRequired,
-    stopSpinner: PropTypes.func.isRequired,
-    addNotification: PropTypes.func.isRequired,
-    removeNotification: PropTypes.func.isRequired,
+    sendEvent: PropTypes.func.isRequired,
     profile: PropTypes.object.isRequired,
+    event: PropTypes.object
 }
 
 export default Bookmarks;

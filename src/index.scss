@@ -8,15 +8,18 @@
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  .MuiInputLabel-root, .MuiInputBase-root, .MuiTypography-root {
-    color: var(--color-body-text);
+  .MuiInputBase-root, .MuiTypography-root {
+    color: var(--color-text);
+  }
+  .MuiInputLabel-root {
+    color: var(--color-text-dim);
   }
 }
 
 .body {
   font-family: 'Lato', sans-serif;
   background-color: var(--color-body);
-  color: var(--color-body-text);
+  color: var(--color-text);
 }
 
 code {
@@ -25,10 +28,12 @@ code {
 }
 
 :root {
+  --height-nav: 50px;
   .theme_dark {
 
     --color-body: #434343;
-    --color-body-text: #fcfcfc;
+    --color-text: #fcfcfc;
+    --color-text-dim: #AAAAAA;
     --color-primary: #F19F4D;
     --color-secondary: #1B998B;
     --color-accent: #9B5094;
@@ -53,7 +58,8 @@ code {
   
   .theme_light {
     --color-body: #f5f5f5;
-    --color-body-text: black;
+    --color-text: #101010;
+    --color-text-dim: #6E6E6E;
     --color-primary: #F19F4D;
     --color-secondary: #1B998B;
     --color-accent: #9B5094;

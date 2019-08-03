@@ -10,10 +10,13 @@ import PrivateRoute from '../Auth/PrivateRoute';
 import AuthInit from '../Auth/AuthInit';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { addNotification, removeNotification, startSpinner, stopSpinner } from '../../actions/NotificationActions';
+import { receiveEvents, sendEvent } from '../../actions/EventActions';
 import { getProfile } from '../../actions/ProfileActions';
 
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import Backdrop from './Backdrop';
+import Notification from '../Notification';
+import Navigation from '../Navigation';
 
 const arcTheme = createMuiTheme({
     typography: {
@@ -32,17 +35,22 @@ const arcTheme = createMuiTheme({
 class Content extends Component {
     constructor(props) {
         super(props);
+        this.props.receiveEvents();
         this.props.getProfile();
     }
 
     render() {
         return (
             <div className={"App " + this.props.profile.theme}>
+                
                 <HashRouter>
                     <AuthInit />
+                    <Backdrop sendEvent={this.props.sendEvent} event={this.props.event} />
                     <div className="body">
                         <div className="content">
+                            <Notification sendEvent={this.props.sendEvent} event={this.props.event} />
                             <MuiThemeProvider theme={arcTheme}>
+                                <Navigation {...this.props} />
                                 <Route exact path="/" render={(props) => <Home {...props} {...this.props}/>} />
                                 <Route path="/home" render={(props) => <Home {...props} {...this.props}/>} />
                                 <Route path="/login" render={(props) => <Login {...props} {...this.props}/>} />
@@ -58,17 +66,17 @@ class Content extends Component {
 }
 
 Content.propTypes = {
-    startSpinner: PropTypes.func.isRequired,
-    stopSpinner: PropTypes.func.isRequired,
-    addNotification: PropTypes.func.isRequired,
-    removeNotification: PropTypes.func.isRequired,
+    receiveEvents: PropTypes.func.isRequired,
+    sendEvent: PropTypes.func.isRequired,
     getProfile: PropTypes.func.isRequired,
 
+    event: PropTypes.object,
     profile: PropTypes.object.isRequired
 }
 
 const mapStateToProps = state => ({
-  profile: state.profile
+  profile: state.profile,
+  event: state.event
 })
 
-export default connect(mapStateToProps, { addNotification, removeNotification, startSpinner, stopSpinner, getProfile })(Content);
+export default connect(mapStateToProps, { receiveEvents, sendEvent, getProfile })(Content);

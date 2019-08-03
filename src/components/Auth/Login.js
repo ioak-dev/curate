@@ -23,8 +23,8 @@ class Login extends Component {
 
     signin = () => {
         const that = this;
-        this.props.removeNotification();
-        this.props.startSpinner();
+        that.props.sendEvent('notification', false);
+        that.props.sendEvent('spinner');
         if (this.state.username && this.state.password) {
             signin({
                 username: this.state.username,
@@ -33,29 +33,29 @@ class Login extends Component {
                 .then(function(response) {
                     console.log(response);
                     if (response.status === 200) {
-                        that.props.addNotification('success', 'Signed In successfully', 3000);
+                        that.props.sendEvent('notification', true, {message: 'Signed In successfully', type: 'success', duration: 3000});
                         that.success(response.data);
                     } else if (response.status === 404) {
-                        that.props.addNotification('failure', 'User name does not exist', 3000);
+                        that.props.sendEvent('notification', true, {message: 'User name does not exist', type: 'failure', duration: 3000});
                     } else if (response.status === 401) {
-                        that.props.addNotification('failure', 'Incorrect passphrase', 3000);
+                        that.props.sendEvent('notification', true, {message: 'Incorrect passphrase', type: 'failure', duration: 3000});
                     } else {
-                        that.props.addNotification('failure', 'Unknown response from server. Please try again or at a later time', 3000);
+                        that.props.sendEvent('notification', true, {message: 'Unknown response from server. Please try again or at a later time', type: 'failure', duration: 3000});
                     }
                 })
                 .catch((error) => {
                     console.log(error);
-                    that.props.addNotification('failure', 'Unknown error. Please try again or at a later time', 3000);
+                    this.props.sendEvent('notification', true, {'type': 'failure', message: 'Unknown error. Please try again or at a later time', duration: 3000});
                 })
         } else {
-            this.props.addNotification('failure', 'Username/password cannot be empty', 3000);
+            this.props.sendEvent('notification', true, {type: 'failure', message: 'Username/password cannot be empty', duration: 3000});
         }
     }
 
     signup = () => {
         const that = this;
-        this.props.removeNotification();
-        this.props.startSpinner();
+        this.props.sendEvent('notification', false);
+        this.props.sendEvent('spinner');
         signup({
             username: this.state.username,
             firstname: this.state.firstname,
@@ -65,7 +65,7 @@ class Login extends Component {
             })
             .then(function(status) {
                 if (status === 200) {
-                    that.props.addNotification('success', 'Your account has been created. You can login now', 3000);
+                    this.props.sendEvent('notification', true, {'type': 'success', message: 'Your account has been created. You can login now', duration: 3000});
                     that.toggle();
                 }
             })
@@ -103,48 +103,42 @@ class Login extends Component {
 
     render() {
         return (
-            <>
-                <div className="login">
-                <div className="nav-trans"><Navigation transparent /></div>
-                <div className="nav-block"><Navigation /></div>
-                    {!this.state.newuser && <div className="container">
-                        <h1>Log In</h1>
-                        <div className="form">
-                            <ArcTextField label="Username" id="username" handleChange={e => this.handleChange(e)} />
-                            <ArcTextField label="Password" id="password" type="password" handleChange={e => this.handleChange(e)} />
-                        </div>
-                        <br />
-                        <button className="primary block"  onClick={this.signin}>Sign In</button>
-                        <br /><br />
-                        Don't have an account? &nbsp; <button className="secondary"  onClick={this.toggle}>Sign Up</button>
-                    </div>}
-                    
-                    {this.state.newuser && <div className="container">
-                        <h1>Sign Up</h1>
-                        <div className="form">
-                            <ArcTextField label="First name" id="firstname" handleChange={e => this.handleChange(e)} />
-                            <ArcTextField label="Last name" id="lastname" handleChange={e => this.handleChange(e)} />
-                            <ArcTextField label="Username" id="username" handleChange={e => this.handleChange(e)} />
-                            <ArcTextField label="Password" id="password" type="password" handleChange={e => this.handleChange(e)} />
-                            <ArcTextField label="Email" id="email" handleChange={e => this.handleChange(e)} />
-                        </div>
-                        <br />
-                        <button className="primary block"  onClick={this.signup}>Create account</button>
-                        <br /><br />
-                        Already have a account? &nbsp; <button className="secondary"  onClick={this.toggle}>Sign In</button>
-                    </div>}
-                </div>
-            </>
+            <div className="login">
+                {!this.state.newuser && <div className="container">
+                    <h1>Log In</h1>
+                    <div className="form">
+                        <ArcTextField label="Username" id="username" handleChange={e => this.handleChange(e)} />
+                        <ArcTextField label="Password" id="password" type="password" handleChange={e => this.handleChange(e)} />
+                    </div>
+                    <br />
+                    <button className="primary block"  onClick={this.signin}>Sign In</button>
+                    <br /><br />
+                    Don't have an account? &nbsp; <button className="secondary"  onClick={this.toggle}>Sign Up</button>
+                </div>}
+                
+                {this.state.newuser && <div className="container">
+                    <h1>Sign Up</h1>
+                    <div className="form">
+                        <ArcTextField label="First name" id="firstname" handleChange={e => this.handleChange(e)} />
+                        <ArcTextField label="Last name" id="lastname" handleChange={e => this.handleChange(e)} />
+                        <ArcTextField label="Username" id="username" handleChange={e => this.handleChange(e)} />
+                        <ArcTextField label="Password" id="password" type="password" handleChange={e => this.handleChange(e)} />
+                        <ArcTextField label="Email" id="email" handleChange={e => this.handleChange(e)} />
+                    </div>
+                    <br />
+                    <button className="primary block"  onClick={this.signup}>Create account</button>
+                    <br /><br />
+                    Already have a account? &nbsp; <button className="secondary"  onClick={this.toggle}>Sign In</button>
+                </div>}
+            </div>
         );
     }
 }
 
 Login.propTypes = {
-    startSpinner: PropTypes.func.isRequired,
-    stopSpinner: PropTypes.func.isRequired,
-    addNotification: PropTypes.func.isRequired,
-    removeNotification: PropTypes.func.isRequired,
+    sendEvent: PropTypes.func.isRequired,
     profile: PropTypes.object.isRequired,
+    event: PropTypes.object.isRequired,
 
     getAuth: PropTypes.func.isRequired,
     addAuth: PropTypes.func.isRequired,

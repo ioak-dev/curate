@@ -2,13 +2,8 @@ export const GET_AUTH = 'GET_AUTH';
 export const ADD_AUTH = 'ADD_AUTH';
 export const REMOVE_AUTH = 'REMOVE_AUTH';
 
-export const GET_NOTIFICATION = 'GET_NOTIFICATION';
-export const ADD_NOTIFICATION = 'ADD_NOTIFICATION';
-export const REMOVE_NOTIFICATION = 'REMOVE_NOTIFICATION';
-
-export const GET_SPINNER = 'GET_SPINNER';
-export const START_SPINNER = 'START_SPINNER';
-export const STOP_SPINNER = 'STOP_SPINNER';
-
 export const GET_PROFILE = 'GET_PROFILE';
 export const SET_PROFILE = 'SET_PROFILE';
+
+export const RECEIVE_EVENT = 'RECEIVE_EVENT';
+export const SEND_EVENT = 'SEND_EVENT';
