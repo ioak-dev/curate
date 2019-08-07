@@ -47,9 +47,9 @@ class Desktop extends Component {
                             <button onClick={this.props.toggleSettings}>Change Theme</button>
                         </div>
                         <div className="buttons">
-                            {this.props.authorization.isAuth && <button className="primary" onClick={this.props.logout()}>Logout</button>}
+                            {this.props.authorization.isAuth && <button onClick={this.props.logout()}>Logout</button>}
                             {!this.props.authorization.isAuth && <button onClick={this.props.logout()}>Login</button>}
-                            {!this.props.authorization.isAuth && <button className="secondary block" onClick={this.props.logout()}>Signup</button>}
+                            {!this.props.authorization.isAuth && <button onClick={this.props.logout()}>Signup</button>}
                         </div>
                     </div>
                 </div>

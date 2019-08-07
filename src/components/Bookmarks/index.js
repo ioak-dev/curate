@@ -48,6 +48,11 @@ class Bookmarks extends Component {
         return (
             <div className="bookmarks boxed">
                 <button onClick={this.toggleAddDialog} className="primary block">Add Bookmark</button>
+                <button onClick={this.toggleAddDialog} className="secondary block">Add Bookmark</button>
+                <button onClick={this.toggleAddDialog} className="block">Add Bookmark</button>
+                <button onClick={this.toggleAddDialog} className="primary">Add Bookmark</button>
+                <button onClick={this.toggleAddDialog} className="secondary">Add Bookmark</button>
+                <button onClick={this.toggleAddDialog} className="">Add Bookmark</button>
                 <ArcDialog visible={this.state.showAddDialog} toggleVisibility={this.toggleAddDialog}>
                             <TextField
                                 id="outlined-uncontrolled"

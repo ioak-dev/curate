@@ -41,8 +41,8 @@
         height: var(--height-nav);
         position: fixed;
         width: 100%;
-        box-shadow: 0 0 5px var(--color-nav-shadow);
-        border-bottom: 1px solid var(--color-body);
+        // box-shadow: 0 0 5px var(--color-body);
+        // border-bottom: 1px solid var(--color-body);
         z-index:1;
 
         img.logo {
@@ -54,43 +54,53 @@
         .links {
             display: flex;
             a {
-                color: var(--color-text-dim);
+                color: var(--color-body-invert-dim);
                 position: relative;
                 transition: all .5s;
                 text-decoration: none;
-                font-size: 0.7em;
+                font-size: 0.6em;
                 margin-right: 15px;
                 padding-left: 2px;
                 padding-right: 2px;
+                text-transform: uppercase;
 
                 &.active {
-                    color: var(--color-primary);
+                    color: var(--color-body-invert);
+
+                    &::after {
+                        width: 95%;
+                        background: var(--color-primary);
+                        // height: 4px;
+                        transition: all .3s cubic-bezier(.7,0,.3,1);
+                        // transition-delay: 1s;
+                    }
                 }
 
                 &:hover {
-                  color: var(--color-text);
+                // color: var(--color-body-invert);
+                color: var(--color-primary);
                   &::after {
-                      width: 100%;
+                    //   width: 95%;
                   }
                 }
 
                 &::before {
-                    transition: all .5s;
+                    transition: all .3s cubic-bezier(.7,0,.3,1);
                 }
 
                 &::after {
                     position: absolute;
-                    bottom: -25%;
+                    bottom: -20%;
                     left: 0;
                     right: 0;
                     margin: auto;
                     width: 0%;
                     content: '.';
                     color: transparent;
-                    background: var(--color-text);
-                    height: 1.75px;
-                    transition: all .5s;
-                  }
+                    background: var(--color-body-invert);
+                    height: 4px;
+                    transition: all .3s cubic-bezier(.7,0,.3,1);
+                }
             }
         }
 
@@ -124,7 +134,7 @@
             .menu:after,
             .menu:before,
             .menu div {
-                background-color: var(--color-text);
+                background-color: var(--color-body-invert);
                 border-radius: 3px;
                 content: '';
                 display: block;
@@ -179,7 +189,7 @@
                 align-content: center;
                 a {
                     text-decoration: none;
-                    color: var(--color-text);
+                    color: var(--color-body-invert);
                     font-size: 1.5em;
                     padding: 10px;
 
