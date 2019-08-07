@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Link from './Link';
 import { TextField } from '@material-ui/core';
-import Navigation from '../Navigation';
 import './style.scss';
 import ArcDialog from '../Ux/ArcDialog';
 
@@ -47,56 +46,53 @@ class Bookmarks extends Component {
         ))
         return (
             <div className="bookmarks boxed">
-                <button onClick={this.toggleAddDialog} className="primary block">Add Bookmark</button>
-                <button onClick={this.toggleAddDialog} className="secondary block">Add Bookmark</button>
-                <button onClick={this.toggleAddDialog} className="block">Add Bookmark</button>
-                <button onClick={this.toggleAddDialog} className="primary">Add Bookmark</button>
-                <button onClick={this.toggleAddDialog} className="secondary">Add Bookmark</button>
-                <button onClick={this.toggleAddDialog} className="">Add Bookmark</button>
+                <button onClick={this.toggleAddDialog} className="primary animate in down">Add Bookmark</button>
+                <button onClick={this.toggleAddDialog} className="secondary animate in down">Add Bookmark</button>
+                <br /><br />
                 <ArcDialog visible={this.state.showAddDialog} toggleVisibility={this.toggleAddDialog}>
-                            <TextField
-                                id="outlined-uncontrolled"
-                                label="Title"
-                                margin="normal"
-                                fullWidth
-                                variant="standard"
-                                name="title"
-                                onChange={e => this.handleChange(e)}
-                            />
-                            <TextField
-                                id="outlined-uncontrolled"
-                                label="URL"
-                                margin="normal"
-                                name="url"
-                                fullWidth
-                                variant="standard"
-                                onChange={e => this.handleChange(e)}
-                            />
-                            <TextField
-                                id="outlined-uncontrolled"
-                                label="Description"
-                                margin="normal"
-                                fullWidth
-                                variant="standard"
-                                name="description"
-                                multiline
-                                rows="5"
-                                onChange={e => this.handleChange(e)}
-                            />
-                            <TextField
-                                id="outlined-uncontrolled"
-                                label="Tags"
-                                margin="normal"
-                                fullWidth
-                                name="tags"
-                                variant="standard"
-                                onChange={e => this.handleChange(e)}
-                            />
+                        <TextField
+                            id="outlined-uncontrolled"
+                            label="Title"
+                            margin="normal"
+                            fullWidth
+                            variant="standard"
+                            name="title"
+                            onChange={e => this.handleChange(e)}
+                        />
+                        <TextField
+                            id="outlined-uncontrolled"
+                            label="URL"
+                            margin="normal"
+                            name="url"
+                            fullWidth
+                            variant="standard"
+                            onChange={e => this.handleChange(e)}
+                        />
+                        <TextField
+                            id="outlined-uncontrolled"
+                            label="Description"
+                            margin="normal"
+                            fullWidth
+                            variant="standard"
+                            name="description"
+                            multiline
+                            rows="5"
+                            onChange={e => this.handleChange(e)}
+                        />
+                        <TextField
+                            id="outlined-uncontrolled"
+                            label="Tags"
+                            margin="normal"
+                            fullWidth
+                            name="tags"
+                            variant="standard"
+                            onChange={e => this.handleChange(e)}
+                        />
                         <div className="actions">
-                            <button onClick={this.toggleAddDialog} className="">
+                            <button className="default disabled" onClick={this.toggleAddDialog}>
                                 Cancel
                             </button>
-                            <button onClick={this.addBookmark} className="primary">
+                            <button className="primary animate in up" onClick={this.addBookmark}>
                                 Add
                             </button>
                         </div>

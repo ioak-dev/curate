@@ -5,10 +5,6 @@ import './style.scss';
 import { NavLink } from 'react-router-dom';
 
 class Links extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     toggleMenu = () => {
         this.setState({
             menu: !this.state.menu

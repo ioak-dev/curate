@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import './style.scss';
-import { NavLink } from 'react-router-dom';
-import ioak_white from '../../images/ioak_white.svg';
-import ioak_black from '../../images/ioak_black.svg';
 import curate_white from '../../images/curate_white.svg';
 import curate_black from '../../images/curate_black.svg';
 import Links from './Links';
@@ -29,7 +26,8 @@ class Desktop extends Component {
                 <div className="right">
                     <div className="settings-icon" onClick={this.props.toggleSettings}><i className="material-icons">settings</i></div>
                     <div className="action">
-                        <button onClick={this.props.logout()}>Login</button>
+                        {this.props.authorization.isAuth && <button className="default animate in right noborder small" onClick={this.props.logout()}>Logout</button>}
+                        {!this.props.authorization.isAuth && <button className="default animate in right noborder small" onClick={this.props.login()}>Login</button>}
                     </div>
                 </div>
             </div>
@@ -48,10 +46,5 @@ Desktop.propTypes = {
     profile: PropTypes.object.isRequired
 
 }
-
-const mapStateToProps = state => ({
-    authorization: state.authorization,
-    profile: state.profile
-})
 
 export default Desktop;

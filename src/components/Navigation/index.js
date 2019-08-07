@@ -1,19 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import {withRouter} from 'react-router'
 import { getAuth, addAuth, removeAuth } from '../../actions/AuthActions';
 import { getProfile, setProfile } from '../../actions/ProfileActions';
 import PropTypes from 'prop-types';
 import {withCookies} from 'react-cookie';
-import Notification from '../Notification';
 
 import './style.scss';
-import { NavLink } from 'react-router-dom';
-import ioak_white from '../../images/ioak_white.svg';
-import ioak_black from '../../images/ioak_black.svg';
-import curate_white from '../../images/curate_white.svg';
-import curate_black from '../../images/curate_black.svg';
-import account_circle from '../../icons/mi-account_circle.svg';
-import account_circle_white from '../../icons/mi-account_circle_white.svg';
 import Desktop from './Desktop';
 import Mobile from './Mobile';
 import { Switch } from '@material-ui/core';
@@ -21,7 +14,6 @@ import ArcDialog from '../Ux/ArcDialog';
 
 class Navigation extends Component {
     constructor(props) {
-        console.log(props);
         super(props);
         this.props.getProfile();
         this.state = {
@@ -67,6 +59,10 @@ class Navigation extends Component {
         this.props.sendEvent('notification', true, {type: 'success', message: 'You have been logged out', duration: 3000});
     }
 
+    login = () => {
+        this.props.history.push('/login');
+    }
+
     toggleSettings = () => {
         this.setState({
             showSettings: !this.state.showSettings
@@ -76,8 +72,8 @@ class Navigation extends Component {
     render() {
         return (
             <div className="nav">
-                <Desktop {...this.props} logout={() => this.logout} toggleSettings={this.toggleSettings} transparent={this.state.transparentNavBar} />
-                <Mobile {...this.props} logout={() => this.logout} toggleSettings={this.toggleSettings} transparent={this.state.transparentNavBar} />
+                <Desktop {...this.props} logout={() => this.logout} login={() => this.login} toggleSettings={this.toggleSettings} transparent={this.state.transparentNavBar} />
+                <Mobile {...this.props} logout={() => this.logout} login={() => this.login} toggleSettings={this.toggleSettings} transparent={this.state.transparentNavBar} />
                 
                 
 
@@ -100,9 +96,7 @@ class Navigation extends Component {
                         </div>
                     </div>
                     <div className="actions">
-                        <button className=""  onClick={this.toggleSettings}>Close</button>
-                        <button className="primary"  onClick={this.toggleSettings}>Close</button>
-                        <button className="secondary"  onClick={this.toggleSettings}>Close</button>
+                        <button className="primary animate in right"  onClick={this.toggleSettings}>Close</button>
                     </div>
                 </ArcDialog>
             </div>
@@ -129,4 +123,4 @@ const mapStateToProps = state => ({
     profile: state.profile
 })
 
-export default connect(mapStateToProps, { getAuth, addAuth, removeAuth, getProfile, setProfile })(withCookies(Navigation));
+export default connect(mapStateToProps, { getAuth, addAuth, removeAuth, getProfile, setProfile })(withCookies(withRouter(Navigation)));

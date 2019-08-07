@@ -6,10 +6,6 @@ import developers1 from '../../images/developers1.jpg';
 import developers2 from '../../images/developers2.jpg';
 
 export default class Home extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentWillMount() {
     this.props.sendEvent('navbar-transparency');
   }

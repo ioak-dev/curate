@@ -17,10 +17,12 @@ class ArcDialog extends Component {
     render() {
         return (
             <>
-            <div className={(this.props.visible ? "dialog show" : "dialog hide")}>
-                {this.props.title && <div className="header">{this.props.title}<i className="material-icons" onClick={this.props.toggleVisibility}>close</i></div>}
-                <div className="container">
-                    {this.props.children}
+            <div className="dialog-outer">
+                <div className={(this.props.visible ? "dialog show" : "dialog hide")}>
+                    {this.props.title && <div className="header">{this.props.title}<i className="material-icons" onClick={this.props.toggleVisibility}>close</i></div>}
+                    <div className="container">
+                        {this.props.children}
+                    </div>
                 </div>
             </div>
             </>

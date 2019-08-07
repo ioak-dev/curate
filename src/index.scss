@@ -27,12 +27,8 @@ code {
     monospace;
 }
 
-// HPE
-// 01a982
-// 2ad2c9
-// ff8d6d
-
-// ff7a59
+// 34ba9b
+// f68c70
 
 :root {
   --color-pick: #4B5DB3;
@@ -43,9 +39,9 @@ code {
     --color-body: #2d2d2d;
     --color-body-invert: #fcfcfc;
     --color-body-invert-dim: #AAAAAA;
-    --color-primary: #34ba9b; //#3AAFA9; //#D9AD29;
+    --color-primary: #F49670; //#3AAFA9; //#D9AD29;
     // --color-secondary: #1B998B;
-    --color-secondary: #f68c70;
+    --color-secondary: #64CFEA;
     --color-darkgrey: darkgrey;
     --color-grey: grey;
     --color-white: white;
@@ -63,29 +59,25 @@ code {
     --color-navitem-mobile: var(--color-white);
 
 
-    --color-btn-primary-active: #7DD3BF;
-    --color-btn-primary: rgba(125, 211, 191, 0.3);
-    --color-btn-primary-active-fg: black;
-    --color-btn-primary-fg: white;
-    --color-btn-secondary-active: var(--color-secondary);
-    --color-btn-secondary-active-fg: black;
-    --color-btn-default-active: var(--color-body-invert);
-    --color-btn-default-active-fg: black;
+    --color-btn-primary-bg: var(--color-primary);
+    --color-btn-primary-fg: var(--color-body-invert);
+    --color-btn-primary-fg-hover: black;
+    --color-btn-secondary-bg: var(--color-secondary);
+    --color-btn-secondary-fg: var(--color-body-invert);
+    --color-btn-secondary-fg-hover: black;
+    --color-btn-default-bg: var(--color-body-invert);
+    --color-btn-default-fg: var(--color-body-invert);
+    --color-btn-default-fg-hover: black;
 
-    --color-btn-fg: white;
-    --color-btn-fg-block: black;
-    --color-btn-fg-default: white;
-    --color-btn-fg-default-block: black;
-
-    --color-dialog: #3c3c3c;
+    --color-dialog: var(--color-nav);
   }
   
   .theme_light {
     --color-body: #fcfcfc;
     --color-body-invert: #101010;
     --color-body-invert-dim: #6E6E6E;
-    --color-primary: #34ba9b; //#03A696; //#c9a16e;
-    --color-secondary: #f68c70;
+    --color-primary: #DB7246; //#03A696; //#c9a16e;
+    --color-secondary: #4997AB;
     // --color-secondary: var(--color-pick);
     --color-darkgrey: darkgrey;
     --color-grey: grey;
@@ -103,19 +95,15 @@ code {
     --color-nav-slider: var(--color-body);
     --color-navitem-mobile: var(--color-black);
 
-    --color-btn-primary-active: var(--color-primary);
-    --color-btn-primary: rgba(52, 186, 155, 0.6);
-    --color-btn-primary-active-fg: white;
-    --color-btn-primary-fg: black;
-    --color-btn-secondary-active: var(--color-secondary);
-    --color-btn-secondary-active-fg: var(--color-body);
-    --color-btn-default-active: var(--color-body-invert);
-    --color-btn-default-active-fg: var(--color-body);
-
-    --color-btn-fg: black;
-    --color-btn-fg-block: white;
-    --color-btn-fg-default: black;
-    --color-btn-fg-default-block: white;
+    --color-btn-primary-bg: var(--color-primary);
+    --color-btn-primary-fg: var(--color-body-invert);
+    --color-btn-primary-fg-hover: white;
+    --color-btn-secondary-bg: var(--color-secondary);
+    --color-btn-secondary-fg: var(--color-body-invert);
+    --color-btn-secondary-fg-hover: white;
+    --color-btn-default-bg: var(--color-body-invert);
+    --color-btn-default-fg: var(--color-body-invert);
+    --color-btn-default-fg-hover: white;
 
     --color-dialog: var(--color-body);
     

@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import './style.scss';
-import { NavLink } from 'react-router-dom';
-import ioak_white from '../../images/ioak_white.svg';
-import ioak_black from '../../images/ioak_black.svg';
 import curate_white from '../../images/curate_white.svg';
 import curate_black from '../../images/curate_black.svg';
 import Links from './Links';
@@ -44,12 +41,12 @@ class Desktop extends Component {
                     <Links authorization={this.props.authorization}/>
                     <div className="action">
                         <div className="settings-icon" onClick={this.props.toggleSettings}>
-                            <button onClick={this.props.toggleSettings}>Change Theme</button>
+                            <button className="default small" onClick={this.props.toggleSettings}>Theme</button>
                         </div>
                         <div className="buttons">
-                            {this.props.authorization.isAuth && <button onClick={this.props.logout()}>Logout</button>}
-                            {!this.props.authorization.isAuth && <button onClick={this.props.logout()}>Login</button>}
-                            {!this.props.authorization.isAuth && <button onClick={this.props.logout()}>Signup</button>}
+                            {this.props.authorization.isAuth && <button className="default small" onClick={this.props.logout()}>Logout</button>}
+                            {!this.props.authorization.isAuth && <button className="secondary small" onClick={this.props.login()}>Login</button>}
+                            {!this.props.authorization.isAuth && <button className="secondary small animate out right" onClick={this.props.login()}>Signup</button>}
                         </div>
                     </div>
                 </div>
@@ -70,10 +67,5 @@ Desktop.propTypes = {
     profile: PropTypes.object.isRequired
 
 }
-
-const mapStateToProps = state => ({
-    authorization: state.authorization,
-    profile: state.profile
-})
 
 export default Desktop;

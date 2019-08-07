@@ -4,7 +4,6 @@ import './style.scss';
 
 class Notification extends Component {
     constructor(props) {
-        console.log(props);
         super(props);
         this.state = {
             spinner: false,

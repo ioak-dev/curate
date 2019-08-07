@@ -24,10 +24,10 @@ const arcTheme = createMuiTheme({
     },
     palette: {
       primary: {
-          main: '#D9AD29'          
+          main: '#34ba9b'          
       },
       secondary: {
-          main: '#9AA66D'
+          main: '#f68c70'
       }
     }
   });

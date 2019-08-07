@@ -4,7 +4,6 @@ import { getAuth, addAuth, removeAuth } from '../../actions/AuthActions';
 import PropTypes from 'prop-types';
 import {withCookies} from 'react-cookie';
 import './Login.scss';
-import Navigation from '../Navigation';
 import ArcTextField from '../Ux/ArcTextField';
 import { signup, signin } from './AuthService';
 
