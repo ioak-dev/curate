@@ -54,8 +54,7 @@ class Navigation extends Component {
         this.props.cookies.remove('isAuth');
         this.props.cookies.remove('token');
         this.props.cookies.remove('secret');
-        this.props.cookies.remove('firstname');
-        this.props.cookies.remove('lastname');
+        this.props.cookies.remove('name');
         this.props.sendEvent('notification', true, {type: 'success', message: 'You have been logged out', duration: 3000});
     }
 

@@ -11,8 +11,7 @@ class AuthInit extends Component {
                 isAuth: true,
                 token: this.props.cookies.get('token'),
                 secret: this.props.cookies.get('secret'),
-                firstname: this.props.cookies.get('firstname'),
-                lastname: this.props.cookies.get('lastname')
+                name: this.props.cookies.get('name')
             });
         }
         this.props.getAuth();

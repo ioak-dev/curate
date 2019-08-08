@@ -24,9 +24,9 @@ class Login extends Component {
         const that = this;
         that.props.sendEvent('notification', false);
         that.props.sendEvent('spinner');
-        if (this.state.username && this.state.password) {
+        if (this.state.email && this.state.password) {
             signin({
-                username: this.state.username,
+                email: this.state.email,
                 password: this.state.password
                 })
                 .then(function(response) {
@@ -56,15 +56,13 @@ class Login extends Component {
         this.props.sendEvent('notification', false);
         this.props.sendEvent('spinner');
         signup({
-            username: this.state.username,
-            firstname: this.state.firstname,
-            lastname: this.state.lastname,
+            name: this.state.name,
             password: this.state.password,
             email: this.state.email
             })
             .then(function(status) {
                 if (status === 200) {
-                    this.props.sendEvent('notification', true, {'type': 'success', message: 'Your account has been created. You can login now', duration: 3000});
+                    that.props.sendEvent('notification', true, {'type': 'success', message: 'Your account has been created. You can login now', duration: 3000});
                     that.toggle();
                 }
             })
@@ -83,14 +81,12 @@ class Login extends Component {
             isAuth: true,
             token: data.token,
             secret: data.secret,
-            firstname: data.firstname,
-            lastname: data.lastname
+            name: data.name
         });
         this.props.cookies.set('isAuth', true);
         this.props.cookies.set('token', data.token);
         this.props.cookies.set('secret', data.secret);
-        this.props.cookies.set('firstname', data.firstname);
-        this.props.cookies.set('lastname', data.lastname);
+        this.props.cookies.set('name', data.name);
         this.props.history.push("/bookmarks");
     }
 
@@ -106,7 +102,7 @@ class Login extends Component {
                 {!this.state.newuser && <div className="container">
                     <h1>Log In</h1>
                     <div className="form">
-                        <ArcTextField label="Username" id="username" handleChange={e => this.handleChange(e)} />
+                        <ArcTextField label="Username/e-mail" id="email" handleChange={e => this.handleChange(e)} />
                         <ArcTextField label="Password" id="password" type="password" handleChange={e => this.handleChange(e)} />
                     </div>
                     <br />
@@ -118,11 +114,9 @@ class Login extends Component {
                 {this.state.newuser && <div className="container">
                     <h1>Sign Up</h1>
                     <div className="form">
-                        <ArcTextField label="First name" id="firstname" handleChange={e => this.handleChange(e)} />
-                        <ArcTextField label="Last name" id="lastname" handleChange={e => this.handleChange(e)} />
-                        <ArcTextField label="Username" id="username" handleChange={e => this.handleChange(e)} />
+                        <ArcTextField label="Name" id="name" handleChange={e => this.handleChange(e)} />
+                        <ArcTextField label="Email / User Name" id="email" handleChange={e => this.handleChange(e)} />
                         <ArcTextField label="Password" id="password" type="password" handleChange={e => this.handleChange(e)} />
-                        <ArcTextField label="Email" id="email" handleChange={e => this.handleChange(e)} />
                     </div>
                     <br />
                     <button className="primary block"  onClick={this.signup}>Create account</button>

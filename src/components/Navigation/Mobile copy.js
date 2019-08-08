@@ -46,8 +46,7 @@ class Mobile extends Component {
         this.props.cookies.remove('isAuth');
         this.props.cookies.remove('token');
         this.props.cookies.remove('secret');
-        this.props.cookies.remove('firstname');
-        this.props.cookies.remove('lastname');
+        this.props.cookies.remove('name');
         this.props.addNotification('success', 'You have been logged out', 3000);
     }
 
@@ -75,7 +74,7 @@ class Mobile extends Component {
                     <div className="rightnav">
                         <div className="auth">
                             <Settings />
-                            {this.props.authorization.isAuth && <div className="label">{this.props.authorization.firstname}</div>}
+                            {this.props.authorization.isAuth && <div className="label">{this.props.authorization.name}</div>}
                             {!this.props.authorization.isAuth && <div className="label">Log In</div>}
                             {/* {!this.props.authorization.isAuth && <NavLink to="/login" className="navitem" activeClassName="active"><i className="material-icons">face</i></NavLink>}
                             {this.props.authorization.isAuth && <button className="icon primary" onClick={this.logout}><i className="material-icons">power_settings_new</i></button>} */}
@@ -118,7 +117,7 @@ class Mobile extends Component {
                         <div className={(this.state.visible ? "mobilefooter": "hidetext")}>
                             {this.props.authorization.isAuth && 
                                 <div>
-                                    {this.props.authorization.firstname}
+                                    {this.props.authorization.name}
                                 </div>
                             }
                         </div>
