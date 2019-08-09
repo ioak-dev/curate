@@ -1,0 +1,35 @@
+.action-button {
+    display: inline;
+    margin: 4px;
+    button {
+        margin: 0;
+        background-color: var(--color-body-invert);
+        color: var(--color-body) !important;
+        text-transform: none;
+        font-size: 1em;
+        &.center {
+            border-radius: 10px;
+            padding-left: 6px;
+            padding-right: 6px;
+            padding-top: 2px;
+            padding-bottom: 2px;
+            cursor: pointer;
+        }
+        &.left {
+            border-radius: 10px 0 0 10px;
+            padding-left: 6px;
+            padding-right: 6px;
+            padding-top: 2px;
+            padding-bottom: 2px;
+            cursor: pointer;
+        }
+        
+        &.right {
+            border-radius: 0 10px 10px 0;
+            padding-right: 6px;
+            padding-top: 2px;
+            padding-bottom: 2px;
+            cursor: pointer;
+        }
+    }
+}

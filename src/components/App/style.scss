@@ -1,6 +1,6 @@
-
 .dialog-container {
   background-color: var(--color-dialog) !important;
+  color: var(--color-body-invert);
 }
 
 .App {
@@ -12,7 +12,7 @@
     margin: auto;
     .boxed {
       min-height: 100vh;
-      padding-top: 100px;
+      padding-top: calc(var(--height-nav) + 20px);
       padding-bottom: 40px;
 
       @media (min-width: 768px) {
@@ -25,54 +25,33 @@
       }
     }
   }
+
+  .backdrop-fade {
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    background-color: black;
+    z-index: 2;
+    opacity: 0.5;
+    overflow: hidden;
+  }
 }
 
-button {
-  outline: none;
-  border-radius: 2px;
-  font-size: 1em;
-  padding: 0.25em 1em;
-  background: transparent;
-  color: var(--color-darkgrey);
-  border: 2px solid var(--color-darkgrey);
-  border-radius: 15px 2px;
-  
-  &.primary {
-    color: var(--color-primary);
-    border: 2px solid var(--color-primary);
-  }
-  &.secondary {
-    color: var(--color-secondary);
-    border: 2px solid var(--color-secondary);
-  }
-  &.accent {
-    color: var(--color-accent);
-    border: 2px solid var(--color-accent);
-  }
-  &.block {
-    background-color: var(--color-white);
-    color: var(--color-white);
-    &.primary {
-      background-color: var(--color-primary);
-    }
-    &.secondary {
-      background-color: var(--color-secondary);
-    }
-    &.accent {
-      background-color: var(--color-accent);
-    }    
-  }
+//   &.icon {
+//     font-size: 0.8em;
+//     padding: 0em 0em;
+//     background: transparent;
+//     border: none;
+//   }
 
-  &.icon {
-    font-size: 0.8em;
-    padding: 0em 0em;
-    background: transparent;
-    border: none;
-  }
+//   .material-icons {
+//     vertical-align: bottom;
+//     font-size: 20px;
+//     margin-right: 5px;
+//   }
+// }
 
-  .material-icons {
-    vertical-align: bottom;
-    font-size: 20px;
-    margin-right: 5px;
-  }
+.MuiInputLabel-root, .MuiInputBase-root {
+  color: white;
 }
+

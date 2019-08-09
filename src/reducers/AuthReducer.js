@@ -4,8 +4,7 @@ const initialState = {
     isAuth: false,
     token: '',
     secret: '',
-    firstname: '',
-    lastname: ''
+    name: ''
 }
 
 export default function(state = initialState, action) {
@@ -21,7 +20,6 @@ export default function(state = initialState, action) {
                 ...state,
                 ...action.payload
             };
-        
         case REMOVE_AUTH:
             console.log('REMOVE_AUTH reducer');
             return {
@@ -29,8 +27,7 @@ export default function(state = initialState, action) {
                 isAuth: false,
                 token: '',
                 secret: '',
-                firstname: '',
-                lastname: ''
+                name: ''
             };
         default:
             return state;

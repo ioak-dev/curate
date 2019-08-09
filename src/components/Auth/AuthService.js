@@ -10,10 +10,9 @@ export function signup(data) {
         .then(function(response) {
             if (response.status === 200) {
                 return axios.post(baseUrl + constants.API_URL_SIGNUP, {
-                    username: data.username,
-                    firstname: data.firstname,
-                    lastname: data.lastname,
+                    name: data.name,
                     email: data.email,
+                    password: data.password,
                     problem: encrypt(data.password, response.data.solution, response.data.salt),
                     solution: response.data.solution
                     })
@@ -25,12 +24,12 @@ export function signup(data) {
 }
 
 export function signin(data) {
-    return axios.get(baseUrl + constants.API_URL_PRESIGNIN + data.username)
+    return axios.get(baseUrl + constants.API_URL_PRESIGNIN + data.email)
         .then(function(response) {
             if (response.status === 200) {
                 let solution = decrypt(data.password, JSON.stringify(response.data));
                 return axios.post(baseUrl + constants.API_URL_SIGNIN, {
-                    name: data.username, solution: solution
+                    email: data.email, solution: solution
                     })
                     .then(function(response) {
                         return Promise.resolve(response);
