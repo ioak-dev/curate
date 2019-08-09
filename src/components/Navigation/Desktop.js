@@ -8,6 +8,7 @@ import Links from './Links';
 
 class Desktop extends Component {
     constructor(props) {
+        console.log(props);
         super(props);
         this.props.getProfile();
         this.state = {
@@ -26,8 +27,8 @@ class Desktop extends Component {
                 <div className="right">
                     <div className="settings-icon" onClick={this.props.toggleSettings}><i className="material-icons">settings</i></div>
                     <div className="action">
-                        {this.props.authorization.isAuth && <button className="default animate in right noborder small" onClick={this.props.logout()}>Logout</button>}
-                        {!this.props.authorization.isAuth && <button className="default animate in right noborder small" onClick={this.props.login()}>Login</button>}
+                        {this.props.authorization.isAuth && <button className="default disabled small" onClick={this.props.logout()}>Logout</button>}
+                        {!this.props.authorization.isAuth && <button className="default disabled small" onClick={this.props.login()}>Login</button>}
                     </div>
                 </div>
             </div>

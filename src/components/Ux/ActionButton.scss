@@ -3,8 +3,8 @@
     margin: 4px;
     button {
         margin: 0;
-        background-color: white;
-        color: black !important;
+        background-color: var(--color-body-invert);
+        color: var(--color-body) !important;
         text-transform: none;
         font-size: 1em;
         &.center {

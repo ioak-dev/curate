@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {withRouter} from 'react-router'
-import { getAuth, addAuth, removeAuth } from '../../actions/AuthActions';
 import { getProfile, setProfile } from '../../actions/ProfileActions';
 import PropTypes from 'prop-types';
 import {withCookies} from 'react-cookie';
@@ -15,6 +14,7 @@ import ArcDialog from '../Ux/ArcDialog';
 class Navigation extends Component {
     constructor(props) {
         super(props);
+        console.log(props);
         this.props.getProfile();
         this.state = {
             visible: false,
@@ -49,15 +49,6 @@ class Navigation extends Component {
         console.log('not available');
     }
 
-    logout = () => {
-        this.props.removeAuth();
-        this.props.cookies.remove('isAuth');
-        this.props.cookies.remove('token');
-        this.props.cookies.remove('secret');
-        this.props.cookies.remove('name');
-        this.props.sendEvent('notification', true, {type: 'success', message: 'You have been logged out', duration: 3000});
-    }
-
     login = () => {
         this.props.history.push('/login');
     }
@@ -71,8 +62,8 @@ class Navigation extends Component {
     render() {
         return (
             <div className="nav">
-                <Desktop {...this.props} logout={() => this.logout} login={() => this.login} toggleSettings={this.toggleSettings} transparent={this.state.transparentNavBar} />
-                <Mobile {...this.props} logout={() => this.logout} login={() => this.login} toggleSettings={this.toggleSettings} transparent={this.state.transparentNavBar} />
+                <Desktop {...this.props} logout={this.props.logout} login={() => this.login} toggleSettings={this.toggleSettings} transparent={this.state.transparentNavBar} />
+                <Mobile {...this.props} logout={this.props.logout} login={() => this.login} toggleSettings={this.toggleSettings} transparent={this.state.transparentNavBar} />
                 
                 
 
@@ -105,8 +96,6 @@ class Navigation extends Component {
 
 Navigation.propTypes = {
     sendEvent: PropTypes.func.isRequired,
-    getAuth: PropTypes.func.isRequired,
-    addAuth: PropTypes.func.isRequired,
     removeAuth: PropTypes.func.isRequired,
     authorization: PropTypes.object.isRequired,
     getProfile: PropTypes.func.isRequired,
@@ -118,8 +107,7 @@ Navigation.propTypes = {
 }
 
 const mapStateToProps = state => ({
-    authorization: state.authorization,
     profile: state.profile
 })
 
-export default connect(mapStateToProps, { getAuth, addAuth, removeAuth, getProfile, setProfile })(withCookies(withRouter(Navigation)));
+export default connect(mapStateToProps, { getProfile, setProfile })(withCookies(withRouter(Navigation)));

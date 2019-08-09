@@ -5,8 +5,8 @@ import './ActionButton.scss';
 function ActionButton(props) {
     return (
         <div className="action-button">
-            <button className="left" onClick={props.action}>{props.label}</button>
-            <button className="right" onClick={props.action}>x</button>
+            <button className="left" onClick={props.leftAction}>{props.leftLabel}</button>
+            <button className="right" onClick={props.rightAction}>{props.rightLabel}</button>
             {/* <a className="center" onClick={props.action}>{props.label}</a> */}
         </div>
     )
