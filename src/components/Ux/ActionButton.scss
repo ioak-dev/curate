@@ -8,7 +8,7 @@
         text-transform: none;
         font-size: 1em;
         &.center {
-            border-radius: 10px;
+            border-radius: 100px;
             padding-left: 6px;
             padding-right: 6px;
             padding-top: 2px;
@@ -16,7 +16,7 @@
             cursor: pointer;
         }
         &.left {
-            border-radius: 10px 0 0 10px;
+            border-radius: 100px 0 0 100px;
             padding-left: 6px;
             padding-right: 6px;
             padding-top: 2px;
@@ -25,11 +25,23 @@
         }
         
         &.right {
-            border-radius: 0 10px 10px 0;
+            border-radius: 0 100px 100px 0;
             padding-right: 6px;
             padding-top: 2px;
             padding-bottom: 2px;
             cursor: pointer;
+        }
+
+        &.primary {
+            background-color: var(--color-primary);
+        }
+
+        &.secondary {
+            background-color: var(--color-secondary);
+        }
+
+        &.danger {
+            background-color: var(--color-btn-action-danger-bg);
         }
     }
 }

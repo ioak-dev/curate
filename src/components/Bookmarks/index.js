@@ -11,6 +11,10 @@ import { constants } from '../Constants';
 import axios from "axios";
 import ArcTextField from '../Ux/ArcTextField';
 import ArcDialog from '../Ux/ArcDialog';
+import ViewResolver from '../Ux/ViewResolver';
+import View from '../Ux/View';
+import ActionButton from '../Ux/ActionButton';
+import './style.scss';
 
 const baseUrl = process.env.REACT_APP_API_URL;
 
@@ -20,6 +24,7 @@ class Bookmarks extends Component {
         console.log(props);
         this.state = {
             items: [],
+            view: [],
             showAddDialog: false
         }
         this.toggleAddDialog = this.toggleAddDialog.bind(this);
@@ -47,7 +52,7 @@ class Bookmarks extends Component {
             })
             .then(function(response) {
                 console.log(response);
-                that.setState({items: response.data});
+                that.setState({items: response.data, view: response.data});
             }
         );
     }
@@ -93,16 +98,14 @@ class Bookmarks extends Component {
     }
 
     render() {
-        const listview = this.state.items.map(item => (
+        const listview = this.state.view.map(item => (
             <div key={item._id}>
             <Link id={item._id} title={item.title} description={item.description} href={item.href} tags={item.tags} />
             <br />
             </div>
         ))
         return (
-            <div className="boxed">
-                
-                <button onClick={this.toggleAddDialog} className="primary animate in down">Add New Bookmark</button>
+            <div className="bookmarks">
                 <ArcDialog title="Add Bookmark" visible={this.state.showAddDialog} toggleVisibility={this.toggleAddDialog}>
                     <ArcTextField label="Title" id="title" handleChange={e => this.handleChange(e)} />
                     <ArcTextField label="URL" id="href" handleChange={e => this.handleChange(e)} />
@@ -113,7 +116,31 @@ class Bookmarks extends Component {
                         <button onClick={this.addBookmark} className="primary animate out down">Add</button>
                     </div>
                 </ArcDialog>
-                {listview}
+
+                <ViewResolver>
+                    <View main>
+                        <button onClick={this.toggleAddDialog} className="primary animate in down space-bottom-1">Add Bookmark</button>
+                        {listview}
+                    </View>
+                    <View side>
+                        <div className="filter-container">
+                            <div className="filter-body">
+                                <div className="typography-2">Filter by Tag</div>
+                                <ActionButton leftLabel="+ ioak"/>
+                                <ActionButton leftLabel="+ curate"/>
+                                <ActionButton leftLabel="+ protekt"/>
+                                <ActionButton leftLabel="+ proteus"/>
+
+                                <div className="typography-2 space-top-2">Search</div>
+                                <ArcTextField label="Search text" id="serachtext" handleChange={e => this.handleChange(e)} />
+                            </div>
+                            <div className="footer">
+                                <button onClick={this.toggleAddDialog} className="primary animate in left">Apply</button>
+                                <button onClick={this.toggleAddDialog} className="primary">Clear</button>
+                            </div>
+                        </div>
+                    </View>
+                </ViewResolver>
             </div>
         )
     }

@@ -68,6 +68,8 @@ code {
     --color-btn-default-bg: var(--color-body-invert);
     --color-btn-default-fg: var(--color-body-invert);
     --color-btn-default-fg-hover: black;
+    
+    --color-btn-action-danger-bg: #DC758F;
 
     --color-dialog: var(--color-nav);
   }
@@ -104,6 +106,8 @@ code {
     --color-btn-default-bg: var(--color-body-invert);
     --color-btn-default-fg: var(--color-body-invert);
     --color-btn-default-fg-hover: white;
+
+    --color-btn-action-danger-bg: #B33951;
 
     --color-dialog: var(--color-body);
     
