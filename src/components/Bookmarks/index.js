@@ -44,7 +44,7 @@ class Bookmarks extends Component {
 
     initializeBookmarks(authorization) {
         const that = this;
-        axios.get(baseUrl + constants.API_URL_BOOKMARK, 
+        axios.get(baseUrl + constants.API_URL_BOOKMARK,
             {
                 headers: {
                     Authorization: 'Bearer ' + authorization.token
@@ -70,7 +70,7 @@ class Bookmarks extends Component {
             href: this.state.href,
             description: this.state.description,
             tags: this.state.tags
-        }, 
+        },
         {
             headers: {
                 Authorization: 'Bearer ' + this.props.authorization.token
@@ -100,7 +100,7 @@ class Bookmarks extends Component {
     render() {
         const listview = this.state.view.map(item => (
             <div key={item._id}>
-            <Link id={item._id} title={item.title} description={item.description} href={item.href} tags={item.tags} />
+            <Link id={item._id} bookmark = {item} />
             <br />
             </div>
         ))
