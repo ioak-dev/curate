@@ -21,15 +21,18 @@ const baseUrl = process.env.REACT_APP_API_URL;
 class Bookmarks extends Component {
     constructor(props) {
         super(props);
-        console.log(props);
         this.state = {
             items: [],
             view: [],
-            showAddDialog: false
+            isEditDialogOpen: false,
+
+            id: null,
+            title: '',
+            href: '',
+            description: '',
+            tags: '',
+            editDialogLabel: 'Add'
         }
-        this.toggleAddDialog = this.toggleAddDialog.bind(this);
-        this.addBookmark = this.addBookmark.bind(this);
-        this.handleChange = this.handleChange.bind(this);
     }
     componentDidMount() {
         if(this.props.authorization.isAuth) {
@@ -57,15 +60,34 @@ class Bookmarks extends Component {
         );
     }
 
-    toggleAddDialog() {
+    toggleEditDialog = () => {
         this.setState({
-            showAddDialog: !this.state.showAddDialog
+            isEditDialogOpen: !this.state.isEditDialogOpen,
+            id: null,
+            title: '',
+            href: '',
+            description: '',
+            tags: '',
+            editDialogLabel: 'Add'
         })
     }
 
-    addBookmark() {
+    editBookmark = (bookmark) => {
+        this.setState({
+            isEditDialogOpen: true,
+            id: bookmark._id,
+            title: bookmark.title,
+            href: bookmark.href,
+            description: bookmark.description,
+            tags: bookmark.tags,
+            editDialogLabel: 'Save'
+        })
+    }
+
+    addBookmark= () => {
         const that = this;
         axios.put(baseUrl + constants.API_URL_BOOKMARK, {
+            id: this.state.id,
             title: this.state.title,
             href: this.state.href,
             description: this.state.description,
@@ -79,7 +101,7 @@ class Bookmarks extends Component {
         .then(function(response) {
             if (response.status === 201) {
                 that.props.sendEvent('notification', true, {type: 'success', message: 'Bookmark created', duration: 5000});
-                that.toggleAddDialog();
+                that.toggleEditDialog();
             }
         })
         .catch((error) => {
@@ -89,7 +111,7 @@ class Bookmarks extends Component {
         })
     }
 
-    handleChange(event) {
+    handleChange = (event) => {
         this.setState(
             {
                 [event.currentTarget.name]: event.currentTarget.value
@@ -100,26 +122,26 @@ class Bookmarks extends Component {
     render() {
         const listview = this.state.view.map(item => (
             <div key={item._id}>
-            <Link id={item._id} bookmark = {item} />
+            <Link id={item._id} bookmark={item} editBookmark={this.editBookmark} />
             <br />
             </div>
         ))
         return (
             <div className="bookmarks">
-                <ArcDialog title="Add Bookmark" visible={this.state.showAddDialog} toggleVisibility={this.toggleAddDialog}>
-                    <ArcTextField label="Title" id="title" handleChange={e => this.handleChange(e)} />
-                    <ArcTextField label="URL" id="href" handleChange={e => this.handleChange(e)} />
-                    <ArcTextField label="Description" id="description" multiline rows='5' handleChange={e => this.handleChange(e)} />
-                    <ArcTextField label="Tags" id="tags" handleChange={e => this.handleChange(e)} />
+                <ArcDialog title="Add Bookmark" visible={this.state.isEditDialogOpen} toggleVisibility={this.toggleEditDialog}>
+                    <ArcTextField label="Title" data={this.state} id="title" handleChange={e => this.handleChange(e)} />
+                    <ArcTextField label="URL" data={this.state} id="href" handleChange={e => this.handleChange(e)} />
+                    <ArcTextField label="Description" data={this.state} id="description" multiline rows='5' handleChange={e => this.handleChange(e)} />
+                    <ArcTextField label="Tags" data={this.state} id="tags" handleChange={e => this.handleChange(e)} />
                     <div className="actions">
-                        <button onClick={this.toggleAddDialog} className="default disabled">Cancel</button>
-                        <button onClick={this.addBookmark} className="primary animate out down">Add</button>
+                        <button onClick={this.toggleEditDialog} className="default disabled">Cancel</button>
+                        <button onClick={this.addBookmark} className="primary animate out down">{this.state.editDialogLabel}</button>
                     </div>
                 </ArcDialog>
 
                 <ViewResolver>
                     <View main>
-                        <button onClick={this.toggleAddDialog} className="primary animate in down space-bottom-1">Add Bookmark</button>
+                        <button onClick={this.toggleEditDialog} className="primary animate in down space-bottom-1">Add Bookmark</button>
                         {listview}
                     </View>
                     <View side>
@@ -132,11 +154,11 @@ class Bookmarks extends Component {
                                 <ActionButton leftLabel="+ proteus"/>
 
                                 <div className="typography-2 space-top-2">Search</div>
-                                <ArcTextField label="Search text" id="serachtext" handleChange={e => this.handleChange(e)} />
+                                <ArcTextField label="Search text" id="serachtext" data={this.state} handleChange={e => this.handleChange(e)} />
                             </div>
                             <div className="footer">
-                                <button onClick={this.toggleAddDialog} className="primary animate in left">Apply</button>
-                                <button onClick={this.toggleAddDialog} className="primary">Clear</button>
+                                <button onClick={this.toggleEditDialog} className="primary animate in left">Apply</button>
+                                <button onClick={this.toggleEditDialog} className="primary">Clear</button>
                             </div>
                         </div>
                     </View>
