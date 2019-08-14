@@ -177,8 +177,12 @@ class Bookmarks extends Component {
                                 <ArcTextField label="Search text" id="serachtext" data={this.state} handleChange={e => this.handleChange(e)} />
                             </div>
                             <div className="footer">
+                                <div>
                                 <button onClick={this.toggleEditDialog} className="primary animate in left">Apply</button>
+                                </div>
+                                <div>
                                 <button onClick={this.toggleEditDialog} className="primary">Clear</button>
+                                </div>
                             </div>
                         </div>
                     </View>
