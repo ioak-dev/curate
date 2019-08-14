@@ -102,8 +102,8 @@ class Login extends Component {
                 {!this.state.newuser && <div className="container">
                     <h1>Log In</h1>
                     <div className="form">
-                        <ArcTextField label="Username/e-mail" id="email" handleChange={e => this.handleChange(e)} />
-                        <ArcTextField label="Password" id="password" type="password" handleChange={e => this.handleChange(e)} />
+                        <ArcTextField label="Username/e-mail" id="email" data={this.state} handleChange={e => this.handleChange(e)} />
+                        <ArcTextField label="Password" id="password" type="password" data={this.state} handleChange={e => this.handleChange(e)} />
                     </div>
                     <br />
                     <button className="primary block"  onClick={this.signin}>Sign In</button>
@@ -114,9 +114,9 @@ class Login extends Component {
                 {this.state.newuser && <div className="container">
                     <h1>Sign Up</h1>
                     <div className="form">
-                        <ArcTextField label="Name" id="name" handleChange={e => this.handleChange(e)} />
-                        <ArcTextField label="Email / User Name" id="email" handleChange={e => this.handleChange(e)} />
-                        <ArcTextField label="Password" id="password" type="password" handleChange={e => this.handleChange(e)} />
+                        <ArcTextField label="Name" id="name" data={this.state} handleChange={e => this.handleChange(e)} />
+                        <ArcTextField label="Email / User Name" id="email" data={this.state} handleChange={e => this.handleChange(e)} />
+                        <ArcTextField label="Password" id="password" type="password" data={this.state} handleChange={e => this.handleChange(e)} />
                     </div>
                     <br />
                     <button className="primary block"  onClick={this.signup}>Create account</button>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ActionButton from '../Ux/ActionButton';
+import { classProperty } from '@babel/types';
 
 class Link extends Component {
     constructor(props) {
@@ -19,6 +20,10 @@ class Link extends Component {
         this.props.editBookmark(this.props.bookmark);
     }
 
+    delete = () => {
+        this.props.deleteBookmark(this.props.id);
+    }
+
     render() {
         const tags = [];
         this.props.bookmark.tags.split(" ").map(item => {
@@ -28,7 +33,7 @@ class Link extends Component {
             <div>
                 <div className="typography-3">{this.props.bookmark.title}</div>
                 <ActionButton type="danger" leftLabel="edit" leftAction={this.edit}></ActionButton>
-                <ActionButton type="danger" leftLabel="delete" leftAction={this.tag}></ActionButton>
+                <ActionButton type="danger" leftLabel="delete" leftAction={this.delete}></ActionButton>
                 <div className="typography-2 color-secondary">{this.props.bookmark.href}</div>
                 <div className="typography-1 space-bottom-1">{this.props.bookmark.description}</div>
                 {tags}

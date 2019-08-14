@@ -84,6 +84,26 @@ class Bookmarks extends Component {
         })
     }
 
+    deleteBookmark = (bookmarkId) => {
+        const that = this;
+        axios.delete(baseUrl + constants.API_URL_BOOKMARK + "/" + bookmarkId,
+        {
+            headers: {
+                Authorization: 'Bearer ' + this.props.authorization.token
+            }
+        })
+        .then(function(response) {
+            if (response.status === 201) {
+                that.props.sendEvent('notification', true, {type: 'success', message: 'Bookmark deleted', duration: 5000});
+            }
+        })
+        .catch((error) => {
+            if (error.response.status === 401) {
+                that.props.logout(null, 'failure', 'Session expired. Login again');
+            }
+        })
+    }
+
     addBookmark= () => {
         const that = this;
         axios.put(baseUrl + constants.API_URL_BOOKMARK, {
@@ -122,7 +142,7 @@ class Bookmarks extends Component {
     render() {
         const listview = this.state.view.map(item => (
             <div key={item._id}>
-            <Link id={item._id} bookmark={item} editBookmark={this.editBookmark} />
+            <Link id={item._id} bookmark={item} editBookmark={this.editBookmark} deleteBookmark={this.deleteBookmark}/>
             <br />
             </div>
         ))
