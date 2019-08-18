@@ -88,6 +88,7 @@ class Login extends Component {
         this.props.cookies.set('secret', data.secret);
         this.props.cookies.set('name', data.name);
         this.props.history.push("/bookmarks");
+        this.props.history.push("/notes");
     }
 
     toggle = () => {
@@ -110,7 +111,7 @@ class Login extends Component {
                     <br /><br />
                     Don't have an account? &nbsp; <button className="secondary"  onClick={this.toggle}>Sign Up</button>
                 </div>}
-                
+
                 {this.state.newuser && <div className="container">
                     <h1>Sign Up</h1>
                     <div className="form">

@@ -104,6 +104,21 @@ class Bookmarks extends Component {
         })
     }
 
+    searchBookmarksByTags = () =>{
+        const that = this;
+        axios.get(baseUrl + constants.API_URL_BOOKMARK,
+            {
+                headers: {
+                    Authorization: 'Bearer ' + this.props.authorization.token
+                }
+            })
+            .then(function(response) {
+                    console.log(response);
+                    that.setState({items: response.data, view: response.data});
+                }
+            );
+    }
+
     addBookmark= () => {
         const that = this;
         axios.put(baseUrl + constants.API_URL_BOOKMARK, {
@@ -178,7 +193,7 @@ class Bookmarks extends Component {
                             </div>
                             <div className="footer">
                                 <div>
-                                <button onClick={this.toggleEditDialog} className="primary animate in left">Apply</button>
+                                <button onClick={this.searchBookmarksByTags} className="primary animate in left">Apply</button>
                                 </div>
                                 <div>
                                 <button onClick={this.toggleEditDialog} className="primary">Clear</button>
