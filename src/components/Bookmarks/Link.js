@@ -27,16 +27,16 @@ class Link extends Component {
     render() {
         const tags = [];
         this.props.bookmark.tags.split(" ").map(item => {
-            tags.push(<ActionButton key={item} leftLabel={item} leftAction={() => this.tag(item)} rightLabel="x" rightAction={() => this.removeTag(item)}></ActionButton>);
+            tags.push(<ActionButton key={item} icon="" leftLabel={item} leftAction={() => this.tag(item)}></ActionButton>);
         })
         return (
             <div>
                 <div className="typography-3">{this.props.bookmark.title}</div>
-                <ActionButton type="danger" leftLabel="edit" leftAction={this.edit}></ActionButton>
-                <ActionButton type="danger" leftLabel="delete" leftAction={this.delete}></ActionButton>
-                <div className="typography-2 color-secondary">{this.props.bookmark.href}</div>
+                <div className="typography-2">{this.props.bookmark.href}</div>
                 <div className="typography-1 space-bottom-1">{this.props.bookmark.description}</div>
                 {tags}
+                <ActionButton type="secondary" icon="edit" leftLabel="edit" leftAction={this.edit}></ActionButton>
+                <ActionButton type="danger" icon="delete" leftLabel="delete" leftAction={this.delete}></ActionButton>
             </div>
         )
     }

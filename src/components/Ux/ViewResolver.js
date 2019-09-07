@@ -50,18 +50,30 @@ class ViewResolver extends Component {
     render() {
         return (
             <>
-            <div className="view-main">
-                {this.state.main}
-            </div>
-            <div className="view-filter" onClick={this.toggleSideView}>
-                {!this.state.showSide && <i className="material-icons">filter_list</i>}
-                {this.state.showSide && <i className="material-icons">clear</i>}
-            </div>
-            <div className={(this.state.showSide ? "slider show" : "slider hide")}>
-                <div className={(this.state.showSide ? "container": "container hidetext")}>
-                    <div className="view-side">
-                        {this.state.side}
+            <div className="view-mobile">
+                <div className="view-main">
+                    {this.state.main}
+                </div>
+                <div className="view-filter" onClick={this.toggleSideView}>
+                    {!this.state.showSide && <i className="material-icons">filter_list</i>}
+                    {this.state.showSide && <i className="material-icons">clear</i>}
+                </div>
+                <div className={(this.state.showSide ? "slider show" : "slider hide")}>
+                    <div className={(this.state.showSide ? "container": "container hidetext")}>
+                        <div className="view-side">
+                            {this.state.side}
+                        </div>
                     </div>
+                </div>
+            </div>
+
+            <div className="view-desktop">
+                <div className="view-side">
+                    {this.state.side}
+                </div>
+                <div className="view-content">
+                    {this.state.main}
+                    {this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}
                 </div>
             </div>
             </>
