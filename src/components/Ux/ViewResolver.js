@@ -73,7 +73,7 @@ class ViewResolver extends Component {
                 </div>
                 <div className="view-content">
                     {this.state.main}
-                    {this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}
+                    {/* {this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main} */}
                 </div>
             </div>
             </>

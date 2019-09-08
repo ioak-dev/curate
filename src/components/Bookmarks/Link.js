@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ActionButton from '../Ux/ActionButton';
-import { classProperty } from '@babel/types';
+import './style.scss';
 
 class Link extends Component {
     constructor(props) {
@@ -31,12 +31,15 @@ class Link extends Component {
         })
         return (
             <div>
-                <div className="typography-3">{this.props.bookmark.title}</div>
+                <div className="typography-3">{this.props.bookmark.title}
+                    <div className="action-icon">
+                        <i onClick={this.edit} className="material-icons">edit</i>
+                        <i onClick={this.delete} className="material-icons">delete</i>
+                    </div>
+                </div>
                 <div className="typography-2">{this.props.bookmark.href}</div>
                 <div className="typography-1 space-bottom-1">{this.props.bookmark.description}</div>
                 {tags}
-                <ActionButton type="secondary" icon="edit" leftLabel="edit" leftAction={this.edit}></ActionButton>
-                <ActionButton type="danger" icon="delete" leftLabel="delete" leftAction={this.delete}></ActionButton>
             </div>
         )
     }

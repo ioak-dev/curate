@@ -2,4 +2,11 @@
     .form {
         width: 100%;
     }
+
+    .action-icon {
+        cursor: pointer;
+        display: inline;
+        padding-left: 10px;
+        color: var(--color-secondary);
+    }
 }
