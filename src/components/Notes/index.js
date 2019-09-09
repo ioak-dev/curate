@@ -179,14 +179,6 @@ class Notes extends Component {
                             <div className="section-main">
                                 <div className="typography-2">New component in a loop to show all notes as a clickable link</div>
                             </div>
-                            <div className="section-footer">
-                                <div>
-                                <button onClick={this.searchNotesByTags} className="primary animate in left">Apply</button>
-                                </div>
-                                <div>
-                                <button onClick={this.toggleEditDialog} className="primary">Clear</button>
-                                </div>
-                            </div>
                         </div>
                     </View>
                 </ViewResolver>
