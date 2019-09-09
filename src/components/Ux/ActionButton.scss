@@ -1,6 +1,6 @@
 .action-button {
     display: inline;
-    margin: 4px;
+    // margin: 4px;
     button {
         margin: 0;
         background-color: var(--color-tag);
@@ -8,6 +8,7 @@
         text-transform: none;
         font-size: 1em;
         height: 30px;
+        margin: 4px;
         &.center, &.left, &.right {
             padding-left: 10px;
             padding-right: 10px;

@@ -176,17 +176,17 @@ class Notes extends Component {
                     </View>
                     <View side>
                         <div className="filter-container">
-                            <div className="filter-body">
+                            <div className="section-main">
                                 <div className="typography-2">Filter by Tag</div>
-                                <ActionButton leftLabel="+ ioak"/>
-                                <ActionButton leftLabel="+ curate"/>
-                                <ActionButton leftLabel="+ protekt"/>
-                                <ActionButton leftLabel="+ proteus"/>
+                                <ActionButton icon="add" leftLabel="ioak"/>
+                                <ActionButton icon="delete" leftLabel="curate"/>
+                                <ActionButton icon="edit" leftLabel="protekt"/>
+                                <ActionButton icon="remove" leftLabel="proteus"/>
 
                                 <div className="typography-2 space-top-2">Search</div>
                                 <ArcTextField label="Search text" id="serachtext" data={this.state} handleChange={e => this.handleChange(e)} />
                             </div>
-                            <div className="footer">
+                            <div className="section-footer">
                                 <div>
                                 <button onClick={this.searchNotesByTags} className="primary animate in left">Apply</button>
                                 </div>
