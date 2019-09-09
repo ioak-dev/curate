@@ -177,14 +177,7 @@ class Notes extends Component {
                     <View side>
                         <div className="filter-container">
                             <div className="section-main">
-                                <div className="typography-2">Filter by Tag</div>
-                                <ActionButton icon="add" leftLabel="ioak"/>
-                                <ActionButton icon="delete" leftLabel="curate"/>
-                                <ActionButton icon="edit" leftLabel="protekt"/>
-                                <ActionButton icon="remove" leftLabel="proteus"/>
-
-                                <div className="typography-2 space-top-2">Search</div>
-                                <ArcTextField label="Search text" id="serachtext" data={this.state} handleChange={e => this.handleChange(e)} />
+                                <div className="typography-2">New component in a loop to show all notes as a clickable link</div>
                             </div>
                             <div className="section-footer">
                                 <div>
