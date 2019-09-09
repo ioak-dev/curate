@@ -17,7 +17,8 @@ class ViewResolver extends Component {
 
     initializeViews() {
         React.Children.toArray(this.state.views).forEach((node) => {
-            if (node.type.name === 'View') {
+            // node.type.name is minified after build and so static build result has different alphabet
+            // if (node.type.name === 'View') {
                 if (node.props.main) {
                     this.setState({
                         main: node
@@ -27,7 +28,7 @@ class ViewResolver extends Component {
                         side: node
                     })
                 }
-            }
+            // }
         })
     }
 
