@@ -1,5 +1,47 @@
 .notes {
+
+    .edit-note-view {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-items: center;
+    }
+
+    .action-icon {
+        cursor: pointer;
+        display: inline;
+        padding-left: 10px;
+        color: var(--color-primary);
+    }
+
     .form {
         width: 100%;
+    }
+
+    .noteref {
+        cursor: pointer;
+
+        .title {
+            
+        }
+
+        .detail {
+            color: var(--color-body-invert-dim);
+        }
+        
+        &.selected {
+            // background-color: var(--color-primary);
+            background-color: var(--color-body-invert);
+
+            .title {
+                color: var(--color-body);
+            }
+
+            .detail {
+                color: var(--color-body-dim);
+            }
+        }
+
+        transition: all .2s ease-in-out;
+
     }
 }

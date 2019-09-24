@@ -168,7 +168,7 @@ class Bookmarks extends Component {
                     </div>
                 </ArcDialog>
 
-                <ViewResolver>
+                <ViewResolver event={this.props.event}>
                     <View main>
                         <button onClick={this.toggleEditDialog} className="primary animate in down space-bottom-1">Add Bookmark</button>
                         {listview}

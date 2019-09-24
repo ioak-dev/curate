@@ -40,6 +40,12 @@ class ViewResolver extends Component {
                 this.initializeViews();
             })
         }
+
+        if (nextProps.event && nextProps.event.name === 'sidebar') {
+            this.setState({
+                showSide: nextProps.event.signal
+            })
+        }
     }
 
     toggleSideView = () => {
@@ -74,7 +80,6 @@ class ViewResolver extends Component {
                 </div>
                 <div className="view-content">
                     {this.state.main}
-                    {/* {this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main}{this.state.main} */}
                 </div>
             </div>
             </>
@@ -83,6 +88,7 @@ class ViewResolver extends Component {
 }
 
 ViewResolver.propTypes = {
+    event: PropTypes.object
 }
 
 export default ViewResolver;

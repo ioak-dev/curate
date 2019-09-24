@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ActionButton from '../Ux/ActionButton';
-import { classProperty } from '@babel/types';
+import ReactMarkdown from 'react-markdown';
 
 class Link extends Component {
     constructor(props) {
@@ -27,16 +27,22 @@ class Link extends Component {
     render() {
         const tags = [];
         this.props.note.tags.split(" ").map(item => {
-            tags.push(<ActionButton key={item} leftLabel={item} leftAction={() => this.tag(item)} rightLabel="x" rightAction={() => this.removeTag(item)}></ActionButton>);
+            tags.push(<ActionButton key={item} leftLabel={item} leftAction={() => this.tag(item)}></ActionButton>);
         })
         return (
             <div>
-                <div className="typography-2">{this.props.note.title}</div>
-                <div className="typography-1 space-bottom-1">{this.props.note.content}</div>
+                <div className="typography-3">
+                    {/* <div className="action-icon">
+                        <i onClick={this.edit} className="material-icons">edit</i>
+                        <i onClick={this.delete} className="material-icons">delete</i>
+                    </div> */}
+                    {this.props.note.title}
+                </div>
+                <ActionButton icon="edit" type="primary" leftLabel="edit" leftAction={this.edit}></ActionButton>
+                <ActionButton icon="delete" type="danger" leftLabel="delete" leftAction={this.delete}></ActionButton>
+                
                 {tags}
-                <div ><br /></div>
-                <ActionButton type="danger" leftLabel="edit" leftAction={this.edit}></ActionButton>
-                <ActionButton type="danger" leftLabel="delete" leftAction={this.delete}></ActionButton>
+                <ReactMarkdown source={this.props.note.content} />
 
             </div>
         )
