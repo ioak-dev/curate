@@ -163,14 +163,14 @@ class Bookmarks extends Component {
                     <ArcTextField label="Description" data={this.state} id="description" multiline rows='5' handleChange={e => this.handleChange(e)} />
                     <ArcTextField label="Tags" data={this.state} id="tags" handleChange={e => this.handleChange(e)} />
                     <div className="actions">
-                        <button onClick={this.toggleEditDialog} className="default disabled">Cancel</button>
-                        <button onClick={this.addBookmark} className="primary animate out down">{this.state.editDialogLabel}</button>
+                        <button onClick={this.toggleEditDialog} className="default disabled"><i class="material-icons">close</i>Cancel</button>
+                        <button onClick={this.addBookmark} className="primary block"><i class="material-icons">check</i>{this.state.editDialogLabel}</button>
                     </div>
                 </ArcDialog>
 
                 <ViewResolver event={this.props.event}>
                     <View main>
-                        <button onClick={this.toggleEditDialog} className="primary animate in down space-bottom-1">Add Bookmark</button>
+                        <button onClick={this.toggleEditDialog} className="primary animate space-bottom-1"><i className="material-icons">add</i>Add Bookmark</button>
                         {listview}
                     </View>
                     <View side>
@@ -182,120 +182,15 @@ class Bookmarks extends Component {
                                 <ActionButton type="select" icon="remove" leftLabel="protekt"/>
                                 <ActionButton icon="add" leftLabel="proteus"/>
 
-
-
-
-                                
-                                {/* <div className="typography-2">Filter by Tag</div>
-                                <ActionButton leftLabel="+ ioak"/>
-                                <ActionButton leftLabel="+ curate"/>
-                                <ActionButton leftLabel="+ protekt"/>
-                                <ActionButton leftLabel="+ proteus"/>
-                                <div className="typography-2">Filter by Tag</div>
-                                <ActionButton leftLabel="+ ioak"/>
-                                <ActionButton leftLabel="+ curate"/>
-                                <ActionButton leftLabel="+ protekt"/>
-                                <ActionButton leftLabel="+ proteus"/>
-                                <div className="typography-2">Filter by Tag</div>
-                                <ActionButton leftLabel="+ ioak"/>
-                                <ActionButton leftLabel="+ curate"/>
-                                <ActionButton leftLabel="+ protekt"/>
-                                <ActionButton leftLabel="+ proteus"/>
-                                <div className="typography-2">Filter by Tag</div>
-                                <ActionButton leftLabel="+ ioak"/>
-                                <ActionButton leftLabel="+ curate"/>
-                                <ActionButton leftLabel="+ protekt"/>
-                                <ActionButton leftLabel="+ proteus"/>
-                                <div className="typography-2">Filter by Tag</div>
-                                <ActionButton leftLabel="+ ioak"/>
-                                <ActionButton leftLabel="+ curate"/>
-                                <ActionButton leftLabel="+ protekt"/>
-                                <ActionButton leftLabel="+ proteus"/>
-                                <div className="typography-2">Filter by Tag</div>
-                                <ActionButton leftLabel="+ ioak"/>
-                                <ActionButton leftLabel="+ curate"/>
-                                <ActionButton leftLabel="+ protekt"/>
-                                <ActionButton leftLabel="+ proteus"/>
-                                <div className="typography-2">Filter by Tag</div>
-                                <ActionButton leftLabel="+ ioak"/>
-                                <ActionButton leftLabel="+ curate"/>
-                                <ActionButton leftLabel="+ protekt"/>
-                                <ActionButton leftLabel="+ proteus"/>
-                                <div className="typography-2">Filter by Tag</div>
-                                <ActionButton leftLabel="+ ioak"/>
-                                <ActionButton leftLabel="+ curate"/>
-                                <ActionButton leftLabel="+ protekt"/>
-                                <ActionButton leftLabel="+ proteus"/>
-                                <div className="typography-2">Filter by Tag</div>
-                                <ActionButton leftLabel="+ ioak"/>
-                                <ActionButton leftLabel="+ curate"/>
-                                <ActionButton leftLabel="+ protekt"/>
-                                <ActionButton leftLabel="+ proteus"/>
-                                <div className="typography-2">Filter by Tag</div>
-                                <ActionButton leftLabel="+ ioak"/>
-                                <ActionButton leftLabel="+ curate"/>
-                                <ActionButton leftLabel="+ protekt"/>
-                                <ActionButton leftLabel="+ proteus"/>
-                                <div className="typography-2">Filter by Tag</div>
-                                <ActionButton leftLabel="+ ioak"/>
-                                <ActionButton leftLabel="+ curate"/>
-                                <ActionButton leftLabel="+ protekt"/>
-                                <ActionButton leftLabel="+ proteus"/>
-                                <div className="typography-2">Filter by Tag</div>
-                                <ActionButton leftLabel="+ ioak"/>
-                                <ActionButton leftLabel="+ curate"/>
-                                <ActionButton leftLabel="+ protekt"/>
-                                <ActionButton leftLabel="+ proteus"/>
-                                <div className="typography-2">Filter by Tag</div>
-                                <ActionButton leftLabel="+ ioak"/>
-                                <ActionButton leftLabel="+ curate"/>
-                                <ActionButton leftLabel="+ protekt"/>
-                                <ActionButton leftLabel="+ proteus"/>
-                                <div className="typography-2">Filter by Tag</div>
-                                <ActionButton leftLabel="+ ioak"/>
-                                <ActionButton leftLabel="+ curate"/>
-                                <ActionButton leftLabel="+ protekt"/>
-                                <ActionButton leftLabel="+ proteus"/>
-                                <div className="typography-2">Filter by Tag</div>
-                                <ActionButton leftLabel="+ ioak"/>
-                                <ActionButton leftLabel="+ curate"/>
-                                <ActionButton leftLabel="+ protekt"/>
-                                <ActionButton leftLabel="+ proteus"/>
-                                <div className="typography-2">Filter by Tag</div>
-                                <ActionButton leftLabel="+ ioak"/>
-                                <ActionButton leftLabel="+ curate"/>
-                                <ActionButton leftLabel="+ protekt"/>
-                                <ActionButton leftLabel="+ proteus"/>
-                                <div className="typography-2">Filter by Tag</div>
-                                <ActionButton leftLabel="+ ioak"/>
-                                <ActionButton leftLabel="+ curate"/>
-                                <ActionButton leftLabel="+ protekt"/>
-                                <ActionButton leftLabel="+ proteus"/>
-                                <div className="typography-2">Filter by Tag</div>
-                                <ActionButton leftLabel="+ ioak"/>
-                                <ActionButton leftLabel="+ curate"/>
-                                <ActionButton leftLabel="+ protekt"/>
-                                <ActionButton leftLabel="+ proteus"/>
-                                <div className="typography-2">Filter by Tag</div>
-                                <ActionButton leftLabel="+ ioak"/>
-                                <ActionButton leftLabel="+ curate"/>
-                                <ActionButton leftLabel="+ protekt"/>
-                                <ActionButton leftLabel="+ proteus"/>
-                                <div className="typography-2">Filter by Tag</div>
-                                <ActionButton leftLabel="+ ioak"/>
-                                <ActionButton leftLabel="+ curate"/>
-                                <ActionButton leftLabel="+ protekt"/>
-                                <ActionButton leftLabel="+ proteus"/> */}
-
                                 <div className="typography-2 space-top-2">Search</div>
                                 <ArcTextField label="Search text" id="serachtext" data={this.state} handleChange={e => this.handleChange(e)} />
                             </div>
                             <div className="section-footer">
                                 <div>
-                                    <button onClick={this.toggleEditDialog} className="default disabled small">Clear</button>
+                                    <button onClick={this.toggleEditDialog} className="default disabled left">Clear</button>
                                 </div>
                                 <div>
-                                    <button onClick={this.searchBookmarksByTags} className="default animate in left small">Apply</button>
+                                    <button onClick={this.searchBookmarksByTags} className="default animate right space-right-2">Apply</button>
                                 </div>
                             </div>
                         </div>

@@ -13,9 +13,9 @@ import ArcTextField from '../Ux/ArcTextField';
 import ArcDialog from '../Ux/ArcDialog';
 import ViewResolver from '../Ux/ViewResolver';
 import View from '../Ux/View';
-import ReactMarkdown from 'react-markdown';
 import './style.scss';
 import NoteRef from './NoteRef';
+import Showdown from '../Ux/Showdown';
 
 const baseUrl = process.env.REACT_APP_API_URL;
 
@@ -27,16 +27,11 @@ class Notes extends Component {
             view: [],
             isAddDialogOpen: false,
 
-            editNote: false,
-            editNotePreview: false,
-
             selectedNoteId: '',
 
-            id: null,
             title: '',
             content: '',
-            tags: '',
-            editDialogLabel: 'Add'
+            tags: ''
         }
         this.props.receiveEvents();
     }
@@ -82,45 +77,7 @@ class Notes extends Component {
             id: null,
             title: '',
             content: '',
-            tags: '',
-            editDialogLabel: 'Add'
-        })
-    }
-
-    closeNewNote = () => {
-        this.setState({
-            isAddDialogOpen: false,
-            id: null,
-            title: '',
-            content: '',
-            tags: '',
-            editDialogLabel: 'Add'
-        })
-    }
-
-    toggleEditNotePreview = () => {
-        this.setState({
-            editNotePreview: !this.state.editNotePreview
-        })
-    }
-
-
-    closeEditNote = () => {
-        this.setState({
-            editNote: !this.state.editNote,
-            editNotePreview: true,
-        })
-    }
-
-    editNote = (note) => {
-        this.setState({
-            editNote: true,
-            editNotePreview: true,
-            id: note._id,
-            title: note.title,
-            content: note.content,
-            tags: note.tags,
-            editDialogLabel: 'Save'
+            tags: ''
         })
     }
 
@@ -150,8 +107,7 @@ class Notes extends Component {
 
     selectNote = (noteId) => {
         this.setState({
-            selectedNoteId: noteId,
-            editNote: false
+            selectedNoteId: noteId
         })
         this.props.sendEvent('sidebar', false);
     }
@@ -171,13 +127,22 @@ class Notes extends Component {
             );
     }
 
-    saveNote= () => {
-        const that = this;
-        axios.put(baseUrl + constants.API_URL_NOTE, {
-            id: this.state.id,
+    saveNoteEvent = () => {
+        this.saveNote({
+            id: null,
             title: this.state.title,
             content: this.state.content,
             tags: this.state.tags
+        });
+    }
+
+    saveNote = (note, edit=false) => {
+        const that = this;
+        axios.put(baseUrl + constants.API_URL_NOTE, {
+            id: note.id,
+            title: note.title,
+            content: note.content,
+            tags: note.tags
         },
         {
             headers: {
@@ -186,14 +151,14 @@ class Notes extends Component {
         })
         .then(function(response) {
             if (response.status === 201) {
-                if (that.state.editNote) {
-                    that.props.sendEvent('notification', true, {type: 'success', message: 'Note Updated', duration: 5000});
-                    that.closeEditNote();
+                if (edit) {
+                    that.props.sendEvent('notification', true, {type: 'success', message: 'Note edited', duration: 5000});
+                    that.props.sendEvent('closeNoteEditView', true);
                 } else {
                     that.props.sendEvent('notification', true, {type: 'success', message: 'Note created', duration: 5000});
-                    that.closeNewNote();
+                    that.toggleAddDialog();
                 }
-                console.log(response);
+                
                 that.initializeNotes(that.props.authorization, response.data._id);
             }
         })
@@ -216,7 +181,7 @@ class Notes extends Component {
         const noteview = this.state.view.map(item => (
             <>
             {item._id === this.state.selectedNoteId && <div key={item._id}>
-                <Link id={item._id} note={item} editNote={this.editNote} deleteNote={this.deleteNote}/>
+                <Link id={item._id} note={item} saveNote={this.saveNote} deleteNote={this.deleteNote} event={this.props.event}/>
             </div>}
             </>
         ))
@@ -229,51 +194,26 @@ class Notes extends Component {
             <div className="notes">
                 <ArcDialog title="Add Note" visible={this.state.isAddDialogOpen} toggleVisibility={this.toggleAddDialog}>
                     <ArcTextField label="Title" data={this.state} id="title" handleChange={e => this.handleChange(e)} />
-                    <ArcTextField label="Tags" data={this.state} id="tags" handleChange={e => this.handleChange(e)} />
-                    <ArcTextField label="Content" data={this.state} id="content" multiline rows='20' handleChange={e => this.handleChange(e)} />
+                    <ArcTextField label="Tags (separated by blank spaces)" data={this.state} id="tags" handleChange={e => this.handleChange(e)} />
+                    <ArcTextField label="Content (Markdown / HTML / Plaintext)" data={this.state} id="content" multiline rows='20' handleChange={e => this.handleChange(e)} />
                     <div className="actions">
-                        <button onClick={this.toggleAddDialog} className="default disabled">Cancel</button>
-                        <button onClick={this.saveNote} className="primary animate out down">{this.state.editDialogLabel}</button>
+                        <button onClick={this.toggleAddDialog} className="default disabled left"><i class="material-icons">close</i>Cancel</button>
+                        <button onClick={this.saveNoteEvent} className="primary animate right"><i class="material-icons">check</i>Save</button>
                     </div>
                 </ArcDialog>
 
                 <ViewResolver event={this.props.event}>
                     <View main>
-                        {/* <button onClick={this.toggleAddDialog} className="primary animate in down space-bottom-1">Add Note</button> */}
-                        {!this.state.editNote && noteview}
-                        {this.state.editNote && 
-                            <div>
-                                <div className="typography-3">{this.state.title}</div>
-                                {/* <ActionButton type="primary" leftLabel="Save" leftAction={this.saveNote}></ActionButton>
-                                <ActionButton type="default" leftLabel="Cancel" leftAction={this.toggleEditNote}></ActionButton> */}
-
-                                <ArcTextField label="Title" data={this.state} id="title" handleChange={e => this.handleChange(e)} />
-                                <ArcTextField label="Tags" data={this.state} id="tags" handleChange={e => this.handleChange(e)} />
-                                {this.state.editNotePreview && <div className="edit-note-view">
-                                    <div><ArcTextField label="Content" data={this.state} id="content" multiline handleChange={e => this.handleChange(e)} /></div>
-                                    <div>
-                                        <ReactMarkdown source={this.state.content} />
-                                    </div>
-                                </div>}
-                                {!this.state.editNotePreview && <ArcTextField label="Content" data={this.state} id="content" multiline handleChange={e => this.handleChange(e)} />}
-                                <div className="space-top-2" />
-                                <button onClick={this.closeEditNote} className="default disabled">Cancel</button>
-                                {!this.state.editNotePreview && <button onClick={this.toggleEditNotePreview} className="default">Show Preview</button>}
-                                {this.state.editNotePreview && <button onClick={this.toggleEditNotePreview} className="default">Hide Preview</button>}
-                                <button onClick={this.saveNote} className="primary animate out down">Save</button>
-                        </div>}
-                        
+                        {noteview}
                     </View>
                     <View side>
                         <div className="filter-container">
                             <div className="section-main">
+                                {/* <div className="typography-1 space-bottom-2">HTML / Markdown supported</div> */}
+                                <button onClick={this.newNote} className="primary block space-top-2 space-bottom-2 space-left-2">
+                                    <i class="material-icons">add</i>New Note
+                                </button>
                                 {listNoteRef}
-                            </div>
-                        
-                            <div className="section-footer">
-                                <div>
-                                    <button onClick={this.newNote} className="default animate in left small">New Note</button>
-                                </div>
                             </div>
                         </div>
                     </View>

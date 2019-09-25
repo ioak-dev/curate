@@ -86,7 +86,7 @@ class Navigation extends Component {
                         </div>
                     </div>
                     <div className="actions">
-                        <button className="primary animate in right"  onClick={this.toggleSettings}>Close</button>
+                        <button className="primary"  onClick={this.toggleSettings}>Close</button>
                     </div>
                 </ArcDialog>
             </div>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ActionButton from '../Ux/ActionButton';
-import ReactMarkdown from 'react-markdown';
 import './style.scss';
+const removeMd = require('remove-markdown');
 
 class NoteRef extends Component {
     constructor(props) {
@@ -31,18 +31,22 @@ class NoteRef extends Component {
 
     render() {
         const tags = [];
-        this.props.note.tags.split(" ").map(item => {
-            tags.push(<ActionButton key={item} leftLabel={item} leftAction={() => this.tag(item)} rightLabel="x" rightAction={() => this.removeTag(item)}></ActionButton>);
-        })
+        if (this.props.note.tags) {
+            this.props.note.tags.split(" ").map(item => {
+                tags.push(<ActionButton key={item} leftLabel={item} leftAction={() => this.tag(item)} rightLabel="x" rightAction={() => this.removeTag(item)}></ActionButton>);
+            })
+        }
         return (
             <>
             <div className={this.props.selected ? "noteref selected" : "noteref"} onClick={this.selectNote}>
-                <div className="title typography-1">{this.props.note.title}</div>
-                {/* <div className="detail typography-1">{this.props.note.content.substring(1, 150)}</div> */}
-                <div className="detail typography-1"><ReactMarkdown source={this.props.note.content.substring(0, 150)} /></div>
-                
+                <div className="content">
+                    <div className="title typography-2">{this.props.note.title}</div>
+                    <div className="detail typography-1">{removeMd(this.props.note.content.substring(0, 200))}</div>
+                    {/* <div className="detail typography-1"><Showdown source={this.props.note.content.substring(0, 150)} /></div> */}
+                </div>
             </div>
-            <hr />
+            <div className="separator" />
+            {/* <hr /> */}
             </>
         )
     }
