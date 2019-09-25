@@ -1,5 +1,26 @@
 .notes {
 
+    .actionbar {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        justify-items: center;
+    }
+
+    .filter {
+        padding: 10px;
+        overflow: hidden;
+        &.hide {
+            // display: none;
+            height: 0px;
+            // transition: all 1s cubic-bezier(.5,1.6,.4,.7);
+        }
+        &.show {
+            height: 500px;
+            // transition: all 1s cubic-bezier(.5,1.6,.4,.7);
+        }
+        transition: all 1s cubic-bezier(.5,1.6,.4,.7);
+    }
+
     .edit-note-view {
         display: grid;
         grid-template-columns: 1fr 1fr;

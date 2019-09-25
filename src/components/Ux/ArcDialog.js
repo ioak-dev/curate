@@ -7,7 +7,6 @@ import { receiveEvents, sendEvent } from '../../actions/EventActions';
 class ArcDialog extends Component {
     constructor(props){
         super(props);
-        console.log(props);
     }
     componentWillReceiveProps(nextProps) {
         if (this.props.visible !== nextProps.visible) {

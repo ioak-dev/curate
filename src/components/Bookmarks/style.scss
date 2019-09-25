@@ -3,6 +3,12 @@
         width: 100%;
     }
 
+    .actionbar {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        justify-items: center;
+    }
+
     .tag {
         background-color: var(--color-body-dim);
         display: inline;
@@ -18,5 +24,9 @@
         display: inline;
         padding-left: 10px;
         color: var(--color-primary);
+    }
+
+    .section-main {
+        padding: 20px;
     }
 }

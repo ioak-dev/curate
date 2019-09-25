@@ -78,7 +78,7 @@ class Link extends Component {
         const tags = [];
         if (this.props.note.tags) {
             this.props.note.tags.split(" ").map(item => {
-                tags.push(<div className="tag">{item}</div>);
+                tags.push(<div key={item} className="tag">{item}</div>);
             })
         }
 

@@ -5,7 +5,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { TextField, Typography } from '@material-ui/core';
+import { TextField, Typography, Switch } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { constants } from '../Constants';
 import axios from "axios";
@@ -31,18 +31,30 @@ class Notes extends Component {
 
             title: '',
             content: '',
-            tags: ''
+            tags: '',
+            firstLoad: true,
+
+            showFilter: false,
+            searchtext: '',
+            isFiltered: false,
+            searchPref: {
+                title: true,
+                tags: true,
+                content: true
+            }
         }
         this.props.receiveEvents();
     }
     componentDidMount() {
-        if(this.props.authorization.isAuth) {
+        if(this.state.firstLoad && this.props.authorization.isAuth) {
             this.initializeNotes(this.props.authorization);
+            this.setState({firstLoad: false})
         }
     }
     componentWillReceiveProps(nextProps) {
-        if (nextProps.authorization && !this.state.selectedNoteId) {
+        if (this.state.firstLoad && nextProps.authorization) {
             this.initializeNotes(nextProps.authorization);
+            this.setState({firstLoad: false})
         }
     }
 
@@ -56,6 +68,9 @@ class Notes extends Component {
             })
             .then(function(response) {
                 that.setState({items: response.data, view: response.data});
+                if (that.state.isFiltered) {
+                    that.search();
+                }
 
                 if (selectedNoteId) {
                     that.setState({selectedNoteId: selectedNoteId});
@@ -78,6 +93,65 @@ class Notes extends Component {
             title: '',
             content: '',
             tags: ''
+        })
+    }
+
+    toggleFilter = () => {
+        this.setState({showFilter: !this.state.showFilter});
+    }
+
+    clearSearch = () => {
+        this.setState({
+            view: this.state.items,
+            isFiltered: false,
+            searchtext: ''
+        })
+        this.props.sendEvent('sidebar', false)
+    }
+
+    search = (event) => {
+        if (event) {
+            event.preventDefault();
+        }
+        const view = this.state.items.filter((item) => {
+            if (this.state.searchPref.title && this.match(item.title, this.state.searchtext)) {
+                return true;
+            } else if (this.state.searchPref.tags && this.match(item.tags, this.state.searchtext)) {
+                return true;
+            } else if (this.state.searchPref.content && this.match(item.content, this.state.searchtext)) {
+                return true;
+            }
+        });
+        let selectedNoteId = null;
+        if (view.length > 0) {
+            selectedNoteId = view[0]._id;
+        }
+        this.setState({
+            view: view,
+            isFiltered: true,
+            selectedNoteId: selectedNoteId
+        });
+        this.props.sendEvent('sidebar', false)
+    }
+
+    match = (text, words) => {
+        let found = false;
+        if (words) {
+            words.split(' ').forEach(word => {
+                if (text.match(new RegExp('(\\w*'+ word +'\\w*)','gi'))) {
+                    found = true;
+                }
+            });
+        }
+        return found;
+    }
+
+    toggleSearchPref = (pref) => {
+        this.setState({
+            searchPref: {
+                ...this.state.searchPref,
+                [pref]: !this.state.searchPref[pref]
+            }
         })
     }
 
@@ -110,21 +184,6 @@ class Notes extends Component {
             selectedNoteId: noteId
         })
         this.props.sendEvent('sidebar', false);
-    }
-
-    searchNotesByTags = () =>{
-        const that = this;
-        axios.get(baseUrl + constants.API_URL_NOTE,
-            {
-                headers: {
-                    Authorization: 'Bearer ' + this.props.authorization.token
-                }
-            })
-            .then(function(response) {
-                    console.log(response);
-                    that.setState({items: response.data, view: response.data});
-                }
-            );
     }
 
     saveNoteEvent = () => {
@@ -179,15 +238,14 @@ class Notes extends Component {
 
     render() {
         const noteview = this.state.view.map(item => (
-            <>
-            {item._id === this.state.selectedNoteId && <div key={item._id}>
-                <Link id={item._id} note={item} saveNote={this.saveNote} deleteNote={this.deleteNote} event={this.props.event}/>
-            </div>}
-            </>
+            <div key={item._id}>
+                {item._id === this.state.selectedNoteId && 
+                        <Link key={item._id} id={item._id} note={item} saveNote={this.saveNote} deleteNote={this.deleteNote} event={this.props.event}/>}
+            </div>
         ))
         const listNoteRef = this.state.view.map(item => (
             <div key={item._id}>
-            <NoteRef selected={this.state.selectedNoteId === item._id ? true : false} id={item._id} note={item} selectNote={this.selectNote} />
+                <NoteRef selected={this.state.selectedNoteId === item._id ? true : false} id={item._id} note={item} selectNote={this.selectNote} />
             </div>
         ))
         return (
@@ -197,22 +255,71 @@ class Notes extends Component {
                     <ArcTextField label="Tags (separated by blank spaces)" data={this.state} id="tags" handleChange={e => this.handleChange(e)} />
                     <ArcTextField label="Content (Markdown / HTML / Plaintext)" data={this.state} id="content" multiline rows='20' handleChange={e => this.handleChange(e)} />
                     <div className="actions">
-                        <button onClick={this.toggleAddDialog} className="default disabled left"><i class="material-icons">close</i>Cancel</button>
-                        <button onClick={this.saveNoteEvent} className="primary animate right"><i class="material-icons">check</i>Save</button>
+                        <button onClick={this.toggleAddDialog} className="default disabled left"><i className="material-icons">close</i>Cancel</button>
+                        <button onClick={this.saveNoteEvent} className="primary animate right"><i className="material-icons">check</i>Save</button>
                     </div>
                 </ArcDialog>
 
-                <ViewResolver event={this.props.event}>
+                <ViewResolver event={this.props.event} sendEvent={this.props.sendEvent}>
                     <View main>
                         {noteview}
                     </View>
                     <View side>
                         <div className="filter-container">
                             <div className="section-main">
-                                {/* <div className="typography-1 space-bottom-2">HTML / Markdown supported</div> */}
-                                <button onClick={this.newNote} className="primary block space-top-2 space-bottom-2 space-left-2">
-                                    <i class="material-icons">add</i>New Note
-                                </button>
+                                <div className="actionbar space-top-2">
+                                    <div>
+                                        <button onClick={this.newNote} className="primary block">
+                                            <i className="material-icons">add</i>New Note
+                                        </button>
+                                    </div>
+                                    <div>
+                                        <button onClick={this.toggleFilter} className="default disabled">
+                                            {!this.state.showFilter && <><i className="material-icons">expand_more</i>Filter</>}
+                                            {this.state.showFilter && <><i className="material-icons">expand_less</i>Filter</>}
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div className={this.state.showFilter ? "filter show" : "filter hide"}>
+                                    <div className="typography-2 space-top-1">Enter keywords separated by space</div>
+                                    {/* <form accept-charset="utf-8" method="GET" onSubmit={this.search} noValidate> */}
+                                    <form method="GET" onSubmit={this.search} noValidate>
+                                        <ArcTextField label="Keywords" id="searchtext" data={this.state} handleChange={e => this.handleChange(e)} />
+                                        {/* <ArcTextField label="Keywords2" id="searchtext2" data={this.state} handleChange={e => this.handleChange(e)} /> */}
+                                    </form>
+                                    <div className="typography-1 space-top-2">
+                                        <Switch
+                                            checked={this.state.searchPref.title}
+                                            onChange={() => this.toggleSearchPref('title')}
+                                            inputProps={{ 'aria-label': 'primary checkbox' }}/>
+                                        Include title
+                                    </div>
+                                    <div className="typography-1 space-top-2">
+                                        <Switch
+                                            checked={this.state.searchPref.tags}
+                                            onChange={() => this.toggleSearchPref('tags')}
+                                            inputProps={{ 'aria-label': 'primary checkbox' }}/>
+                                        Include tags
+                                    </div>
+                                    <div className="typography-1 space-top-2">
+                                        <Switch
+                                            checked={this.state.searchPref.content}
+                                            onChange={() => this.toggleSearchPref('content')}
+                                            inputProps={{ 'aria-label': 'primary checkbox' }}/>
+                                        Include Content
+                                    </div>
+                                    {this.state.isFiltered && <div className="typography-2 space-top-2">Found {this.state.view.length} notes matching the search criteria</div>}
+                                    <div className="actionbar space-top-2 space-bottom-2">
+                                        <div>
+                                            <button onClick={this.clearSearch} className="default left">Clear</button>
+                                        </div>
+                                        <div>
+                                            <button onClick={this.search} className="default animate right space-right-2">Search</button>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 {listNoteRef}
                             </div>
                         </div>

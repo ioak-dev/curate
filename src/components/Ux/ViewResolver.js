@@ -49,9 +49,7 @@ class ViewResolver extends Component {
     }
 
     toggleSideView = () => {
-        this.setState({
-            showSide: !this.state.showSide
-        })
+        this.props.sendEvent('sidebar', !this.state.showSide);
     }
 
     render() {
