@@ -1,11 +1,6 @@
 import React, { Component } from 'react';
 import Link from './Link';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import { TextField, Typography, Switch } from '@material-ui/core';
+import { Switch } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { constants } from '../Constants';
 import axios from "axios";
@@ -15,7 +10,7 @@ import ViewResolver from '../Ux/ViewResolver';
 import View from '../Ux/View';
 import './style.scss';
 import NoteRef from './NoteRef';
-import Showdown from '../Ux/Showdown';
+const queryString = require('query-string');
 
 const baseUrl = process.env.REACT_APP_API_URL;
 
@@ -46,6 +41,25 @@ class Notes extends Component {
         this.props.receiveEvents();
     }
     componentDidMount() {
+        if (this.props.location.search) {
+            const query = queryString.parse(this.props.location.search);
+            if (query && query.q) {
+                if (query.q.startsWith('tags')) {
+                    this.setState({
+                        searchPref: {
+                            title: false,
+                            tags: true,
+                            content: false
+                        }
+                    })
+                }
+                this.setState({
+                    searchtext: query.q,
+                    isFiltered: true
+                })
+            }
+        }
+
         if(this.state.firstLoad && this.props.authorization.isAuth) {
             this.initializeNotes(this.props.authorization);
             this.setState({firstLoad: false})

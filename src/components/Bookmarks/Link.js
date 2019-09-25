@@ -1,12 +1,7 @@
 import React, { Component } from 'react';
-import ActionButton from '../Ux/ActionButton';
 import './style.scss';
 
 class Link extends Component {
-    constructor(props) {
-        super(props);
-
-    }
     removeTag = (tag) => {
         alert(this.props.id + ' remove ' + tag);
         console.log(this.props);

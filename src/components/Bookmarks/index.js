@@ -7,20 +7,15 @@ import ArcTextField from '../Ux/ArcTextField';
 import ArcDialog from '../Ux/ArcDialog';
 import ViewResolver from '../Ux/ViewResolver';
 import View from '../Ux/View';
-import ActionButton from '../Ux/ActionButton';
 import './style.scss';
 import { Switch } from '@material-ui/core';
+const queryString = require('query-string');
 
 const baseUrl = process.env.REACT_APP_API_URL;
 
 class Bookmarks extends Component {
     constructor(props) {
         super(props);
-        // console.log(props.match);
-        // console.log(props.location);
-        // if (window.location.search) {
-        //     // alert(window.location.search);
-        // }
         this.state = {
             items: [],
             view: [],
@@ -45,6 +40,25 @@ class Bookmarks extends Component {
         }
     }
     componentDidMount() {
+        if (this.props.location.search) {
+            const query = queryString.parse(this.props.location.search);
+            if (query && query.q) {
+                if (query.q.startsWith('tags')) {
+                    this.setState({
+                        searchPref: {
+                            title: false,
+                            tags: true,
+                            content: false
+                        }
+                    })
+                }
+                this.setState({
+                    searchtext: query.q,
+                    isFiltered: true
+                })
+            }
+        }
+
         if(this.state.firstLoad && this.props.authorization.isAuth) {
             this.initializeBookmarks(this.props.authorization);
             this.setState({firstLoad: false})
