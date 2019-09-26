@@ -14,7 +14,6 @@ import ArcDialog from '../Ux/ArcDialog';
 class Navigation extends Component {
     constructor(props) {
         super(props);
-        console.log(props);
         this.props.getProfile();
         this.state = {
             visible: false,
@@ -45,10 +44,6 @@ class Navigation extends Component {
         }
     }
 
-    toggleTextSize = () => {
-        console.log('not available');
-    }
-
     login = () => {
         this.props.history.push('/login');
     }
@@ -67,7 +62,7 @@ class Navigation extends Component {
                 
                 
 
-                <ArcDialog title="Settings" visible={this.state.showSettings} toggleVisibility={this.toggleSettings}>
+                <ArcDialog title="Appearance" visible={this.state.showSettings} toggleVisibility={this.toggleSettings}>
                     <div className="settings">
                         <div>Dark mode</div>
                         <div>
@@ -76,17 +71,9 @@ class Navigation extends Component {
                             onChange={this.toggleDarkMode}
                             inputProps={{ 'aria-label': 'primary checkbox' }}/>
                         </div>
-                        
-                        <div>Large Text</div>
-                        <div>
-                            <Switch
-                            checked={this.props.profile.theme === 'theme_dark2'}
-                            onChange={this.toggleTextSize}
-                            inputProps={{ 'aria-label': 'primary checkbox' }}/>
-                        </div>
                     </div>
                     <div className="actions">
-                        <button className="primary animate in right"  onClick={this.toggleSettings}>Close</button>
+                        <button className="primary"  onClick={this.toggleSettings}>Close</button>
                     </div>
                 </ArcDialog>
             </div>

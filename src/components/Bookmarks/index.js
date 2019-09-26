@@ -7,9 +7,11 @@ import ArcTextField from '../Ux/ArcTextField';
 import ArcDialog from '../Ux/ArcDialog';
 import ViewResolver from '../Ux/ViewResolver';
 import View from '../Ux/View';
-import ActionButton from '../Ux/ActionButton';
 import './style.scss';
+import { Switch } from '@material-ui/core';
+import { isEmptyOrSpaces, match } from '../Utils';
 
+const queryString = require('query-string');
 const baseUrl = process.env.REACT_APP_API_URL;
 
 class Bookmarks extends Component {
@@ -20,22 +22,53 @@ class Bookmarks extends Component {
             view: [],
             isEditDialogOpen: false,
 
+            searchtext: '',
+            isFiltered: false,
+
             id: null,
             title: '',
             href: '',
             description: '',
             tags: '',
-            editDialogLabel: 'Add'
+            editDialogLabel: 'Add',
+            firstLoad: true,
+
+            searchPref: {
+                title: true,
+                tags: true,
+                href: true
+            }
         }
     }
     componentDidMount() {
-        if(this.props.authorization.isAuth) {
+        if (this.props.location.search) {
+            const query = queryString.parse(this.props.location.search);
+            if (query && query.q) {
+                if (query.q.startsWith('tags')) {
+                    this.setState({
+                        searchPref: {
+                            title: false,
+                            tags: true,
+                            content: false
+                        }
+                    })
+                }
+                this.setState({
+                    searchtext: query.q,
+                    isFiltered: true
+                })
+            }
+        }
+
+        if(this.state.firstLoad && this.props.authorization.isAuth) {
             this.initializeBookmarks(this.props.authorization);
+            this.setState({firstLoad: false})
         }
     }
     componentWillReceiveProps(nextProps) {
-        if (nextProps.authorization) {
+        if (this.state.firstLoad && nextProps.authorization) {
             this.initializeBookmarks(nextProps.authorization);
+            this.setState({firstLoad: false})
         }
     }
 
@@ -48,8 +81,10 @@ class Bookmarks extends Component {
                 }
             })
             .then(function(response) {
-                console.log(response);
                 that.setState({items: response.data, view: response.data});
+                if (that.state.isFiltered) {
+                    that.search();
+                }
             }
         );
     }
@@ -89,6 +124,7 @@ class Bookmarks extends Component {
         .then(function(response) {
             if (response.status === 201) {
                 that.props.sendEvent('notification', true, {type: 'success', message: 'Bookmark deleted', duration: 5000});
+                that.initializeBookmarks(that.props.authorization);
             }
         })
         .catch((error) => {
@@ -98,30 +134,78 @@ class Bookmarks extends Component {
         })
     }
 
-    searchBookmarksByTags = () =>{
-        const that = this;
-        axios.get(baseUrl + constants.API_URL_BOOKMARK,
-            {
-                headers: {
-                    Authorization: 'Bearer ' + this.props.authorization.token
+    clearSearch = () => {
+        this.setState({
+            view: this.state.items,
+            isFiltered: false,
+            searchtext: ''
+        })
+        this.props.sendEvent('sidebar', false)
+    }
+
+    search = (event) => {
+        if (event) {
+            event.preventDefault();
+        }
+
+        if (isEmptyOrSpaces(this.state.searchtext)) {
+            this.setState({
+                view: this.state.items,
+                isFiltered: false
+            });
+            return;
+        }
+
+        this.setState({
+            view: this.state.items.filter((item) => {
+                if (this.state.searchPref.title && match(item.title, this.state.searchtext)) {
+                    return true;
+                } else if (this.state.searchPref.tags && match(item.tags, this.state.searchtext)) {
+                    return true;
+                } else if (this.state.searchPref.href && match(item.href, this.state.searchtext)) {
+                    return true;
                 }
-            })
-            .then(function(response) {
-                    console.log(response);
-                    that.setState({items: response.data, view: response.data});
-                }
-            );
+            }),
+            isFiltered: true
+        });
+        this.props.sendEvent('sidebar', false)
+    }
+
+    toggleSearchPref = (pref) => {
+        this.setState({
+            searchPref: {
+                ...this.state.searchPref,
+                [pref]: !this.state.searchPref[pref]
+            }
+        })
     }
 
     addBookmark= () => {
         const that = this;
-        axios.put(baseUrl + constants.API_URL_BOOKMARK, {
+
+        let bookmark = {
             id: this.state.id,
             title: this.state.title,
             href: this.state.href,
             description: this.state.description,
             tags: this.state.tags
-        },
+        }
+
+        if (isEmptyOrSpaces(bookmark.title)) {
+            that.props.sendEvent('notification', true, {type: 'failure', message: 'Title / description missing', duration: 5000});
+            return;
+        }
+
+        if (isEmptyOrSpaces(bookmark.href)) {
+            that.props.sendEvent('notification', true, {type: 'failure', message: 'Website URL / Link is missing', duration: 5000});
+            return;
+        }
+
+        if (isEmptyOrSpaces(bookmark.tags)) {
+            bookmark.tags = 'unsorted';
+        }
+
+        axios.put(baseUrl + constants.API_URL_BOOKMARK, bookmark,
         {
             headers: {
                 Authorization: 'Bearer ' + this.props.authorization.token
@@ -131,6 +215,8 @@ class Bookmarks extends Component {
             if (response.status === 201) {
                 that.props.sendEvent('notification', true, {type: 'success', message: 'Bookmark created', duration: 5000});
                 that.toggleEditDialog();
+
+                that.initializeBookmarks(that.props.authorization);
             }
         })
         .catch((error) => {
@@ -163,141 +249,72 @@ class Bookmarks extends Component {
                     <ArcTextField label="Description" data={this.state} id="description" multiline rows='5' handleChange={e => this.handleChange(e)} />
                     <ArcTextField label="Tags" data={this.state} id="tags" handleChange={e => this.handleChange(e)} />
                     <div className="actions">
-                        <button onClick={this.toggleEditDialog} className="default disabled">Cancel</button>
-                        <button onClick={this.addBookmark} className="primary animate out down">{this.state.editDialogLabel}</button>
+                        <button onClick={this.toggleEditDialog} className="default disabled"><i className="material-icons">close</i>Cancel</button>
+                        <button onClick={this.addBookmark} className="primary block"><i className="material-icons">double_arrow</i>{this.state.editDialogLabel}</button>
                     </div>
                 </ArcDialog>
 
-                <ViewResolver>
+                <ViewResolver event={this.props.event} sendEvent={this.props.sendEvent}>
                     <View main>
-                        <button onClick={this.toggleEditDialog} className="primary animate in down space-bottom-1">Add Bookmark</button>
                         {listview}
                     </View>
                     <View side>
                         <div className="filter-container">
                             <div className="section-main">
-                                <div className="typography-2">Filter by Tag</div>
-                                <ActionButton icon="add" leftLabel="ioak"/>
-                                <ActionButton type="select" icon="remove" leftLabel="curate"/>
-                                <ActionButton type="select" icon="remove" leftLabel="protekt"/>
-                                <ActionButton icon="add" leftLabel="proteus"/>
-
-
-
-
-                                
-                                {/* <div className="typography-2">Filter by Tag</div>
-                                <ActionButton leftLabel="+ ioak"/>
-                                <ActionButton leftLabel="+ curate"/>
-                                <ActionButton leftLabel="+ protekt"/>
-                                <ActionButton leftLabel="+ proteus"/>
-                                <div className="typography-2">Filter by Tag</div>
-                                <ActionButton leftLabel="+ ioak"/>
-                                <ActionButton leftLabel="+ curate"/>
-                                <ActionButton leftLabel="+ protekt"/>
-                                <ActionButton leftLabel="+ proteus"/>
-                                <div className="typography-2">Filter by Tag</div>
-                                <ActionButton leftLabel="+ ioak"/>
-                                <ActionButton leftLabel="+ curate"/>
-                                <ActionButton leftLabel="+ protekt"/>
-                                <ActionButton leftLabel="+ proteus"/>
-                                <div className="typography-2">Filter by Tag</div>
-                                <ActionButton leftLabel="+ ioak"/>
-                                <ActionButton leftLabel="+ curate"/>
-                                <ActionButton leftLabel="+ protekt"/>
-                                <ActionButton leftLabel="+ proteus"/>
-                                <div className="typography-2">Filter by Tag</div>
-                                <ActionButton leftLabel="+ ioak"/>
-                                <ActionButton leftLabel="+ curate"/>
-                                <ActionButton leftLabel="+ protekt"/>
-                                <ActionButton leftLabel="+ proteus"/>
-                                <div className="typography-2">Filter by Tag</div>
-                                <ActionButton leftLabel="+ ioak"/>
-                                <ActionButton leftLabel="+ curate"/>
-                                <ActionButton leftLabel="+ protekt"/>
-                                <ActionButton leftLabel="+ proteus"/>
-                                <div className="typography-2">Filter by Tag</div>
-                                <ActionButton leftLabel="+ ioak"/>
-                                <ActionButton leftLabel="+ curate"/>
-                                <ActionButton leftLabel="+ protekt"/>
-                                <ActionButton leftLabel="+ proteus"/>
-                                <div className="typography-2">Filter by Tag</div>
-                                <ActionButton leftLabel="+ ioak"/>
-                                <ActionButton leftLabel="+ curate"/>
-                                <ActionButton leftLabel="+ protekt"/>
-                                <ActionButton leftLabel="+ proteus"/>
-                                <div className="typography-2">Filter by Tag</div>
-                                <ActionButton leftLabel="+ ioak"/>
-                                <ActionButton leftLabel="+ curate"/>
-                                <ActionButton leftLabel="+ protekt"/>
-                                <ActionButton leftLabel="+ proteus"/>
-                                <div className="typography-2">Filter by Tag</div>
-                                <ActionButton leftLabel="+ ioak"/>
-                                <ActionButton leftLabel="+ curate"/>
-                                <ActionButton leftLabel="+ protekt"/>
-                                <ActionButton leftLabel="+ proteus"/>
-                                <div className="typography-2">Filter by Tag</div>
-                                <ActionButton leftLabel="+ ioak"/>
-                                <ActionButton leftLabel="+ curate"/>
-                                <ActionButton leftLabel="+ protekt"/>
-                                <ActionButton leftLabel="+ proteus"/>
-                                <div className="typography-2">Filter by Tag</div>
-                                <ActionButton leftLabel="+ ioak"/>
-                                <ActionButton leftLabel="+ curate"/>
-                                <ActionButton leftLabel="+ protekt"/>
-                                <ActionButton leftLabel="+ proteus"/>
-                                <div className="typography-2">Filter by Tag</div>
-                                <ActionButton leftLabel="+ ioak"/>
-                                <ActionButton leftLabel="+ curate"/>
-                                <ActionButton leftLabel="+ protekt"/>
-                                <ActionButton leftLabel="+ proteus"/>
-                                <div className="typography-2">Filter by Tag</div>
-                                <ActionButton leftLabel="+ ioak"/>
-                                <ActionButton leftLabel="+ curate"/>
-                                <ActionButton leftLabel="+ protekt"/>
-                                <ActionButton leftLabel="+ proteus"/>
-                                <div className="typography-2">Filter by Tag</div>
-                                <ActionButton leftLabel="+ ioak"/>
-                                <ActionButton leftLabel="+ curate"/>
-                                <ActionButton leftLabel="+ protekt"/>
-                                <ActionButton leftLabel="+ proteus"/>
-                                <div className="typography-2">Filter by Tag</div>
-                                <ActionButton leftLabel="+ ioak"/>
-                                <ActionButton leftLabel="+ curate"/>
-                                <ActionButton leftLabel="+ protekt"/>
-                                <ActionButton leftLabel="+ proteus"/>
-                                <div className="typography-2">Filter by Tag</div>
-                                <ActionButton leftLabel="+ ioak"/>
-                                <ActionButton leftLabel="+ curate"/>
-                                <ActionButton leftLabel="+ protekt"/>
-                                <ActionButton leftLabel="+ proteus"/>
-                                <div className="typography-2">Filter by Tag</div>
-                                <ActionButton leftLabel="+ ioak"/>
-                                <ActionButton leftLabel="+ curate"/>
-                                <ActionButton leftLabel="+ protekt"/>
-                                <ActionButton leftLabel="+ proteus"/>
-                                <div className="typography-2">Filter by Tag</div>
-                                <ActionButton leftLabel="+ ioak"/>
-                                <ActionButton leftLabel="+ curate"/>
-                                <ActionButton leftLabel="+ protekt"/>
-                                <ActionButton leftLabel="+ proteus"/>
-                                <div className="typography-2">Filter by Tag</div>
-                                <ActionButton leftLabel="+ ioak"/>
-                                <ActionButton leftLabel="+ curate"/>
-                                <ActionButton leftLabel="+ protekt"/>
-                                <ActionButton leftLabel="+ proteus"/> */}
-
-                                <div className="typography-2 space-top-2">Search</div>
-                                <ArcTextField label="Search text" id="serachtext" data={this.state} handleChange={e => this.handleChange(e)} />
-                            </div>
-                            <div className="section-footer">
-                                <div>
-                                    <button onClick={this.toggleEditDialog} className="default disabled small">Clear</button>
+                                <div className="actionbar space-top-2">
+                                    <div>
+                                        <button onClick={this.toggleEditDialog} className="primary animate">
+                                            <i className="material-icons">add</i>New Bookmark
+                                        </button>
+                                    </div>
                                 </div>
-                                <div>
-                                    <button onClick={this.searchBookmarksByTags} className="default animate in left small">Apply</button>
+                                <div className="content">
+                                    <div className="typography-2 space-top-2">Keywords separated by space</div>
+                                    {/* <form accept-charset="utf-8" method="GET" onSubmit={this.search} noValidate> */}
+                                    <form method="GET" onSubmit={this.search} noValidate>
+                                        <ArcTextField label="Keywords" id="searchtext" data={this.state} handleChange={e => this.handleChange(e)} />
+                                        {/* <ArcTextField label="Keywords2" id="searchtext2" data={this.state} handleChange={e => this.handleChange(e)} /> */}
+                                    </form>
+                                    <div className="typography-1 space-top-2">
+                                        <Switch
+                                            checked={this.state.searchPref.title}
+                                            onChange={() => this.toggleSearchPref('title')}
+                                            inputProps={{ 'aria-label': 'primary checkbox' }}/>
+                                        Include title
+                                    </div>
+                                    <div className="typography-1 space-top-2">
+                                        <Switch
+                                            checked={this.state.searchPref.tags}
+                                            onChange={() => this.toggleSearchPref('tags')}
+                                            inputProps={{ 'aria-label': 'primary checkbox' }}/>
+                                        Include tags
+                                    </div>
+                                    <div className="typography-1 space-top-2">
+                                        <Switch
+                                            checked={this.state.searchPref.href}
+                                            onChange={() => this.toggleSearchPref('href')}
+                                            inputProps={{ 'aria-label': 'primary checkbox' }}/>
+                                        Include URL
+                                    </div>
+                                    {this.state.isFiltered && <div className="typography-2 space-top-2">Found {this.state.view.length} bookmarks matching the search criteria</div>}
                                 </div>
                             </div>
+                            <div className="actionbar space-top-2 space-bottom-2">
+                                <div>
+                                    <button onClick={this.clearSearch} className="default left">Clear</button>
+                                </div>
+                                <div>
+                                    <button onClick={this.search} className="default animate right space-right-2">Search</button>
+                                </div>
+                            </div>
+                            {/* <div className="section-footer">
+                                <div>
+                                    <button onClick={this.clearSearch} className="default disabled left">Clear</button>
+                                </div>
+                                <div>
+                                    <button onClick={this.search} className="default animate right space-right-2">Search</button>
+                                </div>
+                            </div> */}
                         </div>
                     </View>
                 </ViewResolver>

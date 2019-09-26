@@ -8,7 +8,6 @@ import Links from './Links';
 
 class Desktop extends Component {
     constructor(props) {
-        console.log(props);
         super(props);
         this.props.getProfile();
         this.state = {
@@ -25,10 +24,16 @@ class Desktop extends Component {
                     <Links authorization={this.props.authorization}/>
                 </div>
                 <div className="right">
-                    <div className="settings-icon" onClick={this.props.toggleSettings}><i className="material-icons">settings</i></div>
                     <div className="action">
-                        {this.props.authorization.isAuth && <button className="default disabled small" onClick={this.props.logout()}>Logout</button>}
-                        {!this.props.authorization.isAuth && <button className="default disabled small" onClick={this.props.login()}>Login</button>}
+                        {/* <button className="default disabled small" onClick={this.props.toggleSettings}><i className="material-icons">palette</i>Theme</button> */}
+                        {this.props.authorization.isAuth && 
+                            <button className="default disabled small" onClick={this.props.toggleSettings}><i className="material-icons">brush</i>Theme</button>}
+                        {this.props.authorization.isAuth && 
+                            <button className="default disabled small" onClick={this.props.logout()}><i className="material-icons">power_settings_new</i>Logout</button>}
+                        {!this.props.authorization.isAuth && 
+                            <button className="default disabled small" onClick={this.props.login()}><i className="material-icons">person</i>Login</button>}
+                        {!this.props.authorization.isAuth && 
+                            <button className="default disabled small" onClick={this.props.login()}><i className="material-icons">person_add</i>Signup</button>}
                     </div>
                 </div>
             </div>

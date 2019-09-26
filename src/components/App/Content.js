@@ -19,6 +19,7 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Backdrop from './Backdrop';
 import Notification from '../Notification';
 import Navigation from '../Navigation';
+import Search from '../Search';
 
 const arcTheme = createMuiTheme({
     typography: {
@@ -26,7 +27,7 @@ const arcTheme = createMuiTheme({
     },
     palette: {
       primary: {
-          main: '#F49670'          
+          main: '#64CFEA'          
       },
       secondary: {
           main: '#64CFEA'
@@ -68,6 +69,7 @@ class Content extends Component {
                                 <Route path="/login" render={(props) => <Login {...props} {...this.props} logout={() => this.logout}/>} />
                                 <PrivateRoute path="/bookmarks" render={(props) => <Bookmarks {...props} {...this.props} logout={this.logout} />} />
                                 <PrivateRoute path="/notes" render={(props) => <Notes {...props} {...this.props} logout={() => this.logout} />} />
+                                <Route path="/search" render={(props) => <Search {...props} {...this.props} logout={() => this.logout}/>} />
                             </MuiThemeProvider>
                         </div>
                     </div>

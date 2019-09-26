@@ -1,12 +1,7 @@
 import React, { Component } from 'react';
-import ActionButton from '../Ux/ActionButton';
 import './style.scss';
 
 class Link extends Component {
-    constructor(props) {
-        super(props);
-
-    }
     removeTag = (tag) => {
         alert(this.props.id + ' remove ' + tag);
         console.log(this.props);
@@ -26,9 +21,12 @@ class Link extends Component {
 
     render() {
         const tags = [];
-        this.props.bookmark.tags.split(" ").map(item => {
-            tags.push(<ActionButton key={item} icon="" leftLabel={item} leftAction={() => this.tag(item)}></ActionButton>);
-        })
+        if (this.props.bookmark.tags) {
+            this.props.bookmark.tags.split(" ").map(item => {
+                tags.push(<div className="tag" key={item}>{item}</div>);
+            })
+        }
+        
         return (
             <div>
                 <div className="typography-3">{this.props.bookmark.title}

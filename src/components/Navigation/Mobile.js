@@ -41,12 +41,12 @@ class Desktop extends Component {
                     <Links authorization={this.props.authorization}/>
                     <div className="action">
                         <div className="settings-icon" onClick={this.props.toggleSettings}>
-                            <button className="default small" onClick={this.props.toggleSettings}>Theme</button>
+                            {this.props.authorization.isAuth && <button className="default disabled small" onClick={this.props.toggleSettings}><i className="material-icons">brush</i>Theme</button>}
                         </div>
                         <div className="buttons">
-                            {this.props.authorization.isAuth && <button className="default small" onClick={this.props.logout()}>Logout</button>}
-                            {!this.props.authorization.isAuth && <button className="secondary small" onClick={this.props.login()}>Login</button>}
-                            {!this.props.authorization.isAuth && <button className="secondary small animate out right" onClick={this.props.login()}>Signup</button>}
+                            {this.props.authorization.isAuth && <button className="default disabled small" onClick={this.props.logout()}><i className="material-icons">power_settings_new</i>Logout</button>}
+                            {!this.props.authorization.isAuth && <button className="secondary small left" onClick={this.props.login()}><i className="material-icons">person</i>Login</button>}
+                            {!this.props.authorization.isAuth && <button className="secondary small right" onClick={this.props.login()}><i className="material-icons">person_add</i>Signup</button>}
                         </div>
                     </div>
                 </div>

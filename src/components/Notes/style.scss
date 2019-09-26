@@ -1,5 +1,96 @@
 .notes {
+
+    .actionbar {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        justify-items: center;
+    }
+
+    .filter {
+        padding: 10px;
+        overflow: hidden;
+        &.hide {
+            // display: none;
+            height: 0px;
+            // transition: all 1s cubic-bezier(.5,1.6,.4,.7);
+        }
+        &.show {
+            height: 500px;
+            // transition: all 1s cubic-bezier(.5,1.6,.4,.7);
+        }
+        transition: all 1s cubic-bezier(.5,1.6,.4,.7);
+    }
+
+    .edit-note-view {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .action-icon {
+        cursor: pointer;
+        display: inline;
+        padding-left: 10px;
+        color: var(--color-primary);
+    }
+
     .form {
         width: 100%;
+    }
+
+    .noteref {
+        cursor: pointer;
+
+        .content {
+            padding: 10px;
+        }
+
+        .title {
+            
+        }
+
+        .detail {
+            color: var(--color-body-invert-dim);
+        }
+
+        &:hover {
+            background-color: var(--color-hover);
+
+            .detail {
+                color: var(--color-invert-dim);
+            }
+        }
+        
+        &.selected {
+            // background-color: var(--color-primary);
+            background-color: var(--color-selected);
+
+            .title {
+                color: var(--color-body);
+            }
+
+            .detail {
+                color: var(--color-body-dim);
+            }
+        }
+
+        transition: all 0.1s ease-in-out;
+
+        &::after {
+            background-color: var(--color-body-dim);
+            border-radius: 3px;
+            content: '';
+            display: block;
+            height: 1px;
+        }
+    }
+
+    .tag {
+        background-color: var(--color-body-dim);
+        display: inline;
+        margin-right: 10px;
+        padding: 2px 10px 4px 10px;
+        border-radius: 50px;
+        text-align: center;
+        vertical-align: center;
     }
 }
