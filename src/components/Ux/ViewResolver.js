@@ -56,20 +56,22 @@ class ViewResolver extends Component {
         return (
             <>
             <div className="view-mobile">
-                <div className="view-main">
-                    {this.state.main}
-                </div>
-                <div className="view-filter" onClick={this.toggleSideView}>
-                    {!this.state.showSide && <i className="material-icons">filter_list</i>}
-                    {this.state.showSide && <i className="material-icons">clear</i>}
-                </div>
                 <div className={(this.state.showSide ? "slider show" : "slider hide")}>
-                    <div className={(this.state.showSide ? "container": "container hidetext")}>
-                        <div className="view-side">
-                            {this.state.side}
+                    <div className="topbar" onClick={this.toggleSideView}>
+                        <div>
+                            <button className="default hidden" onClick={this.toggleSideView}>
+                                {!this.state.showSide && <><i className="material-icons">expand_more</i>{this.props.sideLabel ? this.props.sideLabel : 'Menu'}</>}
+                                {this.state.showSide && <><i className="material-icons">expand_less</i>Collapse</>}
+                            </button>
                         </div>
                     </div>
+                    <div className="view-side">
+                        {this.state.showSide && this.state.side}
+                    </div>
                 </div>
+                {!this.state.showSide && <div className="view-main">
+                    {this.state.main}
+                </div>}
             </div>
 
             <div className="view-desktop">

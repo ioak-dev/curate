@@ -10,8 +10,9 @@ import ViewResolver from '../Ux/ViewResolver';
 import View from '../Ux/View';
 import './style.scss';
 import NoteRef from './NoteRef';
-const queryString = require('query-string');
+import { isEmptyOrSpaces, match } from '../Utils';
 
+const queryString = require('query-string');
 const baseUrl = process.env.REACT_APP_API_URL;
 
 class Notes extends Component {
@@ -127,12 +128,21 @@ class Notes extends Component {
         if (event) {
             event.preventDefault();
         }
+
+        if (isEmptyOrSpaces(this.state.searchtext)) {
+            this.setState({
+                view: this.state.items,
+                isFiltered: false
+            });
+            return;
+        }
+
         const view = this.state.items.filter((item) => {
-            if (this.state.searchPref.title && this.match(item.title, this.state.searchtext)) {
+            if (this.state.searchPref.title && match(item.title, this.state.searchtext)) {
                 return true;
-            } else if (this.state.searchPref.tags && this.match(item.tags, this.state.searchtext)) {
+            } else if (this.state.searchPref.tags && match(item.tags, this.state.searchtext)) {
                 return true;
-            } else if (this.state.searchPref.content && this.match(item.content, this.state.searchtext)) {
+            } else if (this.state.searchPref.content && match(item.content, this.state.searchtext)) {
                 return true;
             }
         });
@@ -146,18 +156,6 @@ class Notes extends Component {
             selectedNoteId: selectedNoteId
         });
         this.props.sendEvent('sidebar', false)
-    }
-
-    match = (text, words) => {
-        let found = false;
-        if (words) {
-            words.split(' ').forEach(word => {
-                if (text.match(new RegExp('(\\w*'+ word +'\\w*)','gi'))) {
-                    found = true;
-                }
-            });
-        }
-        return found;
     }
 
     toggleSearchPref = (pref) => {
@@ -210,7 +208,23 @@ class Notes extends Component {
     }
 
     saveNote = (note, edit=false) => {
+
         const that = this;
+
+        if (!note) {
+            that.props.sendEvent('notification', true, {type: 'failure', message: 'Unknown error', duration: 5000});
+            return;
+        }
+
+        if (isEmptyOrSpaces(note.title)) {
+            that.props.sendEvent('notification', true, {type: 'failure', message: 'Note name / title missing', duration: 5000});
+            return;
+        }
+
+        if (isEmptyOrSpaces(note.tags)) {
+            note.tags = 'unsorted';
+        }
+
         axios.put(baseUrl + constants.API_URL_NOTE, {
             id: note.id,
             title: note.title,
@@ -270,12 +284,15 @@ class Notes extends Component {
                     <ArcTextField label="Content (Markdown / HTML / Plaintext)" data={this.state} id="content" multiline rows='20' handleChange={e => this.handleChange(e)} />
                     <div className="actions">
                         <button onClick={this.toggleAddDialog} className="default disabled left"><i className="material-icons">close</i>Cancel</button>
-                        <button onClick={this.saveNoteEvent} className="primary animate right"><i className="material-icons">check</i>Save</button>
+                        <button onClick={this.saveNoteEvent} className="primary animate right"><i className="material-icons">double_arrow</i>Save</button>
                     </div>
                 </ArcDialog>
 
-                <ViewResolver event={this.props.event} sendEvent={this.props.sendEvent}>
+                <ViewResolver event={this.props.event} sendEvent={this.props.sendEvent} sideLabel='More options'>
                     <View main>
+                    {/* <button onClick={this.toggleAddDialog} className="primary block left"><i className="material-icons">close</i>Cancel</button>
+                    <button onClick={this.toggleAddDialog} className="secondary block left"><i className="material-icons">close</i>Cancel</button>
+                    <button onClick={this.toggleAddDialog} className="tertiary block left"><i className="material-icons">close</i>Cancel</button> */}
                         {noteview}
                     </View>
                     <View side>
@@ -283,12 +300,12 @@ class Notes extends Component {
                             <div className="section-main">
                                 <div className="actionbar space-top-2">
                                     <div>
-                                        <button onClick={this.newNote} className="primary block">
+                                        <button onClick={this.newNote} className="primary animate">
                                             <i className="material-icons">add</i>New Note
                                         </button>
                                     </div>
                                     <div>
-                                        <button onClick={this.toggleFilter} className="default disabled">
+                                        <button onClick={this.toggleFilter} className={this.state.isFiltered ? "default block" : "default disabled"}>
                                             {!this.state.showFilter && <><i className="material-icons">expand_more</i>Filter</>}
                                             {this.state.showFilter && <><i className="material-icons">expand_less</i>Filter</>}
                                         </button>
@@ -296,7 +313,7 @@ class Notes extends Component {
                                 </div>
 
                                 <div className={this.state.showFilter ? "filter show" : "filter hide"}>
-                                    <div className="typography-2 space-top-1">Enter keywords separated by space</div>
+                                    <div className="typography-2 space-top-1">Keywords separated by space</div>
                                     {/* <form accept-charset="utf-8" method="GET" onSubmit={this.search} noValidate> */}
                                     <form method="GET" onSubmit={this.search} noValidate>
                                         <ArcTextField label="Keywords" id="searchtext" data={this.state} handleChange={e => this.handleChange(e)} />

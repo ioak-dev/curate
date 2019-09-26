@@ -9,8 +9,9 @@ import ViewResolver from '../Ux/ViewResolver';
 import View from '../Ux/View';
 import './style.scss';
 import { Switch } from '@material-ui/core';
-const queryString = require('query-string');
+import { isEmptyOrSpaces, match } from '../Utils';
 
+const queryString = require('query-string');
 const baseUrl = process.env.REACT_APP_API_URL;
 
 class Bookmarks extends Component {
@@ -123,6 +124,7 @@ class Bookmarks extends Component {
         .then(function(response) {
             if (response.status === 201) {
                 that.props.sendEvent('notification', true, {type: 'success', message: 'Bookmark deleted', duration: 5000});
+                that.initializeBookmarks(that.props.authorization);
             }
         })
         .catch((error) => {
@@ -145,31 +147,28 @@ class Bookmarks extends Component {
         if (event) {
             event.preventDefault();
         }
+
+        if (isEmptyOrSpaces(this.state.searchtext)) {
+            this.setState({
+                view: this.state.items,
+                isFiltered: false
+            });
+            return;
+        }
+
         this.setState({
             view: this.state.items.filter((item) => {
-                if (this.state.searchPref.title && this.match(item.title, this.state.searchtext)) {
+                if (this.state.searchPref.title && match(item.title, this.state.searchtext)) {
                     return true;
-                } else if (this.state.searchPref.tags && this.match(item.tags, this.state.searchtext)) {
+                } else if (this.state.searchPref.tags && match(item.tags, this.state.searchtext)) {
                     return true;
-                } else if (this.state.searchPref.href && this.match(item.href, this.state.searchtext)) {
+                } else if (this.state.searchPref.href && match(item.href, this.state.searchtext)) {
                     return true;
                 }
             }),
             isFiltered: true
         });
         this.props.sendEvent('sidebar', false)
-    }
-
-    match = (text, words) => {
-        let found = false;
-        if (words) {
-            words.split(' ').forEach(word => {
-                if (text.match(new RegExp('(\\w*'+ word +'\\w*)','gi'))) {
-                    found = true;
-                }
-            });
-        }
-        return found;
     }
 
     toggleSearchPref = (pref) => {
@@ -183,13 +182,30 @@ class Bookmarks extends Component {
 
     addBookmark= () => {
         const that = this;
-        axios.put(baseUrl + constants.API_URL_BOOKMARK, {
+
+        let bookmark = {
             id: this.state.id,
             title: this.state.title,
             href: this.state.href,
             description: this.state.description,
             tags: this.state.tags
-        },
+        }
+
+        if (isEmptyOrSpaces(bookmark.title)) {
+            that.props.sendEvent('notification', true, {type: 'failure', message: 'Title / description missing', duration: 5000});
+            return;
+        }
+
+        if (isEmptyOrSpaces(bookmark.href)) {
+            that.props.sendEvent('notification', true, {type: 'failure', message: 'Website URL / Link is missing', duration: 5000});
+            return;
+        }
+
+        if (isEmptyOrSpaces(bookmark.tags)) {
+            bookmark.tags = 'unsorted';
+        }
+
+        axios.put(baseUrl + constants.API_URL_BOOKMARK, bookmark,
         {
             headers: {
                 Authorization: 'Bearer ' + this.props.authorization.token
@@ -199,6 +215,8 @@ class Bookmarks extends Component {
             if (response.status === 201) {
                 that.props.sendEvent('notification', true, {type: 'success', message: 'Bookmark created', duration: 5000});
                 that.toggleEditDialog();
+
+                that.initializeBookmarks(that.props.authorization);
             }
         })
         .catch((error) => {
@@ -232,46 +250,54 @@ class Bookmarks extends Component {
                     <ArcTextField label="Tags" data={this.state} id="tags" handleChange={e => this.handleChange(e)} />
                     <div className="actions">
                         <button onClick={this.toggleEditDialog} className="default disabled"><i className="material-icons">close</i>Cancel</button>
-                        <button onClick={this.addBookmark} className="primary block"><i className="material-icons">check</i>{this.state.editDialogLabel}</button>
+                        <button onClick={this.addBookmark} className="primary block"><i className="material-icons">double_arrow</i>{this.state.editDialogLabel}</button>
                     </div>
                 </ArcDialog>
 
                 <ViewResolver event={this.props.event} sendEvent={this.props.sendEvent}>
                     <View main>
-                        <button onClick={this.toggleEditDialog} className="primary animate space-bottom-1"><i className="material-icons">add</i>Add Bookmark</button>
                         {listview}
                     </View>
                     <View side>
                         <div className="filter-container">
                             <div className="section-main">
-                                <div className="typography-2 space-top-2">Enter keywords separated by space</div>
-                                {/* <form accept-charset="utf-8" method="GET" onSubmit={this.search} noValidate> */}
-                                <form method="GET" onSubmit={this.search} noValidate>
-                                    <ArcTextField label="Keywords" id="searchtext" data={this.state} handleChange={e => this.handleChange(e)} />
-                                    {/* <ArcTextField label="Keywords2" id="searchtext2" data={this.state} handleChange={e => this.handleChange(e)} /> */}
-                                </form>
-                                <div className="typography-1 space-top-2">
-                                    <Switch
-                                        checked={this.state.searchPref.title}
-                                        onChange={() => this.toggleSearchPref('title')}
-                                        inputProps={{ 'aria-label': 'primary checkbox' }}/>
-                                    Include title
+                                <div className="actionbar space-top-2">
+                                    <div>
+                                        <button onClick={this.toggleEditDialog} className="primary animate">
+                                            <i className="material-icons">add</i>New Bookmark
+                                        </button>
+                                    </div>
                                 </div>
-                                <div className="typography-1 space-top-2">
-                                    <Switch
-                                        checked={this.state.searchPref.tags}
-                                        onChange={() => this.toggleSearchPref('tags')}
-                                        inputProps={{ 'aria-label': 'primary checkbox' }}/>
-                                    Include tags
+                                <div className="content">
+                                    <div className="typography-2 space-top-2">Keywords separated by space</div>
+                                    {/* <form accept-charset="utf-8" method="GET" onSubmit={this.search} noValidate> */}
+                                    <form method="GET" onSubmit={this.search} noValidate>
+                                        <ArcTextField label="Keywords" id="searchtext" data={this.state} handleChange={e => this.handleChange(e)} />
+                                        {/* <ArcTextField label="Keywords2" id="searchtext2" data={this.state} handleChange={e => this.handleChange(e)} /> */}
+                                    </form>
+                                    <div className="typography-1 space-top-2">
+                                        <Switch
+                                            checked={this.state.searchPref.title}
+                                            onChange={() => this.toggleSearchPref('title')}
+                                            inputProps={{ 'aria-label': 'primary checkbox' }}/>
+                                        Include title
+                                    </div>
+                                    <div className="typography-1 space-top-2">
+                                        <Switch
+                                            checked={this.state.searchPref.tags}
+                                            onChange={() => this.toggleSearchPref('tags')}
+                                            inputProps={{ 'aria-label': 'primary checkbox' }}/>
+                                        Include tags
+                                    </div>
+                                    <div className="typography-1 space-top-2">
+                                        <Switch
+                                            checked={this.state.searchPref.href}
+                                            onChange={() => this.toggleSearchPref('href')}
+                                            inputProps={{ 'aria-label': 'primary checkbox' }}/>
+                                        Include URL
+                                    </div>
+                                    {this.state.isFiltered && <div className="typography-2 space-top-2">Found {this.state.view.length} bookmarks matching the search criteria</div>}
                                 </div>
-                                <div className="typography-1 space-top-2">
-                                    <Switch
-                                        checked={this.state.searchPref.href}
-                                        onChange={() => this.toggleSearchPref('href')}
-                                        inputProps={{ 'aria-label': 'primary checkbox' }}/>
-                                    Include URL
-                                </div>
-                                {this.state.isFiltered && <div className="typography-2 space-top-2">Found {this.state.view.length} bookmarks matching the search criteria</div>}
                             </div>
                             <div className="actionbar space-top-2 space-bottom-2">
                                 <div>

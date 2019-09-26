@@ -53,7 +53,7 @@
         }
 
         &:hover {
-            background-color: var(--color-body-invert-dim);
+            background-color: var(--color-hover);
 
             .detail {
                 color: var(--color-invert-dim);
@@ -62,7 +62,7 @@
         
         &.selected {
             // background-color: var(--color-primary);
-            background-color: var(--color-body-invert);
+            background-color: var(--color-selected);
 
             .title {
                 color: var(--color-body);

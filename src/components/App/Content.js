@@ -30,7 +30,7 @@ const arcTheme = createMuiTheme({
           main: '#64CFEA'          
       },
       secondary: {
-          main: '#F49670'
+          main: '#64CFEA'
       }
     }
   });

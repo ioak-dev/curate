@@ -40,16 +40,18 @@ code {
     --color-body-dim: #535353;
     --color-body-invert: #fcfcfc;
     --color-body-invert-dim: #A1A1A1;
-    --color-primary: #F49670; //#3AAFA9; //#D9AD29;
-    // --color-secondary: #1B998B;
-    --color-secondary: #64CFEA;
-    --color-darkgrey: darkgrey;
-    --color-grey: grey;
+    --color-primary: #91CCD9;
+    --color-secondary: #69A7BF;
+    --color-tertiary:#376B8C;
+    --color-tertiary-trans:rgba(55,107,140,0.2);
+    --color-default: rgba(217,217,217,1);
+    --color-selected: rgba(217,217,217,1);
+    --color-hover: rgba(217,217,217,0.2);
     --color-white: white;
     --color-black: black;
-    --color-success: #6ABC65;
+    --color-success: #437A34;
     --color-warning: #49A078;
-    --color-failure: #BF2A3D;
+    --color-failure: #8C030E;
   
     --color-nav: #1e1e1e;
     --color-nav-shadow: rgba(252,252,252,.15);
@@ -66,7 +68,10 @@ code {
     --color-btn-secondary-bg: var(--color-secondary);
     --color-btn-secondary-fg: var(--color-body-invert);
     --color-btn-secondary-fg-hover: black;
-    --color-btn-default-bg: var(--color-body-invert);
+    --color-btn-tertiary-bg: var(--color-tertiary);
+    --color-btn-tertiary-fg: var(--color-body-invert);
+    --color-btn-tertiary-fg-hover: black;
+    --color-btn-default-bg: var(--color-default);
     --color-btn-default-fg: var(--color-body-invert);
     --color-btn-default-fg-hover: black;
     
@@ -82,16 +87,18 @@ code {
     --color-body-dim: #E6E6E6;
     --color-body-invert: #252525;
     --color-body-invert-dim: #6E6E6E;
-    --color-primary: #DB7246; //#03A696; //#c9a16e;
-    --color-secondary: #4997AB;
-    // --color-secondary: var(--color-pick);
-    --color-darkgrey: darkgrey;
-    --color-grey: grey;
+    --color-primary: #376B8C;
+    --color-secondary: #69A7BF;
+    --color-tertiary:#91CCD9;
+    --color-tertiary-trans:rgba(145,204,217,0.2);
+    --color-default: rgba(64,64,64,1);
+    --color-selected: rgba(64,64,64,1);
+    --color-hover: rgba(64,64,64,0.2);
     --color-white: white;
     --color-black: black;
-    --color-success: #6ABC65;
+    --color-success: #437A34;
     --color-warning: #49A078;
-    --color-failure: #BF2A3D;
+    --color-failure: #8C030E;
   
     --color-nav: #ececec;
     --color-nav-shadow: rgba(0,0,0,.15);
@@ -107,7 +114,10 @@ code {
     --color-btn-secondary-bg: var(--color-secondary);
     --color-btn-secondary-fg: var(--color-body-invert);
     --color-btn-secondary-fg-hover: white;
-    --color-btn-default-bg: var(--color-body-invert);
+    --color-btn-tertiary-bg: var(--color-tertiary);
+    --color-btn-tertiary-fg: var(--color-body-invert);
+    --color-btn-tertiary-fg-hover: white;
+    --color-btn-default-bg: var(--color-default);
     --color-btn-default-fg: var(--color-body-invert);
     --color-btn-default-fg-hover: white;
 
@@ -119,3 +129,26 @@ code {
     
   }
 }
+
+
+
+// /* Color Theme Swatches in Hex */
+// .Vintage-blue-background.-Rough-painted-wall-of-sapphire-color.-Imperfect-plane-of-blue-colored.-Uneven-old-decorative-toned-backdrop-of-cyan-tint.-Texture-of-sapphirine-hue.-Ornamental-stony-surface.-1-hex { color: #0F2F59; }
+// .Vintage-blue-background.-Rough-painted-wall-of-sapphire-color.-Imperfect-plane-of-blue-colored.-Uneven-old-decorative-toned-backdrop-of-cyan-tint.-Texture-of-sapphirine-hue.-Ornamental-stony-surface.-2-hex { color: #1F4C73; }
+// .Vintage-blue-background.-Rough-painted-wall-of-sapphire-color.-Imperfect-plane-of-blue-colored.-Uneven-old-decorative-toned-backdrop-of-cyan-tint.-Texture-of-sapphirine-hue.-Ornamental-stony-surface.-3-hex { color: #3A6D8C; }
+// .Vintage-blue-background.-Rough-painted-wall-of-sapphire-color.-Imperfect-plane-of-blue-colored.-Uneven-old-decorative-toned-backdrop-of-cyan-tint.-Texture-of-sapphirine-hue.-Ornamental-stony-surface.-4-hex { color: #75AABF; }
+// .Vintage-blue-background.-Rough-painted-wall-of-sapphire-color.-Imperfect-plane-of-blue-colored.-Uneven-old-decorative-toned-backdrop-of-cyan-tint.-Texture-of-sapphirine-hue.-Ornamental-stony-surface.-5-hex { color: #9CD3D9; }
+
+// /* Color Theme Swatches in RGBA */
+// .Vintage-blue-background.-Rough-painted-wall-of-sapphire-color.-Imperfect-plane-of-blue-colored.-Uneven-old-decorative-toned-backdrop-of-cyan-tint.-Texture-of-sapphirine-hue.-Ornamental-stony-surface.-1-rgba { color: rgba(15, 47, 89, 1); }
+// .Vintage-blue-background.-Rough-painted-wall-of-sapphire-color.-Imperfect-plane-of-blue-colored.-Uneven-old-decorative-toned-backdrop-of-cyan-tint.-Texture-of-sapphirine-hue.-Ornamental-stony-surface.-2-rgba { color: rgba(30, 75, 114, 1); }
+// .Vintage-blue-background.-Rough-painted-wall-of-sapphire-color.-Imperfect-plane-of-blue-colored.-Uneven-old-decorative-toned-backdrop-of-cyan-tint.-Texture-of-sapphirine-hue.-Ornamental-stony-surface.-3-rgba { color: rgba(57, 108, 140, 1); }
+// .Vintage-blue-background.-Rough-painted-wall-of-sapphire-color.-Imperfect-plane-of-blue-colored.-Uneven-old-decorative-toned-backdrop-of-cyan-tint.-Texture-of-sapphirine-hue.-Ornamental-stony-surface.-4-rgba { color: rgba(116, 170, 191, 1); }
+// .Vintage-blue-background.-Rough-painted-wall-of-sapphire-color.-Imperfect-plane-of-blue-colored.-Uneven-old-decorative-toned-backdrop-of-cyan-tint.-Texture-of-sapphirine-hue.-Ornamental-stony-surface.-5-rgba { color: rgba(156, 210, 216, 1); }
+
+// /* Color Theme Swatches in HSLA */
+// .Vintage-blue-background.-Rough-painted-wall-of-sapphire-color.-Imperfect-plane-of-blue-colored.-Uneven-old-decorative-toned-backdrop-of-cyan-tint.-Texture-of-sapphirine-hue.-Ornamental-stony-surface.-1-hsla { color: hsla(213, 70, 20, 1); }
+// .Vintage-blue-background.-Rough-painted-wall-of-sapphire-color.-Imperfect-plane-of-blue-colored.-Uneven-old-decorative-toned-backdrop-of-cyan-tint.-Texture-of-sapphirine-hue.-Ornamental-stony-surface.-2-hsla { color: hsla(208, 57, 28, 1); }
+// .Vintage-blue-background.-Rough-painted-wall-of-sapphire-color.-Imperfect-plane-of-blue-colored.-Uneven-old-decorative-toned-backdrop-of-cyan-tint.-Texture-of-sapphirine-hue.-Ornamental-stony-surface.-3-hsla { color: hsla(202, 41, 38, 1); }
+// .Vintage-blue-background.-Rough-painted-wall-of-sapphire-color.-Imperfect-plane-of-blue-colored.-Uneven-old-decorative-toned-backdrop-of-cyan-tint.-Texture-of-sapphirine-hue.-Ornamental-stony-surface.-4-hsla { color: hsla(196, 36, 60, 1); }
+// .Vintage-blue-background.-Rough-painted-wall-of-sapphire-color.-Imperfect-plane-of-blue-colored.-Uneven-old-decorative-toned-backdrop-of-cyan-tint.-Texture-of-sapphirine-hue.-Ornamental-stony-surface.-5-hsla { color: hsla(185, 44, 73, 1); }

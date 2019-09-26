@@ -90,8 +90,8 @@ class Link extends Component {
                 </div>
                 {tags}
                 <div className="space-bottom-2" />
-                <button onClick={this.showEdit} className="primary animate left"><i className="material-icons">edit</i>Edit</button>
-                <button onClick={this.delete} className="primary animate right"><i className="material-icons">delete</i>Delete</button>
+                <button onClick={this.showEdit} className="secondary animate left"><i className="material-icons">edit</i>Edit</button>
+                <button onClick={this.delete} className="secondary animate right"><i className="material-icons">delete</i>Delete</button>
                 
                 
                 <Showdown source={this.props.note.content} />
@@ -102,8 +102,8 @@ class Link extends Component {
                 <div>
                     <div className="typography-3 space-bottom-1">{this.state.title}</div>
                     
-                    {/* <button onClick={this.save} className="primary animate left space-bottom-2"><i className="material-icons">double_arrow</i>Save</button> */}
-                    <button onClick={this.save} className="primary animate left space-bottom-2"><i className="material-icons">check</i>Save</button>
+                    <button onClick={this.save} className="primary animate left space-bottom-2"><i className="material-icons">double_arrow</i>Save</button>
+                    {/* <button onClick={this.save} className="primary animate left space-bottom-2"><i className="material-icons">check</i>Save</button> */}
                     <button onClick={this.showEdit} className="default disabled center"><i className="material-icons">refresh</i>Undo All</button>
                     <button onClick={this.hideEdit} className="default disabled center"><i className="material-icons">close</i>Cancel</button>
                     {!this.state.preview && <button onClick={this.togglepreview} className="default disabled right"><i className="material-icons">visibility</i>Show Preview</button>}
