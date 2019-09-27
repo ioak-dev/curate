@@ -37,7 +37,7 @@ class NoteRef extends Component {
             <div className={this.props.selected ? "noteref selected" : "noteref"} onClick={this.selectNote}>
                 <div className="content">
                     <div className="title typography-2">{this.props.note.title}</div>
-                    <div className="detail typography-1">{removeMd(this.props.note.content.substring(0, 200))}</div>
+                    <div className="detail typography-1">{removeMd(this.props.note.content.substring(0, 100))}</div>
                     {/* <div className="detail typography-1"><Showdown source={this.props.note.content.substring(0, 150)} /></div> */}
                 </div>
             </div>

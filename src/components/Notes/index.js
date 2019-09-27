@@ -281,7 +281,7 @@ class Notes extends Component {
                 <ArcDialog title="Add Note" visible={this.state.isAddDialogOpen} toggleVisibility={this.toggleAddDialog}>
                     <ArcTextField label="Title" data={this.state} id="title" handleChange={e => this.handleChange(e)} />
                     <ArcTextField label="Tags (separated by blank spaces)" data={this.state} id="tags" handleChange={e => this.handleChange(e)} />
-                    <ArcTextField label="Content (Markdown / HTML / Plaintext)" data={this.state} id="content" multiline rows='20' handleChange={e => this.handleChange(e)} />
+                    <ArcTextField label="Content (Markdown / HTML / Plaintext)" data={this.state} id="content" multiline handleChange={e => this.handleChange(e)} />
                     <div className="actions">
                         <button onClick={this.toggleAddDialog} className="default disabled left"><i className="material-icons">close</i>Cancel</button>
                         <button onClick={this.saveNoteEvent} className="primary animate right"><i className="material-icons">double_arrow</i>Save</button>
@@ -298,7 +298,7 @@ class Notes extends Component {
                     <View side>
                         <div className="filter-container">
                             <div className="section-main">
-                                <div className="actionbar space-top-2">
+                                <div className="actionbar-2 space-top-2">
                                     <div>
                                         <button onClick={this.newNote} className="primary animate">
                                             <i className="material-icons">add</i>New Note
@@ -341,12 +341,12 @@ class Notes extends Component {
                                         Include Content
                                     </div>
                                     {this.state.isFiltered && <div className="typography-2 space-top-2">Found {this.state.view.length} notes matching the search criteria</div>}
-                                    <div className="actionbar space-top-2 space-bottom-2">
+                                    <div className="actionbar-2 space-top-2 space-bottom-2">
                                         <div>
-                                            <button onClick={this.clearSearch} className="default left">Clear</button>
+                                            <button onClick={this.clearSearch} className="default">Clear</button>
                                         </div>
                                         <div>
-                                            <button onClick={this.search} className="default animate right space-right-2">Search</button>
+                                            <button onClick={this.search} className="default animate space-right-2">Search</button>
                                         </div>
                                     </div>
                                 </div>

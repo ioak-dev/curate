@@ -299,12 +299,12 @@ class Bookmarks extends Component {
                                     {this.state.isFiltered && <div className="typography-2 space-top-2">Found {this.state.view.length} bookmarks matching the search criteria</div>}
                                 </div>
                             </div>
-                            <div className="actionbar space-top-2 space-bottom-2">
+                            <div className="actionbar-2 space-top-2 space-bottom-2">
                                 <div>
-                                    <button onClick={this.clearSearch} className="default left">Clear</button>
+                                    <button onClick={this.clearSearch} className="default">Clear</button>
                                 </div>
                                 <div>
-                                    <button onClick={this.search} className="default animate right space-right-2">Search</button>
+                                    <button onClick={this.search} className="default animate space-right-2">Search</button>
                                 </div>
                             </div>
                             {/* <div className="section-footer">

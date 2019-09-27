@@ -14,6 +14,24 @@ a {
   width: 100%;
   margin: auto;
 
+  .actionbar, .actionbar-1 {
+    display: grid;
+    grid-template-columns: auto;
+    justify-items: center;
+  }
+  
+  .actionbar-2 {
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-items: center;
+  }
+
+  .actionbar-3 {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    justify-items: center;
+  }
+
   .body .content {
     width: 100%;
     margin: auto;
