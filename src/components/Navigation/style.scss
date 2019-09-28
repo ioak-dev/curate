@@ -179,7 +179,7 @@
         .container {
             display: grid;
             height: inherit;
-            grid-template-rows: auto 1fr auto;
+            grid-template-rows: auto auto 1fr;
 
             .links
             {

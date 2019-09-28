@@ -28,6 +28,7 @@
     padding-left: 30px;
     padding-right: 30px;
     padding-top: 10px;
+    margin-top: var(--height-nav);
 
     max-width: 60vw;
     max-height: 80vh;
@@ -69,6 +70,12 @@
 
     .container {
         // padding: 30px;
+        display: grid;
+        grid-template-rows: auto;
+        width: 60vw;
+        @media (max-width: 767px) {
+            width: 80vw;
+        }
     }
 
     .actions {

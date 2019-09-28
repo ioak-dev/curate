@@ -13,3 +13,15 @@ export function match(text, words) {
     }
     return found;
 }
+
+export function sort(array, property, isReverseOrder) {
+    const result = array.sort(function(o1,o2){
+        if (isReverseOrder) {
+            return o1[property] > o2[property] ? -1 : o1[property] < o2[property] ? 1 : 0;
+        } else {
+            return o1[property] < o2[property] ? -1 : o1[property] > o2[property] ? 1 : 0;
+        }
+    });
+
+    return result;
+}
