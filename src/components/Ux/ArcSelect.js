@@ -28,7 +28,7 @@ function ArcSelect(props) {
         <FormControl className={classes.formControl}>
             <InputLabel htmlFor={id}>{label}</InputLabel>
             <Select
-            value={data[id]}z
+            value={data[id]}
             onChange={e => handleChange(e)}
             inputProps={{
                 name: id,

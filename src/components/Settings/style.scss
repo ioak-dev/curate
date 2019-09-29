@@ -1,0 +1,28 @@
+.settings {
+    
+
+    .text-size {
+        display: inline;
+        cursor: pointer;
+
+        &.active {
+            color: var(--color-secondary);
+        }
+
+        &.size-1 {
+            font-size: calc(var(--metric-unit-tiny) * var(--metric-typography-base-3));
+        }
+
+        &.size-2 {
+            font-size: calc(var(--metric-unit-small) * var(--metric-typography-base-3));
+        }
+
+        &.size-3 {
+            font-size: calc(var(--metric-unit-medium) * var(--metric-typography-base-3));
+        }
+
+        &.size-4 {
+            font-size: calc(var(--metric-unit-large) * var(--metric-typography-base-3));
+        }
+    }
+}

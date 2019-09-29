@@ -393,32 +393,32 @@ class Notes extends Component {
                                 </div>
 
                                 <div className={this.state.showFilter ? "filter show" : "filter hide"}>
-                                    <div className="typography-2 space-top-1">Keywords separated by space</div>
+                                    <div className="typography-4 space-top-1">Keywords separated by space</div>
                                     <form method="GET" onSubmit={this.search} noValidate>
                                         <ArcTextField label="Keywords" id="searchtext" data={this.state} handleChange={e => this.handleChange(e)} />
                                     </form>
-                                    <div className="typography-1 space-top-2">
+                                    <div className="typography-5 space-top-2">
                                         <Switch
                                             checked={this.state.searchPref.title}
                                             onChange={() => this.toggleSearchPref('title')}
                                             inputProps={{ 'aria-label': 'primary checkbox' }}/>
                                         Include title
                                     </div>
-                                    <div className="typography-1 space-top-2">
+                                    <div className="typography-5 space-top-2">
                                         <Switch
                                             checked={this.state.searchPref.tags}
                                             onChange={() => this.toggleSearchPref('tags')}
                                             inputProps={{ 'aria-label': 'primary checkbox' }}/>
                                         Include tags
                                     </div>
-                                    <div className="typography-1 space-top-2">
+                                    <div className="typography-5 space-top-2">
                                         <Switch
                                             checked={this.state.searchPref.content}
                                             onChange={() => this.toggleSearchPref('content')}
                                             inputProps={{ 'aria-label': 'primary checkbox' }}/>
                                         Include Content
                                     </div>
-                                    {this.state.isFiltered && <div className="typography-2 space-top-2">Found {this.state.searchResults.length} notes matching the search criteria</div>}
+                                    {this.state.isFiltered && <div className="typography-4 space-top-2">Found {this.state.searchResults.length} notes matching the search criteria</div>}
                                     <div className="actionbar-2 space-top-2 space-bottom-2">
                                         <div>
                                             <button onClick={this.clearSearch} className="default">Clear</button>

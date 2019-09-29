@@ -75,10 +75,10 @@ class ViewResolver extends Component {
             </div>
 
             <div className="view-desktop">
-                <div className="view-side">
+                {this.state.side && <div className="view-side">
                     {this.state.side}
-                </div>
-                <div className="view-content">
+                </div>}
+                <div className={'view-content' + (this.state.side ? ' side-present' : '')}>
                     {this.state.main}
                 </div>
             </div>

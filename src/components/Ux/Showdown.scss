@@ -16,20 +16,20 @@
         padding: 0;
     }
     h1 {
-        font-size: 48px;
+        font-size: var(--textsize-1);
     }
     h2 {
-        font-size: 36px;
+        font-size: var(--textsize-2);
         margin: 24px 0 6px;
     }
     h3 {
-        font-size: 24px;
+        font-size: var(--textsize-3);
     }
     h4 {
-        font-size: 21px;
+        font-size: var(--textsize-4);
     }
     h5 {
-        font-size: 18px;
+        font-size: var(--textsize-5);
     }
     a {
         color: #61BFC1;
@@ -55,7 +55,7 @@
         margin-left: 24px;
     }
     p, ul, ol {
-        font-size: 16px;
+        font-size: var(--textsize-5);
         line-height: 24px;
     }
     pre {

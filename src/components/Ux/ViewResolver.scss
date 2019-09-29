@@ -29,7 +29,10 @@
   .view-content {
     padding: 50px;
     padding-top: calc(var(--height-nav) + 20px);
-    margin-left: calc(25vw + 40px);
+
+    &.side-present {
+      margin-left: calc(25vw + 40px);
+    }
     min-height: 100vh;
   }
   

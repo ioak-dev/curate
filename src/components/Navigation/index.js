@@ -35,13 +35,22 @@ class Navigation extends Component {
     toggleDarkMode = () => {
         if (this.props.profile.theme === 'theme_dark') {
             this.props.setProfile({
+                ...this.props.profile,
                 theme: 'theme_light'
             })   
         } else  {
             this.props.setProfile({
+                ...this.props.profile,
                 theme: 'theme_dark'
             })   
         }
+    }
+
+    changeTextSize = (size) => {
+        this.props.setProfile({
+            ...this.props.profile,
+            textSize: size
+        })
     }
 
     login = () => {
@@ -59,8 +68,6 @@ class Navigation extends Component {
             <div className="nav">
                 <Desktop {...this.props} logout={this.props.logout} login={() => this.login} toggleSettings={this.toggleSettings} transparent={this.state.transparentNavBar} />
                 <Mobile {...this.props} logout={this.props.logout} login={() => this.login} toggleSettings={this.toggleSettings} transparent={this.state.transparentNavBar} />
-                
-                
 
                 <ArcDialog title="Appearance" visible={this.state.showSettings} toggleVisibility={this.toggleSettings}>
                     <div className="settings">
@@ -70,6 +77,14 @@ class Navigation extends Component {
                             checked={this.props.profile.theme === 'theme_dark'}
                             onChange={this.toggleDarkMode}
                             inputProps={{ 'aria-label': 'primary checkbox' }}/>
+                        </div>
+                        
+                        <div>Text Size</div>
+                        <div>
+                            <div className={"text-size size-1 space-right-1 " + (this.props.profile.textSize === 'textsize_tiny' ? 'active' : '')} onClick={() => this.changeTextSize('textsize_tiny')}>Az</div>
+                            <div className={"text-size size-2 space-right-1 " + (this.props.profile.textSize === 'textsize_small' ? 'active' : '')} onClick={() => this.changeTextSize('textsize_small')}>Az</div>
+                            <div className={"text-size size-3 space-right-1 " + (this.props.profile.textSize === 'textsize_medium' ? 'active' : '')} onClick={() => this.changeTextSize('textsize_medium')}>Az</div>
+                            <div className={"text-size size-4 " + (this.props.profile.textSize === 'textsize_large' ? 'active' : '')} onClick={() => this.changeTextSize('textsize_large')}>Az</div>
                         </div>
                     </div>
                     <div className="actions">

@@ -40,7 +40,7 @@ class Desktop extends Component {
                 <div className={(this.state.menu ? "container": "container hidetext")} onClick={this.toggleMenu}>
                     <div className="action">
                         <div className="settings-icon" onClick={this.props.toggleSettings}>
-                            {this.props.authorization.isAuth && <button className="default disabled small" onClick={this.props.toggleSettings}><i className="material-icons">brush</i>Theme</button>}
+                            {this.props.authorization.isAuth && <button className="default disabled small" onClick={this.props.toggleSettings}><i className="material-icons">brush</i>Appearance</button>}
                         </div>
                         <div className="buttons">
                             {this.props.authorization.isAuth && <button className="default disabled small" onClick={this.props.logout()}><i className="material-icons">power_settings_new</i>Logout</button>}

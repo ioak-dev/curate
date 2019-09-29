@@ -19,7 +19,7 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Backdrop from './Backdrop';
 import Notification from '../Notification';
 import Navigation from '../Navigation';
-import Search from '../Search';
+import Settings from '../Settings';
 
 const arcTheme = createMuiTheme({
     typography: {
@@ -54,7 +54,7 @@ class Content extends Component {
 
     render() {
         return (
-            <div className={"App " + this.props.profile.theme}>
+            <div className={"App " + this.props.profile.theme + " " + this.props.profile.textSize}>
                 
                 <HashRouter>
                     <AuthInit />
@@ -69,7 +69,7 @@ class Content extends Component {
                                 <Route path="/login" render={(props) => <Login {...props} {...this.props} logout={() => this.logout}/>} />
                                 <PrivateRoute path="/bookmarks" render={(props) => <Bookmarks {...props} {...this.props} logout={this.logout} />} />
                                 <PrivateRoute path="/notes" render={(props) => <Notes {...props} {...this.props} logout={() => this.logout} />} />
-                                <Route path="/search" render={(props) => <Search {...props} {...this.props} logout={() => this.logout}/>} />
+                                <Route path="/settings" render={(props) => <Settings {...props} {...this.props} logout={() => this.logout}/>} />
                             </MuiThemeProvider>
                         </div>
                     </div>

@@ -28,7 +28,6 @@ class Bookmarks extends Component {
             id: null,
             title: '',
             href: '',
-            description: '',
             tags: '',
             editDialogLabel: 'Add',
             firstLoad: true,
@@ -95,7 +94,6 @@ class Bookmarks extends Component {
             id: null,
             title: '',
             href: '',
-            description: '',
             tags: '',
             editDialogLabel: 'Add'
         })
@@ -107,7 +105,6 @@ class Bookmarks extends Component {
             id: bookmark._id,
             title: bookmark.title,
             href: bookmark.href,
-            description: bookmark.description,
             tags: bookmark.tags,
             editDialogLabel: 'Save'
         })
@@ -187,7 +184,6 @@ class Bookmarks extends Component {
             id: this.state.id,
             title: this.state.title,
             href: this.state.href,
-            description: this.state.description,
             tags: this.state.tags
         }
 
@@ -246,7 +242,6 @@ class Bookmarks extends Component {
                 <ArcDialog title="Add Bookmark" visible={this.state.isEditDialogOpen} toggleVisibility={this.toggleEditDialog}>
                     <ArcTextField label="Title" data={this.state} id="title" handleChange={e => this.handleChange(e)} />
                     <ArcTextField label="URL" data={this.state} id="href" handleChange={e => this.handleChange(e)} />
-                    <ArcTextField label="Description" data={this.state} id="description" multiline rows='5' handleChange={e => this.handleChange(e)} />
                     <ArcTextField label="Tags" data={this.state} id="tags" handleChange={e => this.handleChange(e)} />
                     <div className="actions">
                         <button onClick={this.toggleEditDialog} className="default disabled"><i className="material-icons">close</i>Cancel</button>
@@ -269,34 +264,34 @@ class Bookmarks extends Component {
                                     </div>
                                 </div>
                                 <div className="content">
-                                    <div className="typography-2 space-top-2">Keywords separated by space</div>
+                                    <div className="typography-4 space-top-2">Keywords separated by space</div>
                                     {/* <form accept-charset="utf-8" method="GET" onSubmit={this.search} noValidate> */}
                                     <form method="GET" onSubmit={this.search} noValidate>
                                         <ArcTextField label="Keywords" id="searchtext" data={this.state} handleChange={e => this.handleChange(e)} />
                                         {/* <ArcTextField label="Keywords2" id="searchtext2" data={this.state} handleChange={e => this.handleChange(e)} /> */}
                                     </form>
-                                    <div className="typography-1 space-top-2">
+                                    <div className="typography-5 space-top-2">
                                         <Switch
                                             checked={this.state.searchPref.title}
                                             onChange={() => this.toggleSearchPref('title')}
                                             inputProps={{ 'aria-label': 'primary checkbox' }}/>
                                         Include title
                                     </div>
-                                    <div className="typography-1 space-top-2">
+                                    <div className="typography-5 space-top-2">
                                         <Switch
                                             checked={this.state.searchPref.tags}
                                             onChange={() => this.toggleSearchPref('tags')}
                                             inputProps={{ 'aria-label': 'primary checkbox' }}/>
                                         Include tags
                                     </div>
-                                    <div className="typography-1 space-top-2">
+                                    <div className="typography-5 space-top-2">
                                         <Switch
                                             checked={this.state.searchPref.href}
                                             onChange={() => this.toggleSearchPref('href')}
                                             inputProps={{ 'aria-label': 'primary checkbox' }}/>
                                         Include URL
                                     </div>
-                                    {this.state.isFiltered && <div className="typography-2 space-top-2">Found {this.state.view.length} bookmarks matching the search criteria</div>}
+                                    {this.state.isFiltered && <div className="typography-4 space-top-2">Found {this.state.view.length} bookmarks matching the search criteria</div>}
                                 </div>
                             </div>
                             <div className="actionbar-2 space-top-2 space-bottom-2">

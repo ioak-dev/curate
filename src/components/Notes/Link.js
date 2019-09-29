@@ -132,7 +132,7 @@ class Link extends Component {
                     {this.state.preview && <div className="edit-note-view">
                         <div><ArcTextField label="Content (Markdown / HTML / Plaintext)" data={this.state} id="content" multiline handleChange={e => this.handleChange(e)} /></div>
                         <div>
-                            <div className="typography-1 space-bottom-1">Preview</div>
+                            <div className="typography-5 space-bottom-1">Preview</div>
                             <Showdown source={this.state.content} />
                         </div>
                     </div>}

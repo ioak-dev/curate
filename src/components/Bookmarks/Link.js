@@ -35,8 +35,7 @@ class Link extends Component {
                         <i onClick={this.delete} className="material-icons">delete</i>
                     </div>
                 </div>
-                <div className="typography-2">{this.props.bookmark.href}</div>
-                <div className="typography-1 space-bottom-1">{this.props.bookmark.description}</div>
+                <div className="typography-4 space-bottom-1">{this.props.bookmark.href}</div>
                 {tags}
             </div>
         )
