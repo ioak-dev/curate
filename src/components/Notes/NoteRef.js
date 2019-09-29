@@ -4,14 +4,6 @@ import './style.scss';
 const removeMd = require('remove-markdown');
 
 class NoteRef extends Component {
-    removeTag = (tag) => {
-        alert(this.props.id + ' remove ' + tag);
-        console.log(this.props);
-    }
-    tag = (tag) => {
-        alert(this.props.id + ' show results only for ' + tag);
-        console.log(this.props);
-    }
 
     edit = () => {
         this.props.editNote(this.props.note);

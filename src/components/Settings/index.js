@@ -1,15 +1,46 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { getProfile, setProfile, persistProfile } from '../../actions/ProfileActions';
 import './style.scss';
 import View from '../Ux/View';
 import ViewResolver from '../Ux/ViewResolver';
 import { Switch } from '@material-ui/core';
+import { connect } from 'react-redux';
+import {withCookies} from 'react-cookie';
 
-export default class Settings extends React.Component {
+class Settings extends React.Component {
 
   constructor(props) {
     super(props);
     this.props.receiveEvents();
+  }
+
+  toggleDarkMode = () => {
+      if (this.props.profile.theme === 'theme_dark') {
+          this.props.persistProfile(this.props.authorization, {
+              ...this.props.profile,
+              theme: 'theme_light'
+          })   
+      } else  {
+          this.props.persistProfile(this.props.authorization, {
+              ...this.props.profile,
+              theme: 'theme_dark'
+          })   
+      }
+  }
+
+  changeTextSize = (size) => {
+      this.props.persistProfile(this.props.authorization, {
+          ...this.props.profile,
+          textSize: size
+      })
+  }
+
+  changeThemeColor = (color) => {
+      this.props.persistProfile(this.props.authorization, {
+          ...this.props.profile,
+          themeColor: color
+      })
   }
 
   render() {
@@ -18,30 +49,42 @@ export default class Settings extends React.Component {
         <ViewResolver event={this.props.event} sendEvent={this.props.sendEvent} sideLabel='More options'>
           <View main>
           <div className="typography-3">Import Bookmarks</div>
-          <div className="space-top-2"><button className="primary space-left-2">Import from pinboard</button></div>
-          <div className="space-top-2"><button className="primary space-left-2">Import from OPML</button></div>
+          <div className="space-top-2"><button className="secondary animate space-left-2">Import from pinboard</button></div>
+          <div className="space-top-2"><button className="secondary animate space-left-2">Import from OPML</button></div>
 
           
           <div className="typography-3 space-top-4">Export Bookmarks</div>
-          <div className="space-top-2"><button className="primary space-left-2">Export</button></div>
+          <div className="space-top-2"><button className="secondary animate space-left-2">Export</button></div>
 
           
           <div className="typography-3 space-top-4">Appearance</div>
-          <div className="typography-5 space-top-2 display-inline">Dark mode
-              <Switch
-              checked={this.props.profile.theme === 'theme_dark'}
-              onChange={this.toggleDarkMode}
-              inputProps={{ 'aria-label': 'primary checkbox' }}/>
-          </div>
-          
-          <div className="typography-5 space-top-1">Text Size
-          <div className="display-inline">
-              <div className={"text-size size-1 space-left-2 space-right-1 " + (this.props.profile.textSize === 'textsize_tiny' ? 'active' : '')} >Az</div>
-              <div className={"text-size size-2 space-right-1 " + (this.props.profile.textSize === 'textsize_small' ? 'active' : '')} >Az</div>
-              {/* <div className={"text-size size-2 space-right-1 " + (this.props.profile.textSize === 'textsize_small' ? 'active' : '')} onClick={() => this.changeTextSize('textsize_small')}>Az</div>
+          <div className="appearance">
+            <div className="typography-5">Dark mode</div>
+            <div>
+                <Switch
+                checked={this.props.profile.theme === 'theme_dark'}
+                onChange={this.toggleDarkMode}
+                inputProps={{ 'aria-label': 'primary checkbox' }}/>
+            </div>
+            
+            <div className="typography-5 space-bottom-2">Text Size</div>
+            <div className=" space-bottom-2">
+              <div className={"text-size size-1 space-right-1 " + (this.props.profile.textSize === 'textsize_tiny' ? 'active' : '')}  onClick={() => this.changeTextSize('textsize_tiny')}>Az</div>
+              <div className={"text-size size-2 space-right-1 " + (this.props.profile.textSize === 'textsize_small' ? 'active' : '')}  onClick={() => this.changeTextSize('textsize_small')}>Az</div>
               <div className={"text-size size-3 space-right-1 " + (this.props.profile.textSize === 'textsize_medium' ? 'active' : '')} onClick={() => this.changeTextSize('textsize_medium')}>Az</div>
-              <div className={"text-size size-4 " + (this.props.profile.textSize === 'textsize_large' ? 'active' : '')} onClick={() => this.changeTextSize('textsize_large')}>Az</div> */}
-          </div>
+              <div className={"text-size size-4 " + (this.props.profile.textSize === 'textsize_large' ? 'active' : '')} onClick={() => this.changeTextSize('textsize_large')}>Az</div>
+            </div>
+            
+
+            
+            
+            <div className="typography-5">Color Scheme</div>
+            <div>
+              <div className="theme-color color-1" onClick={() => this.changeThemeColor('themecolor_1')}><i className="material-icons">{this.props.profile.themeColor === 'themecolor_1' && 'check'}</i></div>
+              <div className="theme-color color-2" onClick={() => this.changeThemeColor('themecolor_2')}><i className="material-icons">{this.props.profile.themeColor === 'themecolor_2' && 'check'}</i></div>
+              <div className="theme-color color-3" onClick={() => this.changeThemeColor('themecolor_3')}><i className="material-icons">{this.props.profile.themeColor === 'themecolor_3' && 'check'}</i></div>
+              <div className="theme-color color-4" onClick={() => this.changeThemeColor('themecolor_4')}><i className="material-icons">{this.props.profile.themeColor === 'themecolor_4' && 'check'}</i></div>
+            </div>
           </div>
           </View>
         </ViewResolver>
@@ -53,5 +96,16 @@ export default class Settings extends React.Component {
 Settings.propTypes = {
   sendEvent: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired,
-  event: PropTypes.object.isRequired
+  event: PropTypes.object.isRequired,
+  getProfile: PropTypes.func.isRequired,
+  setProfile: PropTypes.func.isRequired,
+  authorization: PropTypes.object.isRequired
 }
+
+
+
+const mapStateToProps = state => ({
+  profile: state.profile
+})
+
+export default connect(mapStateToProps, { getProfile, setProfile, persistProfile })(withCookies(Settings));

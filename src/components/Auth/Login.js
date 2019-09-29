@@ -30,7 +30,6 @@ class Login extends Component {
                 password: this.state.password
                 })
                 .then(function(response) {
-                    console.log(response);
                     if (response.status === 200) {
                         that.props.sendEvent('notification', true, {message: 'Signed In successfully', type: 'success', duration: 3000});
                         that.success(response.data);
@@ -43,7 +42,6 @@ class Login extends Component {
                     }
                 })
                 .catch((error) => {
-                    console.log(error);
                     this.props.sendEvent('notification', true, {'type': 'failure', message: 'Unknown error. Please try again or at a later time', duration: 3000});
                 })
         } else {
@@ -83,6 +81,7 @@ class Login extends Component {
             secret: data.secret,
             name: data.name
         });
+        this.props.sendEvent('loggedin', true);
         this.props.cookies.set('isAuth', true);
         this.props.cookies.set('token', data.token);
         this.props.cookies.set('secret', data.secret);

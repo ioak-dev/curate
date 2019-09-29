@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {withRouter} from 'react-router'
-import { getProfile, setProfile } from '../../actions/ProfileActions';
+import { getProfile, setProfile, reloadProfile } from '../../actions/ProfileActions';
 import PropTypes from 'prop-types';
 import {withCookies} from 'react-cookie';
 
@@ -20,7 +20,8 @@ class Navigation extends Component {
             mobilemenu: 'hide',
             chooseTheme: false,
             showSettings: false,
-            transparentNavBar: false
+            transparentNavBar: false,
+            firstLoad: true
         }
     }
 
@@ -28,6 +29,13 @@ class Navigation extends Component {
         if (nextProps.event && nextProps.event.name === 'navbar-transparency') {
             this.setState({
                 transparentNavBar: nextProps.event.signal
+            })
+        }
+        if ((this.state.firstLoad && nextProps.authorization && nextProps.authorization.isAuth) || 
+            (nextProps.event && nextProps.event.name === 'loggedin')) {
+            this.props.reloadProfile(nextProps.authorization);
+            this.setState({
+                firstLoad: false
             })
         }
     }
@@ -50,6 +58,13 @@ class Navigation extends Component {
         this.props.setProfile({
             ...this.props.profile,
             textSize: size
+        })
+    }
+
+    changeThemeColor = (color) => {
+        this.props.setProfile({
+            ...this.props.profile,
+            themeColor: color
         })
     }
 
@@ -86,6 +101,14 @@ class Navigation extends Component {
                             <div className={"text-size size-3 space-right-1 " + (this.props.profile.textSize === 'textsize_medium' ? 'active' : '')} onClick={() => this.changeTextSize('textsize_medium')}>Az</div>
                             <div className={"text-size size-4 " + (this.props.profile.textSize === 'textsize_large' ? 'active' : '')} onClick={() => this.changeTextSize('textsize_large')}>Az</div>
                         </div>
+
+                        <div className="typography-5">Color Scheme</div>
+                        <div>
+                            <div className="theme-color color-1" onClick={() => this.changeThemeColor('themecolor_1')}><i className="material-icons">{this.props.profile.themeColor === 'themecolor_1' && 'check'}</i></div>
+                            <div className="theme-color color-2" onClick={() => this.changeThemeColor('themecolor_2')}><i className="material-icons">{this.props.profile.themeColor === 'themecolor_2' && 'check'}</i></div>
+                            <div className="theme-color color-3" onClick={() => this.changeThemeColor('themecolor_3')}><i className="material-icons">{this.props.profile.themeColor === 'themecolor_3' && 'check'}</i></div>
+                            <div className="theme-color color-4" onClick={() => this.changeThemeColor('themecolor_4')}><i className="material-icons">{this.props.profile.themeColor === 'themecolor_4' && 'check'}</i></div>
+                        </div>
                     </div>
                     <div className="actions">
                         <button className="primary"  onClick={this.toggleSettings}>Close</button>
@@ -102,6 +125,7 @@ Navigation.propTypes = {
     authorization: PropTypes.object.isRequired,
     getProfile: PropTypes.func.isRequired,
     setProfile: PropTypes.func.isRequired,
+    reloadProfile: PropTypes.func.isRequired,
 
     profile: PropTypes.object.isRequired,
     event: PropTypes.object.isRequired
@@ -112,4 +136,4 @@ const mapStateToProps = state => ({
     profile: state.profile
 })
 
-export default connect(mapStateToProps, { getProfile, setProfile })(withCookies(withRouter(Navigation)));
+export default connect(mapStateToProps, { getProfile, setProfile, reloadProfile })(withCookies(withRouter(Navigation)));

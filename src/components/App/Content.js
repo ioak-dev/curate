@@ -21,19 +21,28 @@ import Notification from '../Notification';
 import Navigation from '../Navigation';
 import Settings from '../Settings';
 
-const arcTheme = createMuiTheme({
-    typography: {
-      useNextVariants: true,
-    },
-    palette: {
-      primary: {
-          main: '#64CFEA'          
-      },
-      secondary: {
-          main: '#64CFEA'
-      }
-    }
-  });
+const themes = {
+    'themecolor_1': getTheme('#69A7BF'),
+    'themecolor_2': getTheme('#99587B'),
+    'themecolor_3': getTheme('#A66C26'),
+    'themecolor_4': getTheme('#37AE82')
+}
+
+function getTheme(color) {
+    return createMuiTheme({
+        typography: {
+          useNextVariants: true,
+        },
+        palette: {
+          primary: {
+              main: color         
+          },
+          secondary: {
+              main: color
+          }
+        }
+      });
+}
 
 class Content extends Component {
     constructor(props) {
@@ -54,7 +63,7 @@ class Content extends Component {
 
     render() {
         return (
-            <div className={"App " + this.props.profile.theme + " " + this.props.profile.textSize}>
+            <div className={"App " + this.props.profile.theme + " " + this.props.profile.textSize + " " + this.props.profile.themeColor}>
                 
                 <HashRouter>
                     <AuthInit />
@@ -62,7 +71,7 @@ class Content extends Component {
                     <div className="body">
                         <div className="content">
                             <Notification sendEvent={this.props.sendEvent} event={this.props.event} />
-                            <MuiThemeProvider theme={arcTheme}>
+                            <MuiThemeProvider theme={themes[this.props.profile.themeColor]}>
                                 <Navigation {...this.props} logout={() => this.logout}/>
                                 <Route exact path="/" render={(props) => <Home {...props} {...this.props} logout={() => this.logout}/>} />
                                 <Route path="/home" render={(props) => <Home {...props} {...this.props} logout={() => this.logout}/>} />

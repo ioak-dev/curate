@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Showdown from '../Ux/Showdown';
 import ArcTextField from '../Ux/ArcTextField';
-import { InputLabel, FormControl, Select, MenuItem } from '@material-ui/core';
 import ArcSelect from '../Ux/ArcSelect';
 
 class Link extends Component {
@@ -20,15 +19,6 @@ class Link extends Component {
             this.hideEdit();
             this.setState({newNotebook: ''});
         }
-    }
-
-    removeTag = (tag) => {
-        alert(this.props.id + ' remove ' + tag);
-        console.log(this.props);
-    }
-    tag = (tag) => {
-        alert(this.props.id + ' show results only for ' + tag);
-        console.log(this.props);
     }
 
     edit = () => {

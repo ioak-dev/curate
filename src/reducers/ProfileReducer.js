@@ -2,7 +2,8 @@ import { GET_PROFILE, SET_PROFILE } from '../actions/types';
 
 const initialState = {
     theme: 'theme_dark',
-    textSize: 'textsize_medium'
+    textSize: 'textsize_medium',
+    themeColor: 'themecolor_1'
 }
 
 export default function(state = initialState, action) {
@@ -14,6 +15,7 @@ export default function(state = initialState, action) {
             };
         case SET_PROFILE:
             console.log('SET_PROFILE reducer');
+            console.log(action.payload);
             return {
                 ...state,
                 ...action.payload

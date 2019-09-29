@@ -2,14 +2,6 @@ import React, { Component } from 'react';
 import './style.scss';
 
 class Link extends Component {
-    removeTag = (tag) => {
-        alert(this.props.id + ' remove ' + tag);
-        console.log(this.props);
-    }
-    tag = (tag) => {
-        alert(this.props.id + ' show results only for ' + tag);
-        console.log(this.props);
-    }
 
     edit = () => {
         this.props.editBookmark(this.props.bookmark);

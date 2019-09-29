@@ -450,8 +450,4 @@ Notes.propTypes = {
     event: PropTypes.object
 }
 
-const mapStateToProps = state => ({
-  event: state.event
-})
-
 export default Notes;

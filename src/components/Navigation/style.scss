@@ -277,5 +277,35 @@
                 font-size: calc(var(--metric-unit-large) * var(--metric-typography-base-3));
             }
         }
+
+        .theme-color {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 15px;
+            color: #fff;
+            line-height: 50px;
+            text-align: center;
+            background: #000;
+            display: inline-block;
+            margin-right: 10px;
+            cursor: pointer;
+
+            &.color-1 {
+                background-color: var(--color-themecolor-1);
+            }
+
+            &.color-2 {
+                background-color: var(--color-themecolor-2);
+            }
+
+            &.color-3 {
+                background-color: var(--color-themecolor-3);
+            }
+
+            &.color-4 {
+                background-color: var(--color-themecolor-4);
+            }
+        }
     }
 }
