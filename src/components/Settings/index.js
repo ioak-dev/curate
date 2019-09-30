@@ -43,14 +43,27 @@ class Settings extends React.Component {
       })
   }
 
+  fileChoosen = (event) => {
+    event.preventDefault();
+    var reader = new FileReader();
+    reader.onload = function(event) {
+      console.log(event.target.result);
+    }
+    reader.readAsText(event.target.files[0]);
+  }
+
   render() {
     return (
       <div className="settings">
         <ViewResolver event={this.props.event} sendEvent={this.props.sendEvent} sideLabel='More options'>
           <View main>
           <div className="typography-3">Import Bookmarks</div>
-          <div className="space-top-2"><button className="secondary animate space-left-2">Import from pinboard</button></div>
-          <div className="space-top-2"><button className="secondary animate space-left-2">Import from OPML</button></div>
+          <div className="space-top-2 space-left-2">
+            <label class="file-upload">
+              <input type="file" name="file" onChange={this.fileChoosen} />
+              Import
+            </label>
+          </div>
 
           
           <div className="typography-3 space-top-4">Export Bookmarks</div>
