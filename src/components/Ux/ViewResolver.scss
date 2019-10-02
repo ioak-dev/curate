@@ -21,7 +21,7 @@
 
 .view-desktop {
   @media (min-width: 768px) {
-    display: inline;
+    display: show;
   }
   @media (max-width: 767px) {
     display: none;

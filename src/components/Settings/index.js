@@ -7,6 +7,7 @@ import ViewResolver from '../Ux/ViewResolver';
 import { Switch } from '@material-ui/core';
 import { connect } from 'react-redux';
 import {withCookies} from 'react-cookie';
+import Canvas from '../Canvas';
 
 class Settings extends React.Component {
 
@@ -59,7 +60,7 @@ class Settings extends React.Component {
           <View main>
           <div className="typography-3">Import Bookmarks</div>
           <div className="space-top-2 space-left-2">
-            <label class="file-upload">
+            <label className="file-upload">
               <input type="file" name="file" onChange={this.fileChoosen} />
               Import
             </label>
@@ -99,6 +100,9 @@ class Settings extends React.Component {
               <div className="theme-color color-4" onClick={() => this.changeThemeColor('themecolor_4')}><i className="material-icons">{this.props.profile.themeColor === 'themecolor_4' && 'check'}</i></div>
             </div>
           </div>
+
+          <div className="typography-3 space-top-4">Canvas Fabric</div>
+          <div><Canvas width={900} height={900}/></div>
           </View>
         </ViewResolver>
       </div>

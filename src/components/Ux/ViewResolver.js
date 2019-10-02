@@ -55,6 +55,15 @@ class ViewResolver extends Component {
     render() {
         return (
             <>
+            <div className="view-desktop">
+                {this.state.side && <div className="view-side">
+                    {this.state.side}
+                </div>}
+                <div className={'view-content' + (this.state.side ? ' side-present' : '')}>
+                    {this.state.main}
+                </div>
+            </div>
+
             <div className="view-mobile">
                 <div className={(this.state.showSide ? "slider show" : "slider hide")}>
                     <div className="topbar" onClick={this.toggleSideView}>
@@ -72,15 +81,6 @@ class ViewResolver extends Component {
                 {!this.state.showSide && <div className="view-main">
                     {this.state.main}
                 </div>}
-            </div>
-
-            <div className="view-desktop">
-                {this.state.side && <div className="view-side">
-                    {this.state.side}
-                </div>}
-                <div className={'view-content' + (this.state.side ? ' side-present' : '')}>
-                    {this.state.main}
-                </div>
             </div>
             </>
         )

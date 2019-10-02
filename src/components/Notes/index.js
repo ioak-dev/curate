@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Link from './Link';
+import Note from './Note';
 import { Switch } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { constants } from '../Constants';
@@ -12,6 +12,7 @@ import './style.scss';
 import NoteRef from './NoteRef';
 import { isEmptyOrSpaces, match, sort } from '../Utils';
 import ArcSelect from '../Ux/ArcSelect';
+import Artboard from './Artboard';
 
 const queryString = require('query-string');
 const baseUrl = process.env.REACT_APP_API_URL;
@@ -24,6 +25,7 @@ class Notes extends Component {
             searchResults: [],
             view: [],
             isAddDialogOpen: false,
+            isArtboardAddDialogOpen: false,
 
             selectedNoteId: '',
 
@@ -135,9 +137,26 @@ class Notes extends Component {
         this.props.sendEvent('sidebar', false);
     }
 
-    toggleAddDialog = () => {
+    newArtboard = () => {
+        this.toggleArtboardAddDialog();
+        this.props.sendEvent('sidebar', false);
+    }
+
+    toggleAddDialog = (open) => {
         this.setState({
             isAddDialogOpen: !this.state.isAddDialogOpen,
+            id: null,
+            title: '',
+            content: '',
+            tags: '',
+            existingNotebook: '',
+            newNotebook: ''
+        })
+    }
+
+    toggleArtboardAddDialog = () => {
+        this.setState({
+            isArtboardAddDialogOpen: !this.state.isArtboardAddDialogOpen,
             id: null,
             title: '',
             content: '',
@@ -265,6 +284,23 @@ class Notes extends Component {
         }
         this.saveNote({
             id: null,
+            type: 'Note',
+            title: this.state.title,
+            content: this.state.content,
+            tags: this.state.tags,
+            notebook: notebook
+        });
+    }
+
+    saveArtboardEvent = () => {
+        let notebook = this.state.existingNotebook;
+        if (notebook === '<create new>') {
+            notebook = this.state.newNotebook;
+        }
+        this.saveNote({
+            id: null,
+            type: 'Artboard',
+            attributes: {},
             title: this.state.title,
             content: this.state.content,
             tags: this.state.tags,
@@ -297,7 +333,9 @@ class Notes extends Component {
 
         axios.put(baseUrl + constants.API_URL_NOTE, {
             id: note.id,
+            type: note.type,
             title: note.title,
+            attributes: note.attributes,
             content: note.content,
             tags: note.tags,
             notebook: note.notebook
@@ -315,6 +353,7 @@ class Notes extends Component {
                 } else {
                     that.props.sendEvent('notification', true, {type: 'success', message: 'Note created', duration: 5000});
                     that.toggleAddDialog();
+                    that.toggleArtboardAddDialog();
                 }
                 
                 that.initializeNotes(that.props.authorization, response.data._id);
@@ -346,8 +385,10 @@ class Notes extends Component {
     render() {
         const noteview = this.state.view.map(item => (
             <div key={item._id}>
-                {item._id === this.state.selectedNoteId && 
-                        <Link key={item._id} id={item._id} note={item} saveNote={this.saveNote} deleteNote={this.deleteNote} event={this.props.event} notebooks={this.state.existingNotebookList}/>}
+                {item._id === this.state.selectedNoteId && item.type !== 'Artboard' &&
+                        <Note key={item._id} id={item._id} note={item} saveNote={this.saveNote} deleteNote={this.deleteNote} event={this.props.event} notebooks={this.state.existingNotebookList}/>}
+                {item._id === this.state.selectedNoteId && item.type === 'Artboard' &&
+                        <Artboard key={item._id} id={item._id} note={item} saveNote={this.saveNote} deleteNote={this.deleteNote} event={this.props.event} notebooks={this.state.existingNotebookList}/>}
             </div>
         ))
         const listNoteRef = this.state.view.map(item => (
@@ -371,6 +412,19 @@ class Notes extends Component {
                     </div>
                 </ArcDialog>
 
+                <ArcDialog title="Create Artboard" visible={this.state.isArtboardAddDialogOpen} toggleVisibility={this.toggleArtboardAddDialog}>
+                    <div><ArcSelect label="Notebook" data={this.state} id="existingNotebook" handleChange={e => this.handleChange(e)} elements={this.state.existingNotebookList} firstAction="<create new>" /></div>
+                    <div>
+                    {this.state.existingNotebook === '<create new>' && <ArcTextField label="Notebook name" data={this.state} id="newNotebook" handleChange={e => this.handleChange(e)} />}
+                    </div>
+                    <div><ArcTextField label="Title" data={this.state} id="title" handleChange={e => this.handleChange(e)} /></div>
+                    <div><ArcTextField label="Tags (separated by blank spaces)" data={this.state} id="tags" handleChange={e => this.handleChange(e)} /></div>
+                    <div className="actions">
+                        <button onClick={this.toggleArtboardAddDialog} className="default disabled left"><i className="material-icons">close</i>Cancel</button>
+                        <button onClick={this.saveArtboardEvent} className="primary animate right"><i className="material-icons">double_arrow</i>Save</button>
+                    </div>
+                </ArcDialog>
+
                 <ViewResolver event={this.props.event} sendEvent={this.props.sendEvent} sideLabel='More options'>
                     <View main>
                         {noteview}
@@ -381,13 +435,25 @@ class Notes extends Component {
                                 <div className="actionbar-2 space-top-2">
                                     <div>
                                         <button onClick={this.newNote} className="primary animate">
-                                            <i className="material-icons">add</i>New Note
+                                            <i className="material-icons">add</i>Note
                                         </button>
                                     </div>
                                     <div>
+                                        <button onClick={this.newArtboard} className="primary animate">
+                                            <i className="material-icons">add</i>Whiteboard
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className="actionbar-3 space-top-2">
+                                    <div>
+                                        
+                                    </div>
+                                    <div>
+                                    </div>
+                                    <div>
                                         <button onClick={this.toggleFilter} className={this.state.isFiltered ? "default block" : "default disabled"}>
-                                            {!this.state.showFilter && <><i className="material-icons">expand_more</i>Filter</>}
-                                            {this.state.showFilter && <><i className="material-icons">expand_less</i>Filter</>}
+                                            {!this.state.showFilter && <><i className="material-icons">expand_more</i>Search</>}
+                                            {this.state.showFilter && <><i className="material-icons">expand_less</i>Search</>}
                                         </button>
                                     </div>
                                 </div>
