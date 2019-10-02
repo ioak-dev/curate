@@ -4,22 +4,30 @@ import { fabric } from 'fabric';
 
 let isDown, origX, origY, stroke;
 export default class Canvas extends Component {
+    
+    viewPort = window.matchMedia("(max-width: 767px)");
+
+    viewPortChange = (port) => {
+        this.setState({
+            width: port.matches ? window.innerWidth - 100 : window.innerWidth - 1000,
+            height: port.matches ? window.innerHeight - 100 : window.innerHeight
+        });
+    }
 
     constructor(props) {
         super(props);
         this.state = {
-            width: this.props.attributes && this.props.attributes.width ? this.props.attributes.width : 600,
-            height: this.props.attributes && this.props.attributes.height ? this.props.attributes.height : 600,
+            width: window.innerWidth,
+            height: window.innerHeight,
             backgroundColor: this.props.attributes && this.props.attributes.backgroundColor ? this.props.attributes.backgroundColor : 'red',
             data: this.props.data ? this.props.data : null
         }
+        this.refreshCanvas();
     }
 
 
     componentWillReceiveProps(nextProps) {
         this.setState({
-            width: nextProps.attributes && nextProps.attributes.width ? nextProps.attributes.width : 600,
-            height: nextProps.attributes && nextProps.attributes.height ? nextProps.attributes.height : 600,
             backgroundColor: nextProps.attributes && nextProps.attributes.backgroundColor ? nextProps.attributes.backgroundColor : 'red',
             data: nextProps.data ? nextProps.data : null
         }, () => this.refreshCanvas());
@@ -30,28 +38,40 @@ export default class Canvas extends Component {
         this.mouseDown(canvas);
         this.mouseMove(canvas);
         this.mouseUp(canvas);
+
+        this.refreshCanvas();
+        this.viewPort.addListener(this.viewPortChange);
     }
 
     refreshCanvas() {
+        // this.viewPortChange(this.viewPort);
+        
+        let width = this.viewPort.matches ? window.innerWidth - 35 : window.innerWidth - 700;
+        let height = this.viewPort.matches ? window.innerHeight - 200 : window.innerHeight;
+
         let canvas = new fabric.Canvas('c', {
             backgroundColor: this.state.backgroundColor,
-            width: this.state.width,
-            height: this.state.height
+            width: width,
+            height: height
         });
         canvas.isDrawingMode = this.props.edit;
         if (this.state.data) {
             canvas.loadFromDatalessJSON(this.state.data);
+            canvas.backgroundColor = this.state.backgroundColor;
         }
 
         canvas.freeDrawingBrush = new fabric['PencilBrush'](canvas);
         canvas.freeDrawingBrush.width=10;
         canvas.freeDrawingBrush.color='#D2E4C4';
+        canvas.renderAll();
 
         return canvas;
     }
 
     mouseDown(canvas) {
+        let that = this;
         canvas.on('mouse:down', function(o) {
+            canvas.backgroundColor = that.state.backgroundColor;
             isDown = true;
 		    let pointer = canvas.getPointer(o.e);
 		    origX = pointer.x;

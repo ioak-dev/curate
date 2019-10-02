@@ -136,8 +136,8 @@ class Artboard extends Component {
                     <ArcTextField label="Title" data={this.state} id="title" handleChange={e => this.handleChange(e)} />
                     <ArcTextField label="Tags (separated by blank spaces)" data={this.state} id="tags" handleChange={e => this.handleChange(e)} />
                     
-                    <ArcTextField label="Height" data={this.state.attributes} id="height" handleChange={e => this.attributeChange(e)} />
-                    <ArcTextField label="Width" data={this.state.attributes} id="width" handleChange={e => this.attributeChange(e)} />
+                    {/* <ArcTextField label="Height" data={this.state.attributes} id="height" handleChange={e => this.attributeChange(e)} />
+                    <ArcTextField label="Width" data={this.state.attributes} id="width" handleChange={e => this.attributeChange(e)} /> */}
                     <ArcTextField label="Background color" data={this.state.attributes} id="backgroundColor" handleChange={e => this.attributeChange(e)} />
                     
                     <Canvas attributes={this.state.attributes} data={this.state.content} handleChange={this.contentChange} edit={true} />
