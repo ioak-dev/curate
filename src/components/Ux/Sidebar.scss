@@ -1,6 +1,7 @@
 .sidebar {
     background-color: var(--color-sidebar-element);
     .header {
+        user-select: none;
         cursor: pointer;
         display: grid;
         grid-template-columns: auto auto;
@@ -23,6 +24,15 @@
             display: flex;
             justify-content: flex-end;
             padding-right: 10px;
+
+            .material-icons {
+
+                transition: transform 0.4s ease-out;
+
+                &.collapse {
+                    transform: rotate(-90deg);
+                }
+            }
         }
         
         .label {
@@ -68,6 +78,7 @@
         }
 
         .element {
+            user-select: none;
             cursor: pointer;
             padding-top: 15px;
             padding-bottom: 15px;

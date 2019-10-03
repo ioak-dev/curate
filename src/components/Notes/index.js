@@ -486,7 +486,7 @@ class Notes extends Component {
                                 </div>
                             </Sidebar>
                                 
-                            <Sidebar label={this.state.isFiltered ? "Search results" : "All Notes"} icon="notes"  number={this.state.view.length}>
+                            <Sidebar label={this.state.isFiltered ? "Search results" : "All Notes"} icon="notes"  show number={this.state.view.length}>
                                 <div className="filter-bar">
                                     <div><ArcSelect maxWidth="max-width-200" label="Notebook" data={this.state} id="notebookFilter" handleChange={e => this.handleNotebookFilterChange(e)} elements={this.state.filteredNotebookList} first='all notebooks' /></div>
                                     <div></div>

@@ -31,7 +31,8 @@ class Sidebar extends Component {
                         {this.props.label}
                         {this.props.number !== undefined && <div className="number">{this.props.number}</div>}
                     </div>
-                    <div className="aria"><i className="material-icons">{this.state.show ? 'expand_less' : 'expand_more'}</i></div>
+                    {/* <div className="aria"><i className="material-icons">{this.state.show ? 'expand_less' : 'expand_more'}</i></div> */}
+                    <div className="aria"><i className={this.state.show ? "material-icons collapse" : "material-icons"}>keyboard_arrow_left</i></div>
                 </div>
                 <div className={this.state.show ? "content show " + (this.props.animate ? "animate" : "static") : "content hide " + (this.props.animate ? "animate" : "static")}>
                     {elements}
