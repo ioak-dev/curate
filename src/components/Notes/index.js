@@ -13,6 +13,7 @@ import NoteRef from './NoteRef';
 import { isEmptyOrSpaces, match, sort } from '../Utils';
 import ArcSelect from '../Ux/ArcSelect';
 import Artboard from './Artboard';
+import Sidebar from '../Ux/Sidebar';
 
 const queryString = require('query-string');
 const baseUrl = process.env.REACT_APP_API_URL;
@@ -48,6 +49,21 @@ class Notes extends Component {
                 title: true,
                 tags: true,
                 content: true
+            },
+
+            sidebarElements: {
+                addNew: [
+                    {
+                        label: 'New Note',
+                        action: this.newNote,
+                        icon: 'note_add'
+                    },
+                    {
+                        label: 'New Whiteboard',
+                        action: this.newArtboard,
+                        icon: 'tv'
+                    }
+                ]
             }
         }
         this.props.receiveEvents();
@@ -432,75 +448,52 @@ class Notes extends Component {
                     <View side>
                         <div className="filter-container">
                             <div className="section-main">
-                                <div className="actionbar-2 space-top-2">
+                            <Sidebar label="Add New" elements={this.state.sidebarElements['addNew']} icon="add" animate />
+                            <Sidebar label="Search" elements={this.state.sidebarElements['search']} icon="search" animate number={this.state.isFiltered ? this.state.searchResults.length : undefined}>
+                                <div className="space-top-1" />
+                                <form method="GET" onSubmit={this.search} noValidate>
+                                    <div className="space-left-4 space-right-4"><ArcTextField label="Keywords" id="searchtext" data={this.state} handleChange={e => this.handleChange(e)} /></div>
+                                </form>
+                                <div className="typography-5 space-top-2 space-left-4">
+                                    <Switch
+                                        checked={this.state.searchPref.title}
+                                        onChange={() => this.toggleSearchPref('title')}
+                                        inputProps={{ 'aria-label': 'primary checkbox' }}/>
+                                    Include title
+                                </div>
+                                <div className="typography-5 space-top-2 space-left-4">
+                                    <Switch
+                                        checked={this.state.searchPref.tags}
+                                        onChange={() => this.toggleSearchPref('tags')}
+                                        inputProps={{ 'aria-label': 'primary checkbox' }}/>
+                                    Include tags
+                                </div>
+                                <div className="typography-5 space-top-2 space-left-4">
+                                    <Switch
+                                        checked={this.state.searchPref.content}
+                                        onChange={() => this.toggleSearchPref('content')}
+                                        inputProps={{ 'aria-label': 'primary checkbox' }}/>
+                                    Include Content
+                                </div>
+                                {this.state.isFiltered && <div className="typography-4 space-top-2">Found {this.state.searchResults.length} notes matching the search criteria</div>}
+                                <div className="actionbar-2 space-top-2 space-bottom-2">
                                     <div>
-                                        <button onClick={this.newNote} className="primary animate">
-                                            <i className="material-icons">add</i>Note
-                                        </button>
+                                        <button onClick={this.clearSearch} className="default">Clear</button>
                                     </div>
                                     <div>
-                                        <button onClick={this.newArtboard} className="primary animate">
-                                            <i className="material-icons">add</i>Whiteboard
-                                        </button>
+                                        <button onClick={this.search} className="default animate space-right-2">Search</button>
                                     </div>
                                 </div>
-                                <div className="actionbar-3 space-top-2">
-                                    <div>
-                                        
-                                    </div>
-                                    <div>
-                                    </div>
-                                    <div>
-                                        <button onClick={this.toggleFilter} className={this.state.isFiltered ? "default block" : "default disabled"}>
-                                            {!this.state.showFilter && <><i className="material-icons">expand_more</i>Search</>}
-                                            {this.state.showFilter && <><i className="material-icons">expand_less</i>Search</>}
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <div className={this.state.showFilter ? "filter show" : "filter hide"}>
-                                    <div className="typography-4 space-top-1">Keywords separated by space</div>
-                                    <form method="GET" onSubmit={this.search} noValidate>
-                                        <ArcTextField label="Keywords" id="searchtext" data={this.state} handleChange={e => this.handleChange(e)} />
-                                    </form>
-                                    <div className="typography-5 space-top-2">
-                                        <Switch
-                                            checked={this.state.searchPref.title}
-                                            onChange={() => this.toggleSearchPref('title')}
-                                            inputProps={{ 'aria-label': 'primary checkbox' }}/>
-                                        Include title
-                                    </div>
-                                    <div className="typography-5 space-top-2">
-                                        <Switch
-                                            checked={this.state.searchPref.tags}
-                                            onChange={() => this.toggleSearchPref('tags')}
-                                            inputProps={{ 'aria-label': 'primary checkbox' }}/>
-                                        Include tags
-                                    </div>
-                                    <div className="typography-5 space-top-2">
-                                        <Switch
-                                            checked={this.state.searchPref.content}
-                                            onChange={() => this.toggleSearchPref('content')}
-                                            inputProps={{ 'aria-label': 'primary checkbox' }}/>
-                                        Include Content
-                                    </div>
-                                    {this.state.isFiltered && <div className="typography-4 space-top-2">Found {this.state.searchResults.length} notes matching the search criteria</div>}
-                                    <div className="actionbar-2 space-top-2 space-bottom-2">
-                                        <div>
-                                            <button onClick={this.clearSearch} className="default">Clear</button>
-                                        </div>
-                                        <div>
-                                            <button onClick={this.search} className="default animate space-right-2">Search</button>
-                                        </div>
-                                    </div>
-                                </div>
-
+                            </Sidebar>
+                                
+                            <Sidebar label={this.state.isFiltered ? "Search results" : "All Notes"} icon="notes"  number={this.state.view.length}>
                                 <div className="actionbar-3 space-top-2 space-bottom-1">
                                     <div><ArcSelect label="Notebook" data={this.state} id="notebookFilter" handleChange={e => this.handleNotebookFilterChange(e)} elements={this.state.filteredNotebookList} first='all notebooks' /></div>
                                     <div><ArcSelect label="Sort by" data={this.state} id="sortBy" handleChange={e => this.handleNotebookFilterChange(e)} elements={Object.keys(this.sortTypes)} /></div>
                                     <div><ArcSelect label="Sort Order" data={this.state} id="sortOrder" handleChange={e => this.handleNotebookFilterChange(e)} elements={this.sortOrders} /></div>
                                 </div>
                                 {listNoteRef}
+                            </Sidebar>
                             </div>
                         </div>
                     </View>
