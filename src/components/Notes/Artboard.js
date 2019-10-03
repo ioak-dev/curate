@@ -13,7 +13,7 @@ class Artboard extends Component {
             preview: true,
             newNotebook: '',
             title: this.props.note.title,
-            attributes: this.props.note.attributes,
+            attributes: this.props.note.attributes ? this.props.note.attributes : {},
             content: this.props.note.content,
             tags: this.props.note.tags,
             notebook: this.props.note.notebook
@@ -105,24 +105,24 @@ class Artboard extends Component {
         }
 
         return (
-            <>
-            {!this.state.editNote && 
-            <>
-                <div className="notebook"><i className="material-icons">insert_drive_file</i>{this.props.note.notebook}</div>
-                {/* <div className="space-bottom-2" /> */}
-                <div className="typography-3 space-bottom-1">
-                    {this.props.note.title}
-                </div>
-                {tags}
-                <div className="space-bottom-2" />
-                <button onClick={this.showEdit} className="secondary animate left"><i className="material-icons">edit</i>Edit</button>
-                <button onClick={this.delete} className="secondary animate right"><i className="material-icons">delete</i>Delete</button>
-                <div className="space-top-2" />
-                <Canvas attributes={this.state.attributes} data={this.state.content} handleChange={this.contentChange} />
-            </>}
+            <div className="artboard">
+                {!this.state.editNote && 
+                <>
+                    <div className="notebook"><i className="material-icons">insert_drive_file</i>{this.props.note.notebook}</div>
+                    {/* <div className="space-bottom-2" /> */}
+                    <div className="typography-3 space-bottom-1">
+                        {this.props.note.title}
+                    </div>
+                    {tags}
+                    <div className="space-bottom-2" />
+                    <button onClick={this.showEdit} className="secondary animate left"><i className="material-icons">edit</i>Edit</button>
+                    <button onClick={this.delete} className="secondary animate right"><i className="material-icons">delete</i>Delete</button>
+                    <div className="space-top-2" />
+                    <Canvas attributes={this.state.attributes} data={this.state.content} handleChange={this.contentChange} />
+                </>}
             
-            {this.state.editNote && 
-                <div>
+                {this.state.editNote && 
+                <div className="canvas-edit">
                     <div className="typography-3 space-bottom-1">{this.state.title}</div>
                     
                     <button onClick={this.save} className="primary animate left space-bottom-2"><i className="material-icons">double_arrow</i>Save</button>
@@ -139,10 +139,9 @@ class Artboard extends Component {
                     {/* <ArcTextField label="Height" data={this.state.attributes} id="height" handleChange={e => this.attributeChange(e)} />
                     <ArcTextField label="Width" data={this.state.attributes} id="width" handleChange={e => this.attributeChange(e)} /> */}
                     <ArcTextField label="Background color" data={this.state.attributes} id="backgroundColor" handleChange={e => this.attributeChange(e)} />
-                    
                     <Canvas attributes={this.state.attributes} data={this.state.content} handleChange={this.contentChange} edit={true} />
                 </div>}
-            </>
+            </div>
         )
     }
 }

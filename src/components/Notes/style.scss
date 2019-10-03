@@ -40,10 +40,12 @@
 
         .title {
             display: inline;
+            font-size: 16px;
         }
 
         .detail {
             color: var(--color-body-invert-dim);
+            font-size: 14px;
         }
 
         &:hover {
@@ -86,16 +88,26 @@
         border-radius: 50px;
         text-align: center;
         vertical-align: center;
-        font-size: var(--textsize-5);
+        font-size: 14px;
 
         .material-icons {
           vertical-align: middle;
           margin-right: 5px;
-          font-size: var(--textsize-5);
+          font-size: 14px;
         }
     }
 
     .notebook {
         background-color: var(--color-secondary);
+    }
+}
+
+.artboard {
+    .canvas-edit {
+        position: absolute;
+        left: 0px;
+        top: var(--height-nav);
+        background-color: var(--color-body);
+        padding-left: 10px;
     }
 }
