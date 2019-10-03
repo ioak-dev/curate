@@ -1,5 +1,12 @@
 .notes {
 
+    .filter-bar {
+        display: grid;
+        grid-template-columns: auto auto;
+        padding: 10px;
+        background-color: var(--color-sidebar-header-active);
+    }
+
     .filter {
         padding: 10px;
         overflow: hidden;
@@ -46,6 +53,12 @@
         .detail {
             color: var(--color-body-invert-dim);
             font-size: 14px;
+        }
+
+        .detail-artboard {
+            // margin-top: -10px;
+            display: flex;
+            justify-content: flex-end;
         }
 
         &:hover {

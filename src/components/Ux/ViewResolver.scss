@@ -31,13 +31,13 @@
     padding-top: calc(var(--height-nav) + 20px);
 
     &.side-present {
-      margin-left: calc(25vw + 40px);
+      margin-left: calc(362px + 40px);
     }
     min-height: 100vh;
   }
   
   .view-side {
-    width: 25vw;
+    width: 362px;
     border-right: 1px solid var(--color-body-invert-dim);
     position: fixed;
     overflow-y: auto;
@@ -45,7 +45,7 @@
     bottom: 0;
     
     .section-footer {
-        width: 25vw;
+        width: 362px;
         position: fixed;
         bottom: 0;
         display: grid;

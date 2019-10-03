@@ -33,7 +33,8 @@ class NoteRef extends Component {
                         {this.props.note.notebook}
                     </div>
                     <div className="title">{this.props.note.title}</div>
-                    <div className="detail">{removeMd(this.props.note.content.substring(0, 100))}</div>
+                    {this.props.note.type !== 'Artboard' && <div className="detail">{removeMd(this.props.note.content.substring(0, 100))}</div>}
+                    {this.props.note.type === 'Artboard' && <div className="detail-artboard"><i className="material-icons">tv</i></div>}
                     {/* <div className="detail typography-5"><Showdown source={this.props.note.content.substring(0, 150)} /></div> */}
                 </div>
             </div>

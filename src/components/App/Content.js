@@ -69,7 +69,7 @@ class Content extends Component {
                     <AuthInit />
                     <Backdrop sendEvent={this.props.sendEvent} event={this.props.event} />
                     <div className="body">
-                        <div className="content">
+                        <div className="body-content">
                             <Notification sendEvent={this.props.sendEvent} event={this.props.event} />
                             <MuiThemeProvider theme={themes[this.props.profile.themeColor]}>
                                 <Navigation {...this.props} logout={() => this.logout}/>

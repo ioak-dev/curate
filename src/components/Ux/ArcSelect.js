@@ -25,7 +25,7 @@ function ArcSelect(props) {
     const elementsView = elements.map(item => <MenuItem key={item} value={item}>{item}</MenuItem>);
     return (
         <>
-        <FormControl className={classes.formControl}>
+        <FormControl className={classes.formControl} className="arc-select">
             <InputLabel htmlFor={id}>{label}</InputLabel>
             <Select
             value={data[id]}
@@ -35,6 +35,7 @@ function ArcSelect(props) {
                 id: id,
             }}
             autoWidth
+            className={props.maxWidth ? props.maxWidth : ""}
             >
                 {first && <MenuItem value={first}>{first}</MenuItem>}
                 {firstAction && <MenuItem value={firstAction}><em>{firstAction}</em></MenuItem>}

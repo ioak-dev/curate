@@ -487,8 +487,9 @@ class Notes extends Component {
                             </Sidebar>
                                 
                             <Sidebar label={this.state.isFiltered ? "Search results" : "All Notes"} icon="notes"  number={this.state.view.length}>
-                                <div className="actionbar-3 space-top-2 space-bottom-1">
-                                    <div><ArcSelect label="Notebook" data={this.state} id="notebookFilter" handleChange={e => this.handleNotebookFilterChange(e)} elements={this.state.filteredNotebookList} first='all notebooks' /></div>
+                                <div className="filter-bar">
+                                    <div><ArcSelect maxWidth="max-width-200" label="Notebook" data={this.state} id="notebookFilter" handleChange={e => this.handleNotebookFilterChange(e)} elements={this.state.filteredNotebookList} first='all notebooks' /></div>
+                                    <div></div>
                                     <div><ArcSelect label="Sort by" data={this.state} id="sortBy" handleChange={e => this.handleNotebookFilterChange(e)} elements={Object.keys(this.sortTypes)} /></div>
                                     <div><ArcSelect label="Sort Order" data={this.state} id="sortOrder" handleChange={e => this.handleNotebookFilterChange(e)} elements={this.sortOrders} /></div>
                                 </div>
