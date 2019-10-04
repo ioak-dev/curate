@@ -456,8 +456,8 @@ class Notes extends Component {
                     <View side>
                         <div className="filter-container">
                             <div className="section-main">
-                            <Sidebar label="Add New" elements={this.state.sidebarElements['addNew']} icon="add" animate />
-                            <Sidebar label="Search" elements={this.state.sidebarElements['search']} icon="search" animate number={this.state.isFiltered ? this.state.searchResults.length : undefined}>
+                            <Sidebar label="Add New" elements={this.state.sidebarElements['addNew']} icon="add" event={this.props.event} sendEvent={this.props.sendEvent} animate />
+                            <Sidebar label="Search" elements={this.state.sidebarElements['search']} icon="search" event={this.props.event} sendEvent={this.props.sendEvent} animate number={this.state.isFiltered ? this.state.searchResults.length : undefined}>
                                 <div className="space-top-1" />
                                 <form method="GET" onSubmit={this.search} noValidate>
                                     <div className="space-left-4 space-right-4"><ArcTextField label="Keywords" id="searchtext" data={this.state} handleChange={e => this.handleChange(e)} /></div>
@@ -494,7 +494,7 @@ class Notes extends Component {
                                 </div>
                             </Sidebar>
                                 
-                            <Sidebar label={this.state.isFiltered ? "Search results" : "All Notes"} icon="notes"  show number={this.state.view.length}>
+                            <Sidebar label={this.state.isFiltered ? "Search results" : "All Notes"} icon="notes" event={this.props.event} sendEvent={this.props.sendEvent} number={this.state.view.length}>
                                 <div className="filter-bar">
                                     <div><ArcSelect maxWidth="max-width-200" label="Notebook" data={this.state} id="notebookFilter" handleChange={e => this.handleNotebookFilterChange(e)} elements={this.state.filteredNotebookList} first='all notebooks' /></div>
                                     <div></div>

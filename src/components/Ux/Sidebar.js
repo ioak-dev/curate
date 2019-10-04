@@ -16,7 +16,24 @@ class Sidebar extends Component {
     toggle = () => {
         this.setState({
             show: !this.state.show
+        }, () => this.props.sendEvent('sidebarExpanded', this.state.show, {label: this.props.label}));
+    }
+
+    hide = () => {
+        this.setState({
+            show: false
         });
+    }
+
+    componentWillReceiveProps(nextProps) {
+        console.log(nextProps);
+        if (nextProps.event && nextProps.event.name === 'sidebarExpanded' && nextProps.event.signal) {
+            if (nextProps.event.data && nextProps.event.data.label !== this.props.label) {
+                this.setState({
+                    show: false
+                });
+            }
+        }
     }
 
     render() {
