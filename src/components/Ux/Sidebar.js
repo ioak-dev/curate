@@ -26,7 +26,6 @@ class Sidebar extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log(nextProps);
         if (nextProps.event && nextProps.event.name === 'sidebarExpanded' && nextProps.event.signal) {
             if (nextProps.event.data && nextProps.event.data.label !== this.props.label) {
                 this.setState({
