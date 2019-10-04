@@ -9,6 +9,7 @@ class ArcDialog extends Component {
         if (this.props.visible !== nextProps.visible) {
             if (nextProps.visible) {
                 this.props.sendEvent('dialog', true, null);
+                window.scrollTo(500, 0);
             } else {
                 this.props.sendEvent('dialog', false, null);
             }

@@ -1,9 +1,10 @@
 .notes {
 
-    .actionbar {
+    .filter-bar {
         display: grid;
-        grid-template-columns: 1fr 1fr;
-        justify-items: center;
+        grid-template-columns: auto auto;
+        padding: 10px;
+        background-color: var(--color-sidebar-header-active);
     }
 
     .filter {
@@ -11,11 +12,11 @@
         overflow: hidden;
         &.hide {
             // display: none;
-            height: 0px;
+            max-height: 0px;
             // transition: all 1s cubic-bezier(.5,1.6,.4,.7);
         }
         &.show {
-            height: 500px;
+            max-height: 500px;
             // transition: all 1s cubic-bezier(.5,1.6,.4,.7);
         }
         transition: all 1s cubic-bezier(.5,1.6,.4,.7);
@@ -45,11 +46,19 @@
         }
 
         .title {
-            
+            display: inline;
+            font-size: 16px;
         }
 
         .detail {
             color: var(--color-body-invert-dim);
+            font-size: 14px;
+        }
+
+        .detail-artboard {
+            // margin-top: -10px;
+            display: flex;
+            justify-content: flex-end;
         }
 
         &:hover {
@@ -84,7 +93,7 @@
         }
     }
 
-    .tag {
+    .tag, .notebook {
         background-color: var(--color-body-dim);
         display: inline;
         margin-right: 10px;
@@ -92,5 +101,26 @@
         border-radius: 50px;
         text-align: center;
         vertical-align: center;
+        font-size: 14px;
+
+        .material-icons {
+          vertical-align: middle;
+          margin-right: 5px;
+          font-size: 14px;
+        }
+    }
+
+    .notebook {
+        background-color: var(--color-secondary);
+    }
+}
+
+.artboard {
+    .canvas-edit {
+        position: absolute;
+        left: 0px;
+        top: var(--height-nav);
+        background-color: var(--color-body);
+        padding-left: 10px;
     }
 }

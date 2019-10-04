@@ -38,10 +38,9 @@ class Desktop extends Component {
             </div>
             <div className={(this.state.menu ? "slider show" : "slider hide")} onClick={this.toggleMenu}>
                 <div className={(this.state.menu ? "container": "container hidetext")} onClick={this.toggleMenu}>
-                    <Links authorization={this.props.authorization}/>
                     <div className="action">
                         <div className="settings-icon" onClick={this.props.toggleSettings}>
-                            {this.props.authorization.isAuth && <button className="default disabled small" onClick={this.props.toggleSettings}><i className="material-icons">brush</i>Theme</button>}
+                            {this.props.authorization.isAuth && <button className="default disabled small" onClick={this.props.toggleSettings}><i className="material-icons">brush</i>Appearance</button>}
                         </div>
                         <div className="buttons">
                             {this.props.authorization.isAuth && <button className="default disabled small" onClick={this.props.logout()}><i className="material-icons">power_settings_new</i>Logout</button>}
@@ -49,6 +48,7 @@ class Desktop extends Component {
                             {!this.props.authorization.isAuth && <button className="secondary small right" onClick={this.props.login()}><i className="material-icons">person_add</i>Signup</button>}
                         </div>
                     </div>
+                    <Links authorization={this.props.authorization}/>
                 </div>
             </div>
             </>

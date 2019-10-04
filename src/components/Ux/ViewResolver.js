@@ -3,16 +3,31 @@ import PropTypes from 'prop-types';
 import './ViewResolver.scss';
 
 class ViewResolver extends Component {
+    
+    viewPort = window.matchMedia("(max-width: 767px)");
+
+    viewPortChange = (port) => {
+        this.setState({
+            mobileViewPort: port.matches
+        });
+    }
+
     constructor(props) {
         super(props);
         this.state = {
             views: this.props.children,
-            showSide: false
+            showSide: false,
+            mobileViewPort: false
         }
     }
 
     componentWillMount() {
         this.initializeViews();
+    }
+
+    componentDidMount() {
+        this.viewPortChange(this.viewPort);
+        this.viewPort.addListener(this.viewPortChange);
     }
 
     initializeViews() {
@@ -55,7 +70,16 @@ class ViewResolver extends Component {
     render() {
         return (
             <>
-            <div className="view-mobile">
+            {!this.state.mobileViewPort && <div className="view-desktop">
+                {this.state.side && <div className="view-side">
+                    {this.state.side}
+                </div>}
+                <div className={'view-content' + (this.state.side ? ' side-present' : '')}>
+                    {this.state.main}
+                </div>
+            </div>}
+
+            {this.state.mobileViewPort && <div className="view-mobile">
                 <div className={(this.state.showSide ? "slider show" : "slider hide")}>
                     <div className="topbar" onClick={this.toggleSideView}>
                         <div>
@@ -72,16 +96,7 @@ class ViewResolver extends Component {
                 {!this.state.showSide && <div className="view-main">
                     {this.state.main}
                 </div>}
-            </div>
-
-            <div className="view-desktop">
-                <div className="view-side">
-                    {this.state.side}
-                </div>
-                <div className="view-content">
-                    {this.state.main}
-                </div>
-            </div>
+            </div>}
             </>
         )
     }

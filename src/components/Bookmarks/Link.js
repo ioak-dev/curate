@@ -2,14 +2,6 @@ import React, { Component } from 'react';
 import './style.scss';
 
 class Link extends Component {
-    removeTag = (tag) => {
-        alert(this.props.id + ' remove ' + tag);
-        console.log(this.props);
-    }
-    tag = (tag) => {
-        alert(this.props.id + ' show results only for ' + tag);
-        console.log(this.props);
-    }
 
     edit = () => {
         this.props.editBookmark(this.props.bookmark);
@@ -35,8 +27,7 @@ class Link extends Component {
                         <i onClick={this.delete} className="material-icons">delete</i>
                     </div>
                 </div>
-                <div className="typography-2">{this.props.bookmark.href}</div>
-                <div className="typography-1 space-bottom-1">{this.props.bookmark.description}</div>
+                <div className="typography-4 space-bottom-1">{this.props.bookmark.href}</div>
                 {tags}
             </div>
         )

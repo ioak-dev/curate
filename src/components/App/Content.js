@@ -19,21 +19,30 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Backdrop from './Backdrop';
 import Notification from '../Notification';
 import Navigation from '../Navigation';
-import Search from '../Search';
+import Settings from '../Settings';
 
-const arcTheme = createMuiTheme({
-    typography: {
-      useNextVariants: true,
-    },
-    palette: {
-      primary: {
-          main: '#64CFEA'          
-      },
-      secondary: {
-          main: '#64CFEA'
-      }
-    }
-  });
+const themes = {
+    'themecolor_1': getTheme('#69A7BF'),
+    'themecolor_2': getTheme('#99587B'),
+    'themecolor_3': getTheme('#A66C26'),
+    'themecolor_4': getTheme('#37AE82')
+}
+
+function getTheme(color) {
+    return createMuiTheme({
+        typography: {
+          useNextVariants: true,
+        },
+        palette: {
+          primary: {
+              main: color         
+          },
+          secondary: {
+              main: color
+          }
+        }
+      });
+}
 
 class Content extends Component {
     constructor(props) {
@@ -54,22 +63,22 @@ class Content extends Component {
 
     render() {
         return (
-            <div className={"App " + this.props.profile.theme}>
+            <div className={"App " + this.props.profile.theme + " " + this.props.profile.textSize + " " + this.props.profile.themeColor}>
                 
                 <HashRouter>
                     <AuthInit />
                     <Backdrop sendEvent={this.props.sendEvent} event={this.props.event} />
                     <div className="body">
-                        <div className="content">
+                        <div className="body-content">
                             <Notification sendEvent={this.props.sendEvent} event={this.props.event} />
-                            <MuiThemeProvider theme={arcTheme}>
+                            <MuiThemeProvider theme={themes[this.props.profile.themeColor]}>
                                 <Navigation {...this.props} logout={() => this.logout}/>
                                 <Route exact path="/" render={(props) => <Home {...props} {...this.props} logout={() => this.logout}/>} />
                                 <Route path="/home" render={(props) => <Home {...props} {...this.props} logout={() => this.logout}/>} />
                                 <Route path="/login" render={(props) => <Login {...props} {...this.props} logout={() => this.logout}/>} />
                                 <PrivateRoute path="/bookmarks" render={(props) => <Bookmarks {...props} {...this.props} logout={this.logout} />} />
                                 <PrivateRoute path="/notes" render={(props) => <Notes {...props} {...this.props} logout={() => this.logout} />} />
-                                <Route path="/search" render={(props) => <Search {...props} {...this.props} logout={() => this.logout}/>} />
+                                <Route path="/settings" render={(props) => <Settings {...props} {...this.props} logout={() => this.logout}/>} />
                             </MuiThemeProvider>
                         </div>
                     </div>

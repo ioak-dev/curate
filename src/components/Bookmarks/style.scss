@@ -3,12 +3,6 @@
         width: 100%;
     }
 
-    .actionbar {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        justify-items: center;
-    }
-
     .tag {
         background-color: var(--color-body-dim);
         display: inline;
@@ -28,7 +22,7 @@
 
     .section-main {
         .content {
-            padding: 20px;
+            // padding: 20px;
         }
     }
 }

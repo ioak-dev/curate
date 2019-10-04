@@ -10,6 +10,7 @@ import View from '../Ux/View';
 import './style.scss';
 import { Switch } from '@material-ui/core';
 import { isEmptyOrSpaces, match } from '../Utils';
+import Sidebar from '../Ux/Sidebar';
 
 const queryString = require('query-string');
 const baseUrl = process.env.REACT_APP_API_URL;
@@ -28,7 +29,6 @@ class Bookmarks extends Component {
             id: null,
             title: '',
             href: '',
-            description: '',
             tags: '',
             editDialogLabel: 'Add',
             firstLoad: true,
@@ -37,6 +37,16 @@ class Bookmarks extends Component {
                 title: true,
                 tags: true,
                 href: true
+            },
+
+            sidebarElements: {
+                addNew: [
+                    {
+                        label: 'New Bookmark',
+                        action: this.toggleEditDialog,
+                        icon: 'note_add'
+                    }
+                ]
             }
         }
     }
@@ -95,7 +105,6 @@ class Bookmarks extends Component {
             id: null,
             title: '',
             href: '',
-            description: '',
             tags: '',
             editDialogLabel: 'Add'
         })
@@ -107,7 +116,6 @@ class Bookmarks extends Component {
             id: bookmark._id,
             title: bookmark.title,
             href: bookmark.href,
-            description: bookmark.description,
             tags: bookmark.tags,
             editDialogLabel: 'Save'
         })
@@ -187,7 +195,6 @@ class Bookmarks extends Component {
             id: this.state.id,
             title: this.state.title,
             href: this.state.href,
-            description: this.state.description,
             tags: this.state.tags
         }
 
@@ -246,7 +253,6 @@ class Bookmarks extends Component {
                 <ArcDialog title="Add Bookmark" visible={this.state.isEditDialogOpen} toggleVisibility={this.toggleEditDialog}>
                     <ArcTextField label="Title" data={this.state} id="title" handleChange={e => this.handleChange(e)} />
                     <ArcTextField label="URL" data={this.state} id="href" handleChange={e => this.handleChange(e)} />
-                    <ArcTextField label="Description" data={this.state} id="description" multiline rows='5' handleChange={e => this.handleChange(e)} />
                     <ArcTextField label="Tags" data={this.state} id="tags" handleChange={e => this.handleChange(e)} />
                     <div className="actions">
                         <button onClick={this.toggleEditDialog} className="default disabled"><i className="material-icons">close</i>Cancel</button>
@@ -261,60 +267,44 @@ class Bookmarks extends Component {
                     <View side>
                         <div className="filter-container">
                             <div className="section-main">
-                                <div className="actionbar space-top-2">
-                                    <div>
-                                        <button onClick={this.toggleEditDialog} className="primary animate">
-                                            <i className="material-icons">add</i>New Bookmark
-                                        </button>
-                                    </div>
-                                </div>
-                                <div className="content">
-                                    <div className="typography-2 space-top-2">Keywords separated by space</div>
-                                    {/* <form accept-charset="utf-8" method="GET" onSubmit={this.search} noValidate> */}
+                                <Sidebar label="Add New" elements={this.state.sidebarElements['addNew']} icon="add" animate />
+                                <Sidebar label="Search" elements={this.state.sidebarElements['search']} icon="search" animate number={this.state.isFiltered ? this.state.view.length : undefined}>
                                     <form method="GET" onSubmit={this.search} noValidate>
-                                        <ArcTextField label="Keywords" id="searchtext" data={this.state} handleChange={e => this.handleChange(e)} />
-                                        {/* <ArcTextField label="Keywords2" id="searchtext2" data={this.state} handleChange={e => this.handleChange(e)} /> */}
+                                    <div className="space-top-2 space-left-4 space-right-4"><ArcTextField label="Keywords" id="searchtext" data={this.state} handleChange={e => this.handleChange(e)} /></div>
                                     </form>
-                                    <div className="typography-1 space-top-2">
+                                    <div className="typography-5 space-top-2 space-left-4">
                                         <Switch
                                             checked={this.state.searchPref.title}
                                             onChange={() => this.toggleSearchPref('title')}
                                             inputProps={{ 'aria-label': 'primary checkbox' }}/>
                                         Include title
                                     </div>
-                                    <div className="typography-1 space-top-2">
+                                    <div className="typography-5 space-top-2 space-left-4">
                                         <Switch
                                             checked={this.state.searchPref.tags}
                                             onChange={() => this.toggleSearchPref('tags')}
                                             inputProps={{ 'aria-label': 'primary checkbox' }}/>
                                         Include tags
                                     </div>
-                                    <div className="typography-1 space-top-2">
+                                    <div className="typography-5 space-top-2 space-left-4">
                                         <Switch
                                             checked={this.state.searchPref.href}
                                             onChange={() => this.toggleSearchPref('href')}
                                             inputProps={{ 'aria-label': 'primary checkbox' }}/>
                                         Include URL
                                     </div>
-                                    {this.state.isFiltered && <div className="typography-2 space-top-2">Found {this.state.view.length} bookmarks matching the search criteria</div>}
-                                </div>
+                                    {this.state.isFiltered && <div className="typography-4 space-top-2 space-left-2">Found {this.state.view.length} bookmarks matching the search criteria</div>}
+                                    <div className="actionbar-2 space-top-2 space-bottom-2">
+                                        <div>
+                                            <button onClick={this.clearSearch} className="default">Clear</button>
+                                        </div>
+                                        <div>
+                                            <button onClick={this.search} className="default animate space-right-2">Search</button>
+                                        </div>
+                                    </div>
+
+                                </Sidebar>
                             </div>
-                            <div className="actionbar space-top-2 space-bottom-2">
-                                <div>
-                                    <button onClick={this.clearSearch} className="default left">Clear</button>
-                                </div>
-                                <div>
-                                    <button onClick={this.search} className="default animate right space-right-2">Search</button>
-                                </div>
-                            </div>
-                            {/* <div className="section-footer">
-                                <div>
-                                    <button onClick={this.clearSearch} className="default disabled left">Clear</button>
-                                </div>
-                                <div>
-                                    <button onClick={this.search} className="default animate right space-right-2">Search</button>
-                                </div>
-                            </div> */}
                         </div>
                     </View>
                 </ViewResolver>

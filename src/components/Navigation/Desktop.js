@@ -27,7 +27,7 @@ class Desktop extends Component {
                     <div className="action">
                         {/* <button className="default disabled small" onClick={this.props.toggleSettings}><i className="material-icons">palette</i>Theme</button> */}
                         {this.props.authorization.isAuth && 
-                            <button className="default disabled small" onClick={this.props.toggleSettings}><i className="material-icons">brush</i>Theme</button>}
+                            <button className="default disabled small" onClick={this.props.toggleSettings}><i className="material-icons">brush</i>Appearance</button>}
                         {this.props.authorization.isAuth && 
                             <button className="default disabled small" onClick={this.props.logout()}><i className="material-icons">power_settings_new</i>Logout</button>}
                         {!this.props.authorization.isAuth && 

@@ -179,7 +179,7 @@
         .container {
             display: grid;
             height: inherit;
-            grid-template-rows: auto 1fr auto;
+            grid-template-rows: auto auto 1fr;
 
             .links
             {
@@ -252,5 +252,60 @@
         grid-template-columns: 4fr 1fr;
         // overflow: hidden;
         align-items: center;
+
+        .text-size {
+            display: inline;
+            cursor: pointer;
+
+            &.active {
+                color: var(--color-secondary);
+            }
+
+            &.size-1 {
+                font-size: calc(var(--metric-unit-tiny) * var(--metric-typography-base-3));
+            }
+
+            &.size-2 {
+                font-size: calc(var(--metric-unit-small) * var(--metric-typography-base-3));
+            }
+
+            &.size-3 {
+                font-size: calc(var(--metric-unit-medium) * var(--metric-typography-base-3));
+            }
+
+            &.size-4 {
+                font-size: calc(var(--metric-unit-large) * var(--metric-typography-base-3));
+            }
+        }
+
+        .theme-color {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 15px;
+            color: #fff;
+            line-height: 50px;
+            text-align: center;
+            background: #000;
+            display: inline-block;
+            margin-right: 10px;
+            cursor: pointer;
+
+            &.color-1 {
+                background-color: var(--color-themecolor-1);
+            }
+
+            &.color-2 {
+                background-color: var(--color-themecolor-2);
+            }
+
+            &.color-3 {
+                background-color: var(--color-themecolor-3);
+            }
+
+            &.color-4 {
+                background-color: var(--color-themecolor-4);
+            }
+        }
     }
 }

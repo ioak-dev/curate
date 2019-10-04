@@ -5,6 +5,7 @@ export const constants = {
     API_URL_SIGNIN: "/auth/signin",
 
     API_URL_BOOKMARK: "/bookmark",
+    API_URL_PREFERENCES: "/user/preferences",
 
     API_URL_NOTE: "/note"
 }

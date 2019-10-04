@@ -4,14 +4,6 @@ import './style.scss';
 const removeMd = require('remove-markdown');
 
 class NoteRef extends Component {
-    removeTag = (tag) => {
-        alert(this.props.id + ' remove ' + tag);
-        console.log(this.props);
-    }
-    tag = (tag) => {
-        alert(this.props.id + ' show results only for ' + tag);
-        console.log(this.props);
-    }
 
     edit = () => {
         this.props.editNote(this.props.note);
@@ -36,9 +28,14 @@ class NoteRef extends Component {
             <>
             <div className={this.props.selected ? "noteref selected" : "noteref"} onClick={this.selectNote}>
                 <div className="content">
-                    <div className="title typography-2">{this.props.note.title}</div>
-                    <div className="detail typography-1">{removeMd(this.props.note.content.substring(0, 200))}</div>
-                    {/* <div className="detail typography-1"><Showdown source={this.props.note.content.substring(0, 150)} /></div> */}
+                    <div className="notebook">
+                        {/* <i className="material-icons">insert_drive_file</i> */}
+                        {this.props.note.notebook}
+                    </div>
+                    <div className="title">{this.props.note.title}</div>
+                    {this.props.note.type !== 'Artboard' && <div className="detail">{removeMd(this.props.note.content.substring(0, 100))}</div>}
+                    {this.props.note.type === 'Artboard' && <div className="detail-artboard"><i className="material-icons">tv</i></div>}
+                    {/* <div className="detail typography-5"><Showdown source={this.props.note.content.substring(0, 150)} /></div> */}
                 </div>
             </div>
             <div className="separator" />
