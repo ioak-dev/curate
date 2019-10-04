@@ -158,9 +158,15 @@ class Notes extends Component {
         this.props.sendEvent('sidebar', false);
     }
 
-    toggleAddDialog = (open) => {
+    toggleAddDialog = () => {
         this.setState({
             isAddDialogOpen: !this.state.isAddDialogOpen,
+        });
+        this.resetForm();
+    }
+
+    resetForm = () => {
+        this.setState({
             id: null,
             title: '',
             content: '',
@@ -173,13 +179,16 @@ class Notes extends Component {
     toggleArtboardAddDialog = () => {
         this.setState({
             isArtboardAddDialogOpen: !this.state.isArtboardAddDialogOpen,
-            id: null,
-            title: '',
-            content: '',
-            tags: '',
-            existingNotebook: '',
-            newNotebook: ''
-        })
+        });
+        this.resetForm();
+    }
+
+    closeAllDialog = () => {
+        this.setState({
+            isAddDialogOpen: false,
+            isArtboardAddDialogOpen: false
+        });
+        this.resetForm();
     }
 
     toggleFilter = () => {
@@ -368,8 +377,7 @@ class Notes extends Component {
                     that.props.sendEvent('closeNoteEditView', true);
                 } else {
                     that.props.sendEvent('notification', true, {type: 'success', message: 'Note created', duration: 5000});
-                    that.toggleAddDialog();
-                    that.toggleArtboardAddDialog();
+                    that.closeAllDialog();
                 }
                 
                 that.initializeNotes(that.props.authorization, response.data._id);

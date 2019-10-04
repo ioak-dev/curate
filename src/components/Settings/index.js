@@ -100,9 +100,6 @@ class Settings extends React.Component {
               <div className="theme-color color-4" onClick={() => this.changeThemeColor('themecolor_4')}><i className="material-icons">{this.props.profile.themeColor === 'themecolor_4' && 'check'}</i></div>
             </div>
           </div>
-
-          <div className="typography-3 space-top-4">Canvas Fabric</div>
-          <div><Canvas width={900} height={900}/></div>
           </View>
         </ViewResolver>
       </div>
