@@ -151,6 +151,20 @@ class Bookmarks extends Component {
         this.props.sendEvent('sidebar', false)
     }
 
+    searchByTag = (tagName) => {
+        
+        this.setState({
+            searchPref: {
+                ...this.state.searchPref,
+                title: false,
+                tags: true,
+                href: false
+            },
+            searchtext: tagName,
+            isFiltered: true
+        }, () => this.initializeBookmarks(this.props.authorization));
+    }
+
     search = (event) => {
         if (event) {
             event.preventDefault();
@@ -244,7 +258,7 @@ class Bookmarks extends Component {
     render() {
         const listview = this.state.view.map(item => (
             <div key={item._id}>
-            <Link id={item._id} bookmark={item} editBookmark={this.editBookmark} deleteBookmark={this.deleteBookmark}/>
+            <Link id={item._id} bookmark={item} editBookmark={this.editBookmark} deleteBookmark={this.deleteBookmark} searchByTag={this.searchByTag} />
             <br />
             </div>
         ))

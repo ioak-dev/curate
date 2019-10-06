@@ -21,8 +21,15 @@ const useStyles = makeStyles(theme => ({
 function ArcSelect(props) {
     const classes = useStyles();
 
-    const { id, label, elements, handleChange, error, data, first,firstAction,  ...rest } = props;
-    const elementsView = elements.map(item => <MenuItem key={item} value={item}>{item}</MenuItem>);
+    const { id, label, elements, objects, handleChange, error, data, first,firstAction,  ...rest } = props;
+    let dropdownList = [];
+    
+    if (elements) {
+      dropdownList = elements.map(item => <MenuItem key={item} value={item}>{item}</MenuItem>);
+    } else if (objects) {
+      dropdownList = objects.map(item => <MenuItem key={item.key} value={item.key}>{item.value}</MenuItem>);
+    }
+    
     return (
         <>
         <FormControl className={classes.formControl} className="arc-select">
@@ -39,7 +46,7 @@ function ArcSelect(props) {
             >
                 {first && <MenuItem value={first}>{first}</MenuItem>}
                 {firstAction && <MenuItem value={firstAction}><em>{firstAction}</em></MenuItem>}
-                {elementsView}
+                {dropdownList}
             </Select>
         </FormControl>
         </>

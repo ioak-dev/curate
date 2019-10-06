@@ -4,7 +4,7 @@ import showdown  from 'showdown';
 import './Showdown.scss';
 
 function Showdown(props) {
-    const converter = new showdown.Converter();
+    const converter = new showdown.Converter({tables: true});
     const html      = converter.makeHtml(props.source);
     return (
         <div className="markdown-body">

@@ -230,10 +230,21 @@ class Notes extends Component {
         if (searchResults.length > 0) {
             selectedNoteId = searchResults[0]._id;
         }
+
+        let notebookFilter = "all notebooks";
+        let notebookList = [];
+        searchResults.map(item => {
+            notebookList.push(item.notebook);
+        });
+
+        if ([...new Set(notebookList)].length === 1) {
+            notebookFilter = notebookList[0];
+        }
         this.setState({
             searchResults: searchResults,
             isFiltered: true,
-            selectedNoteId: selectedNoteId
+            selectedNoteId: selectedNoteId,
+            notebookFilter: notebookFilter
         }, () => this.props.sendEvent('noteListRefreshed', true));
         this.props.sendEvent('sidebar', false)
     }
@@ -363,6 +374,7 @@ class Notes extends Component {
             attributes: note.attributes,
             content: note.content,
             tags: note.tags,
+            flag: note.flag,
             notebook: note.notebook
         },
         {
@@ -410,14 +422,15 @@ class Notes extends Component {
         const noteview = this.state.view.map(item => (
             <div key={item._id}>
                 {item._id === this.state.selectedNoteId && item.type !== 'Artboard' &&
-                        <Note key={item._id} id={item._id} note={item} saveNote={this.saveNote} deleteNote={this.deleteNote} event={this.props.event} notebooks={this.state.existingNotebookList}/>}
+                        <Note key={item._id} id={item._id} note={item} saveNote={this.saveNote} deleteNote={this.deleteNote} event={this.props.event} 
+                        notebooks={this.state.existingNotebookList}/>}
                 {item._id === this.state.selectedNoteId && item.type === 'Artboard' &&
                         <Artboard key={item._id} id={item._id} note={item} saveNote={this.saveNote} deleteNote={this.deleteNote} event={this.props.event} notebooks={this.state.existingNotebookList}/>}
             </div>
         ))
         const listNoteRef = this.state.view.map(item => (
             <div key={item._id}>
-                <NoteRef selected={this.state.selectedNoteId === item._id ? true : false} id={item._id} note={item} selectNote={this.selectNote} />
+                <NoteRef selected={this.state.selectedNoteId === item._id ? true : false} id={item._id} note={item} selectNote={this.selectNote} showTag={this.state.notebookFilter === 'all notebooks'}/>
             </div>
         ))
         return (
@@ -496,7 +509,8 @@ class Notes extends Component {
                                 
                             <Sidebar label={this.state.isFiltered ? "Search results" : "All Notes"} icon="notes" event={this.props.event} sendEvent={this.props.sendEvent} number={this.state.view.length}>
                                 <div className="filter-bar">
-                                    <div><ArcSelect maxWidth="max-width-200" label="Notebook" data={this.state} id="notebookFilter" handleChange={e => this.handleNotebookFilterChange(e)} elements={this.state.filteredNotebookList} first='all notebooks' /></div>
+                                    {this.state.filteredNotebookList.length > 1 && <div><ArcSelect maxWidth="max-width-200" label="Notebook" data={this.state} id="notebookFilter" handleChange={e => this.handleNotebookFilterChange(e)} elements={this.state.filteredNotebookList} first='all notebooks' /></div>}
+                                    {this.state.filteredNotebookList.length === 1 && <div><ArcSelect maxWidth="max-width-200" label="Notebook" data={this.state} id="notebookFilter" handleChange={e => this.handleNotebookFilterChange(e)} elements={this.state.filteredNotebookList} /></div>}
                                     <div></div>
                                     <div><ArcSelect label="Sort by" data={this.state} id="sortBy" handleChange={e => this.handleNotebookFilterChange(e)} elements={Object.keys(this.sortTypes)} /></div>
                                     <div><ArcSelect label="Sort Order" data={this.state} id="sortOrder" handleChange={e => this.handleNotebookFilterChange(e)} elements={this.sortOrders} /></div>

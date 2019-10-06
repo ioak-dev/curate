@@ -7,7 +7,7 @@ import ViewResolver from '../Ux/ViewResolver';
 import { Switch } from '@material-ui/core';
 import { connect } from 'react-redux';
 import {withCookies} from 'react-cookie';
-import Canvas from '../Canvas';
+import { importBookmarks } from '../Bookmarks/BookmarkService';
 
 class Settings extends React.Component {
 
@@ -46,11 +46,19 @@ class Settings extends React.Component {
 
   fileChoosen = (event) => {
     event.preventDefault();
+    const that = this;
     var reader = new FileReader();
+    that.props.sendEvent('spinner');
     reader.onload = function(event) {
-      console.log(event.target.result);
+      importBookmarks({
+        content: event.target.result
+      }, that.props.authorization.token)
+      .then(function(response) {
+        that.props.sendEvent('notification', true, {message: 'Imported (' + response.data.length + ') bookmarks successfully', type: 'success', duration: 6000});
+      });
     }
     reader.readAsText(event.target.files[0]);
+    event.target.value = '';
   }
 
   render() {

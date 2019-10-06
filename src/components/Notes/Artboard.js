@@ -16,7 +16,35 @@ class Artboard extends Component {
             attributes: this.props.note.attributes ? this.props.note.attributes : {},
             content: this.props.note.content,
             tags: this.props.note.tags,
-            notebook: this.props.note.notebook
+            notebook: this.props.note.notebook,
+            
+
+            flags: [
+                {
+                    key: 'one',
+                    value: <div className="select-palette one" />
+                },
+                {
+                    key: 'two',
+                    value: <div className="select-palette two" />
+                },
+                {
+                    key: 'three',
+                    value: <div className="select-palette three" />
+                },
+                {
+                    key: 'four',
+                    value: <div className="select-palette four" />
+                },
+                {
+                    key: 'five',
+                    value: <div className="select-palette five" />
+                },
+                {
+                    key: 'six',
+                    value: <div className="select-palette six" />
+                }
+            ]
         }
     }
 
@@ -60,6 +88,7 @@ class Artboard extends Component {
             attributes: this.state.attributes,
             content: this.state.content,
             tags: this.state.tags,
+            flag: this.state.flag,
             notebook: notebook
         }, true)
     }
@@ -129,6 +158,7 @@ class Artboard extends Component {
                     <button onClick={this.showEdit} className="default disabled center"><i className="material-icons">refresh</i>Undo All</button>
                     <button onClick={this.hideEdit} className="default disabled center"><i className="material-icons">close</i>Cancel</button>
 
+                    <div><ArcSelect label="Flag" data={this.state} id="flag" handleChange={e => this.handleChange(e)} objects={this.state.flags} /></div>
                     <div><ArcSelect label="Notebook" data={this.state} id="notebook" handleChange={e => this.handleChange(e)} elements={this.props.notebooks} firstAction="<create new>" /></div>
                     <div>
                         {this.state.notebook === '<create new>' && <ArcTextField label="Notebook name" data={this.state} id="newNotebook" handleChange={e => this.handleChange(e)} />}

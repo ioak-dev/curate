@@ -15,6 +15,10 @@ class Desktop extends Component {
         }
     }
 
+    signin = (type) => {
+        this.props.login(type);
+    }
+
     render() {
         return (
             <div className={(this.props.transparent ? "navbar desktop transparent" : "navbar desktop")}>
@@ -31,9 +35,9 @@ class Desktop extends Component {
                         {this.props.authorization.isAuth && 
                             <button className="default disabled small" onClick={this.props.logout()}><i className="material-icons">power_settings_new</i>Logout</button>}
                         {!this.props.authorization.isAuth && 
-                            <button className="default disabled small" onClick={this.props.login()}><i className="material-icons">person</i>Login</button>}
+                            <button className="default disabled small" onClick={() => this.signin('signin')}><i className="material-icons">person</i>Login</button>}
                         {!this.props.authorization.isAuth && 
-                            <button className="default disabled small" onClick={this.props.login()}><i className="material-icons">person_add</i>Signup</button>}
+                            <button className="default disabled small" onClick={() => this.signin('signup')}><i className="material-icons">person_add</i>Signup</button>}
                     </div>
                 </div>
             </div>

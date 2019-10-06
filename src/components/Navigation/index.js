@@ -68,8 +68,8 @@ class Navigation extends Component {
         })
     }
 
-    login = () => {
-        this.props.history.push('/login');
+    login = (type) => {
+        this.props.history.push('/login?type=' + type);
     }
 
     toggleSettings = () => {
@@ -81,8 +81,8 @@ class Navigation extends Component {
     render() {
         return (
             <div className="nav">
-                <Desktop {...this.props} logout={this.props.logout} login={() => this.login} toggleSettings={this.toggleSettings} transparent={this.state.transparentNavBar} />
-                <Mobile {...this.props} logout={this.props.logout} login={() => this.login} toggleSettings={this.toggleSettings} transparent={this.state.transparentNavBar} />
+                <Desktop {...this.props} logout={this.props.logout} login={this.login} toggleSettings={this.toggleSettings} transparent={this.state.transparentNavBar} />
+                <Mobile {...this.props} logout={this.props.logout} login={this.login} toggleSettings={this.toggleSettings} transparent={this.state.transparentNavBar} />
 
                 <ArcDialog title="Appearance" visible={this.state.showSettings} toggleVisibility={this.toggleSettings}>
                     <div className="settings">

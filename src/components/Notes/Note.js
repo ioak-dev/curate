@@ -10,7 +10,35 @@ class Note extends Component {
         this.state = {
             editNote: false,
             preview: true,
-            newNotebook: ''
+            newNotebook: '',
+            
+
+            flags: [
+                {
+                    key: 'one',
+                    value: <div className="select-palette one" />
+                },
+                {
+                    key: 'two',
+                    value: <div className="select-palette two" />
+                },
+                {
+                    key: 'three',
+                    value: <div className="select-palette three" />
+                },
+                {
+                    key: 'four',
+                    value: <div className="select-palette four" />
+                },
+                {
+                    key: 'five',
+                    value: <div className="select-palette five" />
+                },
+                {
+                    key: 'six',
+                    value: <div className="select-palette six" />
+                }
+            ]
         }
     }
 
@@ -35,7 +63,8 @@ class Note extends Component {
             title: this.props.note.title,
             content: this.props.note.content,
             tags: this.props.note.tags,
-            notebook: this.props.note.notebook
+            notebook: this.props.note.notebook,
+            flag: this.props.note.flag
         })
     }
 
@@ -57,6 +86,7 @@ class Note extends Component {
             title: this.state.title,
             content: this.state.content,
             tags: this.state.tags,
+            flag: this.state.flag,
             notebook: notebook
         }, true)
     }
@@ -111,7 +141,8 @@ class Note extends Component {
                     <button onClick={this.hideEdit} className="default disabled center"><i className="material-icons">close</i>Cancel</button>
                     {!this.state.preview && <button onClick={this.togglepreview} className="default disabled right"><i className="material-icons">visibility</i>Show Preview</button>}
                     {this.state.preview && <button onClick={this.togglepreview} className="default disabled right"><i className="material-icons">visibility_off</i>Hide Preview</button>}
-
+                    
+                    <div><ArcSelect label="Flag" data={this.state} id="flag" handleChange={e => this.handleChange(e)} objects={this.state.flags} /></div>
                     <div><ArcSelect label="Notebook" data={this.state} id="notebook" handleChange={e => this.handleChange(e)} elements={this.props.notebooks} firstAction="<create new>" /></div>
                     <div>
                         {this.state.notebook === '<create new>' && <ArcTextField label="Notebook name" data={this.state} id="newNotebook" handleChange={e => this.handleChange(e)} />}
