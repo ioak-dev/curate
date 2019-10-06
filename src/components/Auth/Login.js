@@ -33,24 +33,23 @@ class Login extends Component {
     signin = (event) => {
         event.preventDefault();
 
-        const that = this;
-        that.props.sendEvent('notification', false);
-        that.props.sendEvent('spinner');
+        this.props.sendEvent('notification', false);
+        this.props.sendEvent('spinner');
         if (this.state.email && this.state.password) {
             signin({
                 email: this.state.email,
                 password: this.state.password
                 })
-                .then(function(response) {
+                .then((response) => {
                     if (response.status === 200) {
-                        that.props.sendEvent('notification', true, {message: 'Signed In successfully', type: 'success', duration: 3000});
-                        that.success(response.data);
+                        this.props.sendEvent('notification', true, {message: 'Signed In successfully', type: 'success', duration: 3000});
+                        this.success(response.data);
                     } else if (response.status === 404) {
-                        that.props.sendEvent('notification', true, {message: 'User name does not exist', type: 'failure', duration: 3000});
+                        this.props.sendEvent('notification', true, {message: 'User name does not exist', type: 'failure', duration: 3000});
                     } else if (response.status === 401) {
-                        that.props.sendEvent('notification', true, {message: 'Incorrect passphrase', type: 'failure', duration: 3000});
+                        this.props.sendEvent('notification', true, {message: 'Incorrect passphrase', type: 'failure', duration: 3000});
                     } else {
-                        that.props.sendEvent('notification', true, {message: 'Unknown response from server. Please try again or at a later time', type: 'failure', duration: 3000});
+                        this.props.sendEvent('notification', true, {message: 'Unknown response from server. Please try again or at a later time', type: 'failure', duration: 3000});
                     }
                 })
                 .catch((error) => {
@@ -111,8 +110,9 @@ class Login extends Component {
         this.props.cookies.set('token', data.token);
         this.props.cookies.set('secret', data.secret);
         this.props.cookies.set('name', data.name);
+        this.props.cookies.set('email', data.email);
         this.props.history.push("/bookmarks");
-        this.props.history.push("/notes");
+        // this.props.history.push("/notes");
     }
 
     toggle = () => {

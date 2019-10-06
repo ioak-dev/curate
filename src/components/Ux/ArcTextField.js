@@ -13,7 +13,7 @@ function ArcTextField(props) {
                 onChange={e => handleChange(e)}
                 margin="normal"
                 variant="standard"
-                fullWidth
+                // fullWidth
                 error={error}
                 multiline={multiline}
                 rows={rows}

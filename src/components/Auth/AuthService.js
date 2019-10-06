@@ -12,7 +12,6 @@ export function signup(data) {
                 return axios.post(baseUrl + constants.API_URL_SIGNUP, {
                     name: data.name,
                     email: data.email,
-                    password: data.password,
                     problem: encrypt(data.password, response.data.solution, response.data.salt),
                     solution: response.data.solution
                     })
@@ -43,6 +42,36 @@ export function signin(data) {
                 });
             } else {
                 return Promise.resolve(error.response);
+            }
+        })
+}
+
+export function updateUserDetails(data, token, type) {
+    return axios.get(baseUrl + constants.API_URL_PRESIGNUP)
+        .then(function(response) {
+            if (response.status === 200) {
+                let newData = {};
+                if (type && type === 'password') {
+                    newData = {
+                        problem: encrypt(data.password, response.data.solution, response.data.salt),
+                        solution: response.data.solution
+                    }
+                } else {
+                    newData = {
+                        name: data.name,
+                        email: data.email
+                    }
+                }
+
+                return axios.put(baseUrl + constants.API_URL_USER_DETAILS, newData,
+                    {
+                        headers: {
+                            Authorization: 'Bearer ' + token
+                        }
+                    })
+                    .then(function(response) {
+                        return Promise.resolve(response);
+                    })
             }
         })
 }

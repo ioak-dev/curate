@@ -7,6 +7,7 @@ export const constants = {
     API_URL_BOOKMARK: "/bookmark",
     API_URL_BOOKMARK_IMPORT: "/bookmark/import",
     API_URL_PREFERENCES: "/user/preferences",
+    API_URL_USER_DETAILS: "/user/details",
 
     API_URL_NOTE: "/note"
 }
