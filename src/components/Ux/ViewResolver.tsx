@@ -1,8 +1,20 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import './ViewResolver.scss';
+import { sendMessage, receiveMessage } from '../../events/MessageService';
 
-class ViewResolver extends Component {
+interface Props {
+    sideLabel?: string
+}
+
+interface State {
+    views: any,
+    main?: any,
+    side?: any,
+    showSide: boolean,
+    mobileViewPort: any
+}
+
+class ViewResolver extends Component<Props, State> {
     
     viewPort = window.matchMedia("(max-width: 767px)");
 
@@ -28,6 +40,14 @@ class ViewResolver extends Component {
     componentDidMount() {
         this.viewPortChange(this.viewPort);
         this.viewPort.addListener(this.viewPortChange);
+
+        receiveMessage().subscribe(message => {
+            if (message.name === 'sidebar') {
+                this.setState({
+                    showSide: message.signal
+                })
+            }
+        })
     }
 
     initializeViews() {
@@ -55,16 +75,10 @@ class ViewResolver extends Component {
                 this.initializeViews();
             })
         }
-
-        if (nextProps.event && nextProps.event.name === 'sidebar') {
-            this.setState({
-                showSide: nextProps.event.signal
-            })
-        }
     }
 
     toggleSideView = () => {
-        this.props.sendEvent('sidebar', !this.state.showSide);
+        sendMessage('sidebar', !this.state.showSide);
     }
 
     render() {
@@ -100,10 +114,6 @@ class ViewResolver extends Component {
             </>
         )
     }
-}
-
-ViewResolver.propTypes = {
-    event: PropTypes.object
 }
 
 export default ViewResolver;

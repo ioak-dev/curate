@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { getProfile, setProfile, persistProfile } from '../../actions/ProfileActions';
 import './style.scss';
 import View from '../Ux/View';
@@ -11,8 +10,27 @@ import { importBookmarks } from '../Bookmarks/BookmarkService';
 import ArcTextField from '../Ux/ArcTextField';
 import { isEmptyOrSpaces } from '../Utils';
 import {signin, updateUserDetails} from '../Auth/AuthService';
+import { Authorization, Profile } from '../Types/GeneralTypes';
+import { sendMessage, receiveMessage } from '../../events/MessageService';
 
-class Settings extends React.Component {
+interface Props {
+  profile: Profile,
+  getProfile: Function,
+  setProfile: Function,
+  persistProfile: Function,
+  authorization: Authorization,
+  cookies: any
+}
+
+interface State {
+  oldPassword: string,
+  newPassword: string,
+  repeatPassword: string,
+  name: string,
+  email: string
+}
+
+class Settings extends React.Component<Props, any> {
 
   constructor(props) {
     super(props);
@@ -23,7 +41,6 @@ class Settings extends React.Component {
       newPassword: '',
       repeatPassword: ''
     }
-    this.props.receiveEvents();
   }
 
   componentDidMount() {
@@ -71,17 +88,17 @@ class Settings extends React.Component {
 
   changePassword = () => {
     if (isEmptyOrSpaces(this.state.oldPassword)) {
-      this.props.sendEvent('notification', true, {message: 'Old password not provided', type: 'failure', duration: 5000});
+      sendMessage('notification', true, {message: 'Old password not provided', type: 'failure', duration: 5000});
       return;
     }
 
     if (isEmptyOrSpaces(this.state.newPassword) || isEmptyOrSpaces(this.state.repeatPassword)) {
-      this.props.sendEvent('notification', true, {message: 'New password not provided', type: 'failure', duration: 5000});
+      sendMessage('notification', true, {message: 'New password not provided', type: 'failure', duration: 5000});
       return;
     }
 
     if (this.state.newPassword !== this.state.repeatPassword) {
-      this.props.sendEvent('notification', true, {message: 'New password not provided', type: 'failure', duration: 5000});
+      sendMessage('notification', true, {message: 'New password not provided', type: 'failure', duration: 5000});
       return;
     }
 
@@ -99,14 +116,14 @@ class Settings extends React.Component {
     })
         .then((response) => {
           if (response.status === 200) {
-            this.props.sendEvent('notification', true, {message: 'Signed In successfully', type: 'success', duration: 3000});
+            sendMessage('notification', true, {message: 'Signed In successfully', type: 'success', duration: 3000});
             this.updateUserDetailsImpl('password');
           }else  if (response.status === 401) {
-            this.props.sendEvent('notification', true, {message: 'Incorrect oldpassword', type: 'failure', duration: 3000});
+            sendMessage('notification', true, {message: 'Incorrect oldpassword', type: 'failure', duration: 3000});
           }
         })
         .catch((error) => {
-          this.props.sendEvent('notification', true, {'type': 'failure', message: 'Unknown error. Please try again or at a later time', duration: 3000});
+          sendMessage('notification', true, {'type': 'failure', message: 'Unknown error. Please try again or at a later time', duration: 3000});
         })
   }
 
@@ -114,17 +131,17 @@ class Settings extends React.Component {
 
   updateUserDetails = () => {
     if (isEmptyOrSpaces(this.state.name)) {
-      this.props.sendEvent('notification', true, {message: 'Name not provided', type: 'failure', duration: 5000});
+      sendMessage('notification', true, {message: 'Name not provided', type: 'failure', duration: 5000});
       return;
     }
 
     if (isEmptyOrSpaces(this.state.email)) {
-      this.props.sendEvent('notification', true, {message: 'Email not provided', type: 'failure', duration: 5000});
+      sendMessage('notification', true, {message: 'Email not provided', type: 'failure', duration: 5000});
       return;
     }
 
     if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.state.email))) {
-      this.props.sendEvent('notification', true, {type: 'failure', message: 'Email ID is invalid', duration: 3000});
+      sendMessage('notification', true, {type: 'failure', message: 'Email ID is invalid', duration: 3000});
       return;
     }
 
@@ -138,21 +155,21 @@ class Settings extends React.Component {
       email: this.state.email,
       password: this.state.newPassword
     }, this.props.authorization.token, type)
-    .then((response) => {
+    .then((response: any) => {
       if (response.status === 201) {
         if (type === 'password') {
-          this.props.sendEvent('notification', true, {message: 'Password updated successfully', type: 'success', duration: 3000});
+          sendMessage('notification', true, {message: 'Password updated successfully', type: 'success', duration: 3000});
         } else{
           this.props.cookies.set('name', this.state.name);
           this.props.cookies.set('email', this.state.email);
-          this.props.sendEvent('notification', true, {message: 'User account updated successfully', type: 'success', duration: 3000});
+          sendMessage('notification', true, {message: 'User account updated successfully', type: 'success', duration: 3000});
         }
       } else {
-        this.props.sendEvent('notification', true, {'type': 'failure', message: 'Unknown error. Please try again or at a later time', duration: 3000});
+        sendMessage('notification', true, {'type': 'failure', message: 'Unknown error. Please try again or at a later time', duration: 3000});
       }
     })
     .catch((error) => {
-        this.props.sendEvent('notification', true, {'type': 'failure', message: 'Unknown error. Please try again or at a later time', duration: 3000});
+        sendMessage('notification', true, {'type': 'failure', message: 'Unknown error. Please try again or at a later time', duration: 3000});
     })
   }
 
@@ -160,13 +177,13 @@ class Settings extends React.Component {
     event.preventDefault();
     const that = this;
     var reader = new FileReader();
-    that.props.sendEvent('spinner');
-    reader.onload = function(event) {
+    sendMessage('spinner');
+    reader.onload = function(event: any) {
       importBookmarks({
         content: event.target.result
       }, that.props.authorization.token)
       .then(function(response) {
-        that.props.sendEvent('notification', true, {message: 'Imported (' + response.data.length + ') bookmarks successfully', type: 'success', duration: 6000});
+        sendMessage('notification', true, {message: 'Imported (' + response.data.length + ') bookmarks successfully', type: 'success', duration: 6000});
       });
     }
     reader.readAsText(event.target.files[0]);
@@ -176,7 +193,7 @@ class Settings extends React.Component {
   render() {
     return (
       <div className="settings">
-        <ViewResolver event={this.props.event} sendEvent={this.props.sendEvent} sideLabel='More options'>
+        <ViewResolver sideLabel='More options'>
           <View main>
           <div className="typography-3">Import Bookmarks</div>
           <div className="space-top-2 space-left-2">
@@ -235,17 +252,6 @@ class Settings extends React.Component {
     );
   }
 }
-
-Settings.propTypes = {
-  sendEvent: PropTypes.func.isRequired,
-  profile: PropTypes.object.isRequired,
-  event: PropTypes.object.isRequired,
-  getProfile: PropTypes.func.isRequired,
-  setProfile: PropTypes.func.isRequired,
-  authorization: PropTypes.object.isRequired
-}
-
-
 
 const mapStateToProps = state => ({
   profile: state.profile

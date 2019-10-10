@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import './ActionButton.scss';
 
 function ActionButton(props) {
-    const icon = <i class="material-icons">{props.icon}</i>;
+    const icon = <i className="material-icons">{props.icon}</i>;
     return (
         <div className="action-button">
             {props.leftLabel && props.rightLabel && <button className={"left " + props.type} onClick={props.leftAction}>{props.icon && icon}{props.leftLabel}</button>}

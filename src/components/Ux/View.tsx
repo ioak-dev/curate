@@ -1,7 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-class View extends Component {
+interface Props {
+    main?: any,
+    side?: any
+}
+
+interface State {
+}
+
+class View extends Component<Props, State> {
     render() {
         return (
             <div>
@@ -10,9 +18,6 @@ class View extends Component {
             </div>
         )
     }
-}
-
-View.propTypes = {
 }
 
 export default View;

@@ -18,11 +18,25 @@ const useStyles = makeStyles(theme => ({
     },
   }));
 
-function ArcSelect(props) {
+  
+interface Props {
+  id: string,
+  label: string,
+  handleChange: Function,
+  error?: boolean,
+  data: any,
+  elements?: Array<string>,
+  objects?: Array<any>,
+  first: string,
+  firstAction: string,
+  maxWidth: string
+}
+
+function ArcSelect(props: Props) {
     const classes = useStyles();
 
     const { id, label, elements, objects, handleChange, error, data, first,firstAction,  ...rest } = props;
-    let dropdownList = [];
+    let dropdownList: Array<any> = [];
     
     if (elements) {
       dropdownList = elements.map(item => <MenuItem key={item} value={item}>{item}</MenuItem>);
@@ -32,7 +46,7 @@ function ArcSelect(props) {
     
     return (
         <>
-        <FormControl className={classes.formControl} className="arc-select">
+        <FormControl className={"arc-select " + classes.formControl}>
             <InputLabel htmlFor={id}>{label}</InputLabel>
             <Select
             value={data[id]}
@@ -51,17 +65,6 @@ function ArcSelect(props) {
         </FormControl>
         </>
     )
-}
-
-ArcSelect.propTypes = {
-    id: PropTypes.string.isRequired,
-    label: PropTypes.string.isRequired,
-    handleChange: PropTypes.func.isRequired,
-    error: PropTypes.bool,
-    data: PropTypes.object.isRequired,
-    elements: PropTypes.array.isRequired,
-    first:  PropTypes.string,
-    firstAction:  PropTypes.string
 }
 
 export default ArcSelect;

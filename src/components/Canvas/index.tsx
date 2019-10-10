@@ -3,7 +3,22 @@ import './style.scss';
 import { fabric } from 'fabric';
 
 let isDown, origX, origY, stroke;
-export default class Canvas extends Component {
+
+interface Props {
+    attributes: any,
+    data: any,
+    edit: boolean,
+    handleChange: Function
+}
+
+interface State {
+    backgroundColor: string,
+    data: any,
+    width: number,
+    height: number
+}
+
+export default class Canvas extends Component<Props, State> {
     
     viewPort = window.matchMedia("(max-width: 767px)");
 

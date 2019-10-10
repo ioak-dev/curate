@@ -5,8 +5,29 @@ import './style.scss';
 import curate_white from '../../images/curate_white.svg';
 import curate_black from '../../images/curate_black.svg';
 import Links from './Links';
+import { receiveMessage, sendMessage } from '../../events/MessageService';
+import { Authorization, Profile } from '../Types/GeneralTypes';
 
-class Desktop extends Component {
+interface Props {    
+    sendEvent: Function,
+    getAuth: Function,
+    addAuth: Function,
+    removeAuth: Function,
+    authorization: Authorization
+    getProfile: Function,
+    profile: Profile,
+    login: Function,
+    transparent: boolean,
+    logout: Function,
+    toggleSettings: any
+}
+
+interface State {
+    showSettings: boolean
+}
+
+class Desktop extends Component<Props, State> {
+
     constructor(props) {
         super(props);
         this.props.getProfile();
@@ -25,7 +46,7 @@ class Desktop extends Component {
                 <div className="left">
                     {!this.props.transparent && this.props.profile.theme === 'theme_light' && <img className="logo" src={curate_black} alt="Curate logo" />}
                     {(this.props.transparent || this.props.profile.theme === 'theme_dark') && <img className="logo" src={curate_white} alt="Curate logo" />}
-                    <Links authorization={this.props.authorization}/>
+                    <Links authorization={this.props.authorization} profile={this.props.profile} />
                 </div>
                 <div className="right">
                     <div className="action">
@@ -43,18 +64,6 @@ class Desktop extends Component {
             </div>
         );
     }
-}
-
-Desktop.propTypes = {
-    sendEvent: PropTypes.func.isRequired,
-    getAuth: PropTypes.func.isRequired,
-    addAuth: PropTypes.func.isRequired,
-    removeAuth: PropTypes.func.isRequired,
-    authorization: PropTypes.object.isRequired,
-    getProfile: PropTypes.func.isRequired,
-
-    profile: PropTypes.object.isRequired
-
 }
 
 export default Desktop;

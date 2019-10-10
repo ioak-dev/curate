@@ -10,8 +10,39 @@ import Desktop from './Desktop';
 import Mobile from './Mobile';
 import { Switch } from '@material-ui/core';
 import ArcDialog from '../Ux/ArcDialog';
+import { Authorization, Profile } from '../Types/GeneralTypes';
+import { sendMessage, receiveMessage } from '../../events/MessageService';
 
-class Navigation extends Component {
+interface Props {    
+    sendEvent: Function,
+    getAuth: Function,
+    addAuth: Function,
+    removeAuth: Function,
+    authorization: Authorization,
+    getProfile: Function,
+    setProfile: Function,
+    reloadProfile: Function,
+    profile: Profile,
+    login: Function,
+    transparent: boolean,
+    logout: Function,
+    toggleSettings: any,
+    history: any,
+    cookies: any,
+    location: any,
+    match: any
+}
+
+interface State {
+    visible: boolean,
+    mobilemenu: string,
+    chooseTheme: boolean,
+    showSettings: boolean,
+    transparentNavBar: boolean,
+    firstLoad: boolean
+}
+
+class Navigation extends Component<Props, State> {
     constructor(props) {
         super(props);
         this.props.getProfile();
@@ -117,19 +148,6 @@ class Navigation extends Component {
             </div>
         );
     }
-}
-
-Navigation.propTypes = {
-    sendEvent: PropTypes.func.isRequired,
-    removeAuth: PropTypes.func.isRequired,
-    authorization: PropTypes.object.isRequired,
-    getProfile: PropTypes.func.isRequired,
-    setProfile: PropTypes.func.isRequired,
-    reloadProfile: PropTypes.func.isRequired,
-
-    profile: PropTypes.object.isRequired,
-    event: PropTypes.object.isRequired
-
 }
 
 const mapStateToProps = state => ({

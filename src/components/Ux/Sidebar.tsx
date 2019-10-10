@@ -1,9 +1,23 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './Sidebar.scss';
-import { emphasize } from '@material-ui/core/styles';
+import { sendMessage } from '../../events/MessageService';
 
-class Sidebar extends Component {
+interface Props {
+    show: boolean,
+    elements: Array<string>,
+    label: string,
+    icon: string,
+    number: number,
+    animate: string
+}
+
+interface State {
+    show: boolean,
+    elements: Array<string>
+}
+
+class Sidebar extends Component<Props, State> {
 
     constructor(props) {
         super(props);
@@ -16,7 +30,7 @@ class Sidebar extends Component {
     toggle = () => {
         this.setState({
             show: !this.state.show
-        }, () => this.props.sendEvent('sidebarExpanded', this.state.show, {label: this.props.label}));
+        }, () => sendMessage('sidebarExpanded', this.state.show, {label: this.props.label}));
     }
 
     hide = () => {
@@ -36,7 +50,7 @@ class Sidebar extends Component {
     }
 
     render() {
-        const elements = this.state.elements.map(item => (
+        const elements = this.state.elements.map((item: any) => (
             <div key={item.label} className="element" onClick={item.action}><i className="material-icons">{item.icon}</i>{item.label}</div>
         ))
         return (            
@@ -59,10 +73,6 @@ class Sidebar extends Component {
             
         )
     }
-}
-
-Sidebar.propTypes = {
-    // event: PropTypes.object
 }
 
 export default Sidebar;

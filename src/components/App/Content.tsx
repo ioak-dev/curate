@@ -20,6 +20,8 @@ import Backdrop from './Backdrop';
 import Notification from '../Notification';
 import Navigation from '../Navigation';
 import Settings from '../Settings';
+import { Authorization } from '../Types/GeneralTypes';
+import {  sendMessage, receiveMessage } from '../../events/MessageService';
 
 const themes = {
     'themecolor_1': getTheme('#69A7BF'),
@@ -30,9 +32,6 @@ const themes = {
 
 function getTheme(color) {
     return createMuiTheme({
-        typography: {
-          useNextVariants: true,
-        },
         palette: {
           primary: {
               main: color         
@@ -44,10 +43,28 @@ function getTheme(color) {
       });
 }
 
-class Content extends Component {
-    constructor(props) {
+interface Props {
+    getProfile: Function,
+    setProfile: Function,
+    getAuth: Function,
+    addAuth: Function,
+    removeAuth: Function,
+    cookies: any,
+
+    // event: PropTypes.object,
+    profile: any,
+    authorization: Authorization
+}
+
+interface State {
+    authorization: Authorization,
+    profile: any,
+    event: any
+}
+
+class Content extends Component<Props, State> {
+    constructor(props: Props) {
         super(props);
-        this.props.receiveEvents();
         this.props.getProfile();
         this.props.getAuth();
     }
@@ -58,7 +75,7 @@ class Content extends Component {
         this.props.cookies.remove('token');
         this.props.cookies.remove('secret');
         this.props.cookies.remove('name');
-        this.props.sendEvent('notification', true, {type: type, message: message, duration: 3000});
+        sendMessage('notification', true, {type: type, message: message, duration: 3000});
     }
 
     render() {
@@ -67,10 +84,10 @@ class Content extends Component {
                 
                 <HashRouter>
                     <AuthInit />
-                    <Backdrop sendEvent={this.props.sendEvent} event={this.props.event} />
+                    <Backdrop />
                     <div className="body">
                         <div className="body-content">
-                            <Notification sendEvent={this.props.sendEvent} event={this.props.event} />
+                            <Notification />
                             <MuiThemeProvider theme={themes[this.props.profile.themeColor]}>
                                 <Navigation {...this.props} logout={() => this.logout}/>
                                 <Route exact path="/" render={(props) => <Home {...props} {...this.props} logout={() => this.logout}/>} />
@@ -86,19 +103,6 @@ class Content extends Component {
             </div>
         );
     }
-}
-
-Content.propTypes = {
-    receiveEvents: PropTypes.func.isRequired,
-    sendEvent: PropTypes.func.isRequired,
-    getProfile: PropTypes.func.isRequired,
-    getAuth: PropTypes.func.isRequired,
-    addAuth: PropTypes.func.isRequired,
-    removeAuth: PropTypes.func.isRequired,
-
-    event: PropTypes.object,
-    profile: PropTypes.object.isRequired,
-    authorization: PropTypes.object.isRequired
 }
 
 const mapStateToProps = state => ({
