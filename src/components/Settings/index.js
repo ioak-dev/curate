@@ -10,7 +10,7 @@ import {withCookies} from 'react-cookie';
 import { importBookmarks } from '../Bookmarks/BookmarkService';
 import ArcTextField from '../Ux/ArcTextField';
 import { isEmptyOrSpaces } from '../Utils';
-import { updateUserDetails } from '../Auth/AuthService';
+import {signin, updateUserDetails} from '../Auth/AuthService';
 
 class Settings extends React.Component {
 
@@ -46,12 +46,12 @@ class Settings extends React.Component {
           this.props.persistProfile(this.props.authorization, {
               ...this.props.profile,
               theme: 'theme_light'
-          })   
+          })
       } else  {
           this.props.persistProfile(this.props.authorization, {
               ...this.props.profile,
               theme: 'theme_dark'
-          })   
+          })
       }
   }
 
@@ -74,7 +74,7 @@ class Settings extends React.Component {
       this.props.sendEvent('notification', true, {message: 'Old password not provided', type: 'failure', duration: 5000});
       return;
     }
-    
+
     if (isEmptyOrSpaces(this.state.newPassword) || isEmptyOrSpaces(this.state.repeatPassword)) {
       this.props.sendEvent('notification', true, {message: 'New password not provided', type: 'failure', duration: 5000});
       return;
@@ -86,19 +86,38 @@ class Settings extends React.Component {
     }
 
     // Check if old password is correctly entered
+    this.checkOldPassword('oldpassword');
 
-    this.updateUserDetailsImpl('password');
-    
+    //this.updateUserDetailsImpl('password');
+
   }
 
-  
+  checkOldPassword = (type) => {
+    signin({
+      email: this.state.email,
+      password: this.state.oldPassword
+    })
+        .then((response) => {
+          if (response.status === 200) {
+            this.props.sendEvent('notification', true, {message: 'Signed In successfully', type: 'success', duration: 3000});
+            this.updateUserDetailsImpl('password');
+          }else  if (response.status === 401) {
+            this.props.sendEvent('notification', true, {message: 'Incorrect oldpassword', type: 'failure', duration: 3000});
+          }
+        })
+        .catch((error) => {
+          this.props.sendEvent('notification', true, {'type': 'failure', message: 'Unknown error. Please try again or at a later time', duration: 3000});
+        })
+  }
+
+
 
   updateUserDetails = () => {
     if (isEmptyOrSpaces(this.state.name)) {
       this.props.sendEvent('notification', true, {message: 'Name not provided', type: 'failure', duration: 5000});
       return;
     }
-    
+
     if (isEmptyOrSpaces(this.state.email)) {
       this.props.sendEvent('notification', true, {message: 'Email not provided', type: 'failure', duration: 5000});
       return;
@@ -110,7 +129,7 @@ class Settings extends React.Component {
     }
 
     this.updateUserDetailsImpl('user');
-    
+
   }
 
   updateUserDetailsImpl = (type) => {
@@ -167,11 +186,11 @@ class Settings extends React.Component {
             </label>
           </div>
 
-          
+
           <div className="typography-3 space-top-4">Export Bookmarks</div>
           <div className="space-top-2"><button className="secondary animate space-left-2">Export</button></div>
 
-          
+
           <div className="typography-3 space-top-4">Appearance</div>
           <div className="appearance">
             <div className="typography-5">Dark mode</div>
@@ -181,7 +200,7 @@ class Settings extends React.Component {
                 onChange={this.toggleDarkMode}
                 inputProps={{ 'aria-label': 'primary checkbox' }}/>
             </div>
-            
+
             <div className="typography-5 space-bottom-2">Text Size</div>
             <div className=" space-bottom-2">
               <div className={"text-size size-1 space-right-1 " + (this.props.profile.textSize === 'textsize_tiny' ? 'active' : '')}  onClick={() => this.changeTextSize('textsize_tiny')}>Az</div>
@@ -189,8 +208,8 @@ class Settings extends React.Component {
               <div className={"text-size size-3 space-right-1 " + (this.props.profile.textSize === 'textsize_medium' ? 'active' : '')} onClick={() => this.changeTextSize('textsize_medium')}>Az</div>
               <div className={"text-size size-4 " + (this.props.profile.textSize === 'textsize_large' ? 'active' : '')} onClick={() => this.changeTextSize('textsize_large')}>Az</div>
             </div>
-            
-            
+
+
             <div className="typography-5">Color Scheme</div>
             <div>
               <div className="theme-color color-1" onClick={() => this.changeThemeColor('themecolor_1')}><i className="material-icons">{this.props.profile.themeColor === 'themecolor_1' && 'check'}</i></div>
@@ -204,7 +223,7 @@ class Settings extends React.Component {
           <div><ArcTextField label="Name" data={this.state} id="name" handleChange={e => this.handleChange(e)} /></div>
           <div><ArcTextField label="Email" data={this.state} id="email" handleChange={e => this.handleChange(e)} /></div>
           <div><button className="secondary animate space-top-1" onClick={this.updateUserDetails}>Update details</button></div>
-          
+
           <div className="typography-3 space-top-4">Password</div>
           <div><ArcTextField type="password" label="Old Password" data={this.state} id="oldPassword" handleChange={e => this.handleChange(e)} /></div>
           <div><ArcTextField type="password" label="New Password" data={this.state} id="newPassword" handleChange={e => this.handleChange(e)} /></div>
