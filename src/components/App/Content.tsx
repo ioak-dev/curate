@@ -22,6 +22,7 @@ import Navigation from '../Navigation';
 import Settings from '../Settings';
 import { Authorization } from '../Types/GeneralTypes';
 import {  sendMessage, receiveMessage } from '../../events/MessageService';
+import ResetPassword from '../Auth/ResetPassword';
 
 const themes = {
     'themecolor_1': getTheme('#69A7BF'),
@@ -93,6 +94,7 @@ class Content extends Component<Props, State> {
                                 <Route exact path="/" render={(props) => <Home {...props} {...this.props} logout={() => this.logout}/>} />
                                 <Route path="/home" render={(props) => <Home {...props} {...this.props} logout={() => this.logout}/>} />
                                 <Route path="/login" render={(props) => <Login {...props} {...this.props} logout={() => this.logout}/>} />
+                                <Route path="/reset" render={(props) => <ResetPassword {...props} {...this.props} logout={() => this.logout}/>} />
                                 <PrivateRoute path="/bookmarks" render={(props) => <Bookmarks {...props} {...this.props} logout={this.logout} />} />
                                 <PrivateRoute path="/notes" render={(props) => <Notes {...props} {...this.props} logout={() => this.logout} />} />
                                 <Route path="/settings" render={(props) => <Settings {...props} {...this.props} logout={() => this.logout}/>} />
