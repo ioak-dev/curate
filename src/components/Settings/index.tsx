@@ -102,11 +102,7 @@ class Settings extends React.Component<Props, any> {
       return;
     }
 
-    // Check if old password is correctly entered
     this.checkOldPassword('oldpassword');
-
-    //this.updateUserDetailsImpl('password');
-
   }
 
   checkOldPassword = (type) => {

@@ -5,9 +5,10 @@ import PropTypes from 'prop-types';
 import { withCookies } from 'react-cookie';
 import './Login.scss';
 import ArcTextField from '../Ux/ArcTextField';
-import { signup, signin } from './AuthService';
+import {signup, signin, updateUserDetails, sentPasswordChangeEmail} from './AuthService';
 import { Authorization } from '../Types/GeneralTypes';
 import { sendMessage, receiveMessage } from '../../events/MessageService';
+import {isEmptyOrSpaces} from "../Utils";
 
 const queryString = require('query-string');
 
@@ -25,7 +26,8 @@ interface State {
     newuser: boolean,
     name: string,
     email: string,
-    password: string
+    password: string,
+    resetCode: string
 }
 
 class Login extends Component<Props, any> {
@@ -36,6 +38,7 @@ class Login extends Component<Props, any> {
             name: '',
             email: '',
             password: '',
+            resetCode:''
         }
     }
 
@@ -110,6 +113,38 @@ class Login extends Component<Props, any> {
         }
     }
 
+    sentEmailWithCode = () => {
+        if (isEmptyOrSpaces(this.state.email)) {
+            sendMessage('notification', true, {message: 'Email cannot be empty', type: 'failure', duration: 5000});
+            return;
+        }
+
+        this.sentPasswordChangeEmail('password');
+
+    }
+
+    sentPasswordChangeEmail = (type) => {
+        const min = 1;
+        const max = 100;
+        const rand = min + Math.random() * (max - min);
+        sentPasswordChangeEmail({
+            email: this.state.email,
+            resetCode: rand
+        }, type)
+            .then((response: any) => {
+                if (response === 200) {
+                    if (type === 'password') {
+                        sendMessage('notification', true, {message: 'Password sent successfully', type: 'success', duration: 3000});
+                    }
+                } else {
+                    sendMessage('notification', true, {'type': 'failure', message: 'Invalid Email error', duration: 3000});
+                }
+            })
+            .catch((error) => {
+                sendMessage('notification', true, {'type': 'failure', message: 'Bad request', duration: 3000});
+            })
+    }
+
     handleChange = (event) => {
         this.setState(
             {
@@ -155,7 +190,12 @@ class Login extends Component<Props, any> {
                         <button className="primary block"  onClick={this.signin}>Sign In</button>
                         <br /><br />
                         Don't have an account? &nbsp; <button className="secondary"  onClick={this.toggle}>Sign Up</button>
+                        <br /><br />
+
                     </form>
+
+                    <button onClick={this.sentEmailWithCode}>Forgot password ?</button>
+
                 </div>}
 
                 {this.state.newuser && <div className="container">
