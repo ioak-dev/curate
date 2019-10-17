@@ -5,9 +5,10 @@ import PropTypes from 'prop-types';
 import { withCookies } from 'react-cookie';
 import './Login.scss';
 import ArcTextField from '../Ux/ArcTextField';
-import { signup, signin } from './AuthService';
+import {signup, signin, sentPasswordChangeEmail, resetPassword} from './AuthService';
 import { Authorization } from '../Types/GeneralTypes';
 import { sendMessage, receiveMessage } from '../../events/MessageService';
+import {isEmptyOrSpaces} from "../Utils";
 
 const queryString = require('query-string');
 
@@ -19,6 +20,7 @@ interface Props {
 interface State {
     password: string;
     repeatPassword: string;
+    resetCode: string;
 }
 
 class ResetPassword extends Component<Props, any> {
@@ -26,19 +28,22 @@ class ResetPassword extends Component<Props, any> {
         super(props);
         this.state = {
             password: '',
-            repeatPassword: ''
+            repeatPassword: '',
+            resetCode:''
         }
     }
 
     componentDidMount() {
-        // if (this.props.location.search) {
-        //     const query = queryString.parse(this.props.location.search);
-        //     console.log(query.code);
-        //     if (!query.code) {
-        //         alert(query.code);
-        //         this.props.history.push("/home");
-        //     }
-        // }
+        if (this.props.location.search) {
+            const query = queryString.parse(this.props.location.search);
+            if (query.code) {
+                this.setState({
+                    resetCode: query.code
+                })
+            }else {
+                this.props.history.push("/home");
+            }
+        }
     }
 
     handleChange = (event) => {
@@ -49,9 +54,43 @@ class ResetPassword extends Component<Props, any> {
         )
     }
 
-    changePassword = (event) => {
-        event.preventDefault();
-        alert(this.state.password);
+    changePassword = () => {
+        if (isEmptyOrSpaces(this.state.password)) {
+            sendMessage('notification', true, {message: 'password not provided', type: 'failure', duration: 5000});
+            return;
+        }
+
+        if (isEmptyOrSpaces(this.state.repeatPassword) || isEmptyOrSpaces(this.state.repeatPassword)) {
+            sendMessage('notification', true, {message: 'Repeat password not provided', type: 'failure', duration: 5000});
+            return;
+        }
+
+        if (this.state.password !== this.state.repeatPassword) {
+            sendMessage('notification', true, {message: 'Password is not matching', type: 'failure', duration: 5000});
+            return;
+        }
+
+        this.resetPassword('password');
+
+    }
+
+    resetPassword = (type) => {
+        resetPassword({
+            password: this.state.password,
+            resetCode: this.state.resetCode
+        }, type)
+            .then((response: any) => {
+                if (response === 200) {
+                    if (type === 'password') {
+                        sendMessage('notification', true, {message: 'Password Changed successfully', type: 'success', duration: 3000});
+                    }
+                } else {
+                    sendMessage('notification', true, {'type': 'failure', message: 'Invalid request', duration: 3000});
+                }
+            })
+            .catch((error) => {
+                sendMessage('notification', true, {'type': 'failure', message: 'Bad request', duration: 3000});
+            })
     }
 
     render() {
@@ -65,7 +104,7 @@ class ResetPassword extends Component<Props, any> {
                             <ArcTextField label="Repeat Password" id="repeatPassword" type="password" data={this.state} handleChange={e => this.handleChange(e)} />
                         </div>
                         <br />
-                        <button className="primary block"  onClick={this.changePassword}>Sign In</button>
+                        <button className="primary block"  onClick={this.changePassword}>Submit</button>
                     </form>
                 </div>
             </div>

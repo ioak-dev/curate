@@ -12,6 +12,10 @@ import { isEmptyOrSpaces } from '../Utils';
 import {signin, updateUserDetails} from '../Auth/AuthService';
 import { Authorization, Profile } from '../Types/GeneralTypes';
 import { sendMessage, receiveMessage } from '../../events/MessageService';
+import axios from "axios";
+import {constants} from "../Constants";
+
+const baseUrl = process.env.REACT_APP_API_URL;
 
 interface Props {
   profile: Profile,
@@ -27,7 +31,8 @@ interface State {
   newPassword: string,
   repeatPassword: string,
   name: string,
-  email: string
+  email: string,
+  data:any
 }
 
 class Settings extends React.Component<Props, any> {
@@ -39,7 +44,8 @@ class Settings extends React.Component<Props, any> {
       email: '',
       oldPassword: '',
       newPassword: '',
-      repeatPassword: ''
+      repeatPassword: '',
+      data: []
     }
   }
 
@@ -102,11 +108,7 @@ class Settings extends React.Component<Props, any> {
       return;
     }
 
-    // Check if old password is correctly entered
     this.checkOldPassword('oldpassword');
-
-    //this.updateUserDetailsImpl('password');
-
   }
 
   checkOldPassword = (type) => {
@@ -190,7 +192,33 @@ class Settings extends React.Component<Props, any> {
     event.target.value = '';
   }
 
+  exportBookmark = () => {
+    const that = this;
+    axios.get(baseUrl + constants.API_URL_BOOKMARK,
+        {
+          headers: {
+            Authorization: 'Bearer ' + that.props.authorization.token
+          }
+        })
+        .then(function(response) {
+          let staticContent = '<META HTTP-EQUIV="Content-Type" CONTENT="text/html;' +
+              ' charset=UTF-8"><TITLE>Bookmarks</TITLE><H1>Bookmarks</H1>';
+
+          that.setState({data: response.data});
+
+          that.state.data.map(function(bookmark, i){
+            let htmlContent = '<DL><p>'+'<DT>'+'<A ' +'HREF="'+bookmark.href+'">'+bookmark.title+'</A>'+'</DL><p>';
+            staticContent = staticContent+htmlContent;
+          })
+
+          console.log(staticContent);
+        }
+        );
+
+  }
+
   render() {
+
     return (
       <div className="settings">
         <ViewResolver sideLabel='More options'>
@@ -205,7 +233,7 @@ class Settings extends React.Component<Props, any> {
 
 
           <div className="typography-3 space-top-4">Export Bookmarks</div>
-          <div className="space-top-2"><button className="secondary animate space-left-2">Export</button></div>
+          <div className="space-top-2"><button className="secondary animate space-left-2" onClick={this.exportBookmark}>Export</button></div>
 
 
           <div className="typography-3 space-top-4">Appearance</div>

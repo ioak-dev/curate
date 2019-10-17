@@ -76,6 +76,39 @@ export function updateUserDetails(data, token, type) {
         })
 }
 
+export function sentPasswordChangeEmail(data, type) {
+
+    return axios.post(baseUrl + constants.API_URL_CODE, data)
+        .then(function(response) {
+            return Promise.resolve(response.status);
+        })
+}
+
+export function resetPassword(data, type) {
+
+    return axios.get(baseUrl + constants.API_URL_PRESIGNUP)
+        .then(function(response) {
+            if (response.status === 200) {
+                let newData = {};
+                if (type && type === 'password') {
+                    newData = {
+                        problem: encrypt(data.password, response.data.solution, response.data.salt),
+                        solution: response.data.solution,
+                        resetCode: data.resetCode
+                    }
+
+                }
+
+                return axios.post(baseUrl + constants.API_URL_RESET, newData)
+                    .then(function(response) {
+                        return Promise.resolve(response.status);
+                    })
+
+
+            }
+        })
+}
+
 function encrypt(password, message, salt) {
     const config = {
         cipher: 'aes',
@@ -90,6 +123,6 @@ function decrypt(password, ciphertext) {
     return sjcl.decrypt(password, ciphertext);
 }
 
-// window.addEventListener("unhandledrejection", function(promiseRejectionEvent) { 
+// window.addEventListener("unhandledrejection", function(promiseRejectionEvent) {
 //     this.console.log(promiseRejectionEvent);
 // });
