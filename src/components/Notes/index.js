@@ -15,6 +15,8 @@ import ArcSelect from '../Ux/ArcSelect';
 import Artboard from './Artboard';
 import Sidebar from '../Ux/Sidebar';
 
+import { sendMessage, receiveMessage } from '../../events/MessageService';
+
 const queryString = require('query-string');
 const baseUrl = process.env.REACT_APP_API_URL;
 
@@ -104,15 +106,17 @@ class Notes extends Component {
             this.initializeNotes(this.props.authorization);
             this.setState({firstLoad: false})
         }
+
+        receiveMessage().subscribe(message => {
+            if (message.name === 'noteListRefreshed') {
+                this.applyFilter();
+            }
+        })
     }
     componentWillReceiveProps(nextProps) {
         if (this.state.firstLoad && nextProps.authorization) {
             this.initializeNotes(nextProps.authorization);
             this.setState({firstLoad: false})
-        }
-
-        if (nextProps.event && nextProps.event.name === 'noteListRefreshed') {
-            this.applyFilter();
         }
     }
 
@@ -129,7 +133,7 @@ class Notes extends Component {
                 if (that.state.isFiltered) {
                     that.search();
                 } else {
-                    that.props.sendEvent('noteListRefreshed', true);
+                    sendMessage('noteListRefreshed', true);
                 }
                 
                 const existingNotebookList = [];
@@ -150,12 +154,12 @@ class Notes extends Component {
 
     newNote = () => {
         this.toggleAddDialog();
-        this.props.sendEvent('sidebar', false);
+        sendMessage('sidebar', false);
     }
 
     newArtboard = () => {
         this.toggleArtboardAddDialog();
-        this.props.sendEvent('sidebar', false);
+        sendMessage('sidebar', false);
     }
 
     toggleAddDialog = () => {
@@ -200,8 +204,8 @@ class Notes extends Component {
             searchResults: this.state.items,
             isFiltered: false,
             searchtext: ''
-        }, () => this.props.sendEvent('noteListRefreshed', true))
-        this.props.sendEvent('sidebar', false);
+        }, () => sendMessage('noteListRefreshed', true))
+        sendMessage('sidebar', false);
     }
 
     search = (event) => {
@@ -213,7 +217,7 @@ class Notes extends Component {
             this.setState({
                 searchResults: this.state.items,
                 isFiltered: false
-            }, () => this.props.sendEvent('noteListRefreshed', true));
+            }, () => sendMessage('noteListRefreshed', true));
             return;
         }
 
@@ -230,12 +234,23 @@ class Notes extends Component {
         if (searchResults.length > 0) {
             selectedNoteId = searchResults[0]._id;
         }
+
+        let notebookFilter = "all notebooks";
+        let notebookList = [];
+        searchResults.map(item => {
+            notebookList.push(item.notebook);
+        });
+
+        if ([...new Set(notebookList)].length === 1) {
+            notebookFilter = notebookList[0];
+        }
         this.setState({
             searchResults: searchResults,
             isFiltered: true,
-            selectedNoteId: selectedNoteId
-        }, () => this.props.sendEvent('noteListRefreshed', true));
-        this.props.sendEvent('sidebar', false)
+            selectedNoteId: selectedNoteId,
+            notebookFilter: notebookFilter
+        }, () => sendMessage('noteListRefreshed', true));
+        sendMessage('sidebar', false)
     }
 
     applyFilter = () => {
@@ -281,7 +296,7 @@ class Notes extends Component {
         })
         .then(function(response) {
             if (response.status === 201) {
-                that.props.sendEvent('notification', true, {type: 'success', message: 'Note deleted', duration: 5000});
+                sendMessage('notification', true, {type: 'success', message: 'Note deleted', duration: 5000});
                 that.setState({
                     selectedNoteId: null
                 }, () => that.initializeNotes(that.props.authorization));
@@ -299,7 +314,7 @@ class Notes extends Component {
         this.setState({
             selectedNoteId: noteId
         })
-        this.props.sendEvent('sidebar', false);
+        sendMessage('sidebar', false);
     }
 
     saveNoteEvent = () => {
@@ -338,17 +353,17 @@ class Notes extends Component {
         const that = this;
 
         if (!note) {
-            that.props.sendEvent('notification', true, {type: 'failure', message: 'Unknown error', duration: 5000});
+            sendMessage('notification', true, {type: 'failure', message: 'Unknown error', duration: 5000});
             return;
         }
 
         if (isEmptyOrSpaces(note.notebook)) {
-            that.props.sendEvent('notification', true, {type: 'failure', message: 'Notebook not chosen', duration: 5000});
+            sendMessage('notification', true, {type: 'failure', message: 'Notebook not chosen', duration: 5000});
             return;
         }
 
         if (isEmptyOrSpaces(note.title)) {
-            that.props.sendEvent('notification', true, {type: 'failure', message: 'Note name / title missing', duration: 5000});
+            sendMessage('notification', true, {type: 'failure', message: 'Note name / title missing', duration: 5000});
             return;
         }
 
@@ -363,6 +378,7 @@ class Notes extends Component {
             attributes: note.attributes,
             content: note.content,
             tags: note.tags,
+            flag: note.flag,
             notebook: note.notebook
         },
         {
@@ -373,10 +389,10 @@ class Notes extends Component {
         .then(function(response) {
             if (response.status === 201) {
                 if (edit) {
-                    that.props.sendEvent('notification', true, {type: 'success', message: 'Note edited', duration: 5000});
-                    that.props.sendEvent('closeNoteEditView', true);
+                    sendMessage('notification', true, {type: 'success', message: 'Note edited', duration: 5000});
+                    sendMessage('closeNoteEditView', true);
                 } else {
-                    that.props.sendEvent('notification', true, {type: 'success', message: 'Note created', duration: 5000});
+                    sendMessage('notification', true, {type: 'success', message: 'Note created', duration: 5000});
                     that.closeAllDialog();
                 }
                 
@@ -410,14 +426,15 @@ class Notes extends Component {
         const noteview = this.state.view.map(item => (
             <div key={item._id}>
                 {item._id === this.state.selectedNoteId && item.type !== 'Artboard' &&
-                        <Note key={item._id} id={item._id} note={item} saveNote={this.saveNote} deleteNote={this.deleteNote} event={this.props.event} notebooks={this.state.existingNotebookList}/>}
+                        <Note key={item._id} id={item._id} note={item} saveNote={this.saveNote} deleteNote={this.deleteNote} event={this.props.event} 
+                        notebooks={this.state.existingNotebookList}/>}
                 {item._id === this.state.selectedNoteId && item.type === 'Artboard' &&
                         <Artboard key={item._id} id={item._id} note={item} saveNote={this.saveNote} deleteNote={this.deleteNote} event={this.props.event} notebooks={this.state.existingNotebookList}/>}
             </div>
         ))
         const listNoteRef = this.state.view.map(item => (
             <div key={item._id}>
-                <NoteRef selected={this.state.selectedNoteId === item._id ? true : false} id={item._id} note={item} selectNote={this.selectNote} />
+                <NoteRef selected={this.state.selectedNoteId === item._id ? true : false} id={item._id} note={item} selectNote={this.selectNote} showTag={this.state.notebookFilter === 'all notebooks'}/>
             </div>
         ))
         return (
@@ -449,15 +466,15 @@ class Notes extends Component {
                     </div>
                 </ArcDialog>
 
-                <ViewResolver event={this.props.event} sendEvent={this.props.sendEvent} sideLabel='More options'>
+                <ViewResolver event={this.props.event} sendEvent={sendMessage} sideLabel='More options'>
                     <View main>
                         {noteview}
                     </View>
                     <View side>
                         <div className="filter-container">
                             <div className="section-main">
-                            <Sidebar label="Add New" elements={this.state.sidebarElements['addNew']} icon="add" animate />
-                            <Sidebar label="Search" elements={this.state.sidebarElements['search']} icon="search" animate number={this.state.isFiltered ? this.state.searchResults.length : undefined}>
+                            <Sidebar label="Add New" elements={this.state.sidebarElements['addNew']} icon="add" event={this.props.event} sendEvent={sendMessage} animate />
+                            <Sidebar label="Search" elements={this.state.sidebarElements['search']} icon="search" event={this.props.event} sendEvent={sendMessage} animate number={this.state.isFiltered ? this.state.searchResults.length : undefined}>
                                 <div className="space-top-1" />
                                 <form method="GET" onSubmit={this.search} noValidate>
                                     <div className="space-left-4 space-right-4"><ArcTextField label="Keywords" id="searchtext" data={this.state} handleChange={e => this.handleChange(e)} /></div>
@@ -494,9 +511,10 @@ class Notes extends Component {
                                 </div>
                             </Sidebar>
                                 
-                            <Sidebar label={this.state.isFiltered ? "Search results" : "All Notes"} icon="notes"  show number={this.state.view.length}>
+                            <Sidebar label={this.state.isFiltered ? "Search results" : "All Notes"} icon="notes" event={this.props.event} sendEvent={sendMessage} number={this.state.view.length}>
                                 <div className="filter-bar">
-                                    <div><ArcSelect maxWidth="max-width-200" label="Notebook" data={this.state} id="notebookFilter" handleChange={e => this.handleNotebookFilterChange(e)} elements={this.state.filteredNotebookList} first='all notebooks' /></div>
+                                    {this.state.filteredNotebookList.length > 1 && <div><ArcSelect maxWidth="max-width-200" label="Notebook" data={this.state} id="notebookFilter" handleChange={e => this.handleNotebookFilterChange(e)} elements={this.state.filteredNotebookList} first='all notebooks' /></div>}
+                                    {this.state.filteredNotebookList.length === 1 && <div><ArcSelect maxWidth="max-width-200" label="Notebook" data={this.state} id="notebookFilter" handleChange={e => this.handleNotebookFilterChange(e)} elements={this.state.filteredNotebookList} /></div>}
                                     <div></div>
                                     <div><ArcSelect label="Sort by" data={this.state} id="sortBy" handleChange={e => this.handleNotebookFilterChange(e)} elements={Object.keys(this.sortTypes)} /></div>
                                     <div><ArcSelect label="Sort Order" data={this.state} id="sortOrder" handleChange={e => this.handleNotebookFilterChange(e)} elements={this.sortOrders} /></div>

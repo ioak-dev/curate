@@ -3,8 +3,20 @@ import { Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getAuth } from '../../actions/AuthActions';
 import PropTypes from 'prop-types';
+import { Authorization } from '../Types/GeneralTypes';
 
-class PrivateRoute extends Component {
+interface Props {
+  authorization: Authorization,
+  getAuth: Function,
+  path: string,
+  render: any
+}
+
+interface State {
+
+}
+
+class PrivateRoute extends Component<Props, State> {
   componentWillMount() {
     this.props.getAuth();
   }
@@ -13,15 +25,10 @@ class PrivateRoute extends Component {
     return (
       <>
         {this.props.authorization.isAuth && <Route path={this.props.path} render={this.props.render} />}
-        {!this.props.authorization.isAuth && <Redirect to={{pathname: "/home"}} />}
+        {/* {!this.props.authorization.isAuth && <Redirect to={{pathname: "/login"}} />} */}
       </>
     );
   }
-}
-
-PrivateRoute.propTypes = {
-  getAuth: PropTypes.func.isRequired,
-  authorization: PropTypes.object.isRequired
 }
 
 const mapStateToProps = state => ({

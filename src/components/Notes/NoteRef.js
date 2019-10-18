@@ -28,11 +28,13 @@ class NoteRef extends Component {
             <>
             <div className={this.props.selected ? "noteref selected" : "noteref"} onClick={this.selectNote}>
                 <div className="content">
-                    <div className="notebook">
+                    {this.props.note.flag && <div className={"flag-palette " + this.props.note.flag} />}
+                    {this.props.showTag && <div className="notebook">
                         {/* <i className="material-icons">insert_drive_file</i> */}
                         {this.props.note.notebook}
-                    </div>
+                    </div>}
                     <div className="title">{this.props.note.title}</div>
+                    <div className="space-bottom-0" />
                     {this.props.note.type !== 'Artboard' && <div className="detail">{removeMd(this.props.note.content.substring(0, 100))}</div>}
                     {this.props.note.type === 'Artboard' && <div className="detail-artboard"><i className="material-icons">tv</i></div>}
                     {/* <div className="detail typography-5"><Showdown source={this.props.note.content.substring(0, 150)} /></div> */}

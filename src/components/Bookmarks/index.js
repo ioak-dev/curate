@@ -151,6 +151,20 @@ class Bookmarks extends Component {
         this.props.sendEvent('sidebar', false)
     }
 
+    searchByTag = (tagName) => {
+        
+        this.setState({
+            searchPref: {
+                ...this.state.searchPref,
+                title: false,
+                tags: true,
+                href: false
+            },
+            searchtext: tagName,
+            isFiltered: true
+        }, () => this.initializeBookmarks(this.props.authorization));
+    }
+
     search = (event) => {
         if (event) {
             event.preventDefault();
@@ -244,7 +258,7 @@ class Bookmarks extends Component {
     render() {
         const listview = this.state.view.map(item => (
             <div key={item._id}>
-            <Link id={item._id} bookmark={item} editBookmark={this.editBookmark} deleteBookmark={this.deleteBookmark}/>
+            <Link id={item._id} bookmark={item} editBookmark={this.editBookmark} deleteBookmark={this.deleteBookmark} searchByTag={this.searchByTag} />
             <br />
             </div>
         ))
@@ -267,8 +281,8 @@ class Bookmarks extends Component {
                     <View side>
                         <div className="filter-container">
                             <div className="section-main">
-                                <Sidebar label="Add New" elements={this.state.sidebarElements['addNew']} icon="add" animate />
-                                <Sidebar label="Search" elements={this.state.sidebarElements['search']} icon="search" animate number={this.state.isFiltered ? this.state.view.length : undefined}>
+                                <Sidebar label="Add New" elements={this.state.sidebarElements['addNew']} icon="add" event={this.props.event} sendEvent={this.props.sendEvent} animate />
+                                <Sidebar label="Search" elements={this.state.sidebarElements['search']} icon="search" event={this.props.event} sendEvent={this.props.sendEvent} animate number={this.state.isFiltered ? this.state.view.length : undefined}>
                                     <form method="GET" onSubmit={this.search} noValidate>
                                     <div className="space-top-2 space-left-4 space-right-4"><ArcTextField label="Keywords" id="searchtext" data={this.state} handleChange={e => this.handleChange(e)} /></div>
                                     </form>

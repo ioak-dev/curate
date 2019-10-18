@@ -1,9 +1,17 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import './style.scss';
+import { receiveMessage, sendMessage } from '../../events/MessageService';
 
-class Notification extends Component {
-    constructor(props) {
+interface Props {
+}
+
+interface State {
+    notification: any,
+    spinner: boolean
+}
+
+class Notification extends Component<Props, State> {
+    constructor(props: Props) {
         super(props);
         this.state = {
             spinner: false,
@@ -11,11 +19,32 @@ class Notification extends Component {
         }
     }
     componentWillMount() {
-        this.processNextProps(this.props);
-    }
+        receiveMessage().subscribe(message => {
+            if (message.name === 'notification') {
+                if (!message.signal) {
+                    this.setState({
+                        notification: null,
+                    })
+                } else {
+                    this.setState({
+                        notification: message.data,
+                        spinner: false
+                    })
+                    
+                    if (message.data && message.data.duration) {
+                        setTimeout(() => {
+                            sendMessage('notification', false);
+                        }, message.data.duration);
+                    }
+                }
+            }
 
-    componentWillReceiveProps(nextProps) {
-        this.processNextProps(nextProps);
+            if (message.name === 'spinner') {
+                this.setState({
+                    spinner: message.signal
+                })
+            }
+        });
     }
 
     processNextProps(nextProps) {
@@ -38,9 +67,7 @@ class Notification extends Component {
                 
                 if (nextProps.event.data.duration) {
                     setTimeout(() => {
-                        this.setState({
-                            notification: null
-                        })
+                        // this.props.sendEvent('notification', false);
                     }, nextProps.event.data.duration);
                 }
             }
@@ -57,11 +84,6 @@ class Notification extends Component {
             </>
         );
     }
-}
-
-Notification.propTypes = {
-    sendEvent: PropTypes.func.isRequired,
-    event: PropTypes.object
 }
 
 export default Notification;

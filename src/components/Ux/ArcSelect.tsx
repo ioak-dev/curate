@@ -18,14 +18,35 @@ const useStyles = makeStyles(theme => ({
     },
   }));
 
-function ArcSelect(props) {
+  
+interface Props {
+  id: string,
+  label: string,
+  handleChange: Function,
+  error?: boolean,
+  data: any,
+  elements?: Array<string>,
+  objects?: Array<any>,
+  first: string,
+  firstAction: string,
+  maxWidth: string
+}
+
+function ArcSelect(props: Props) {
     const classes = useStyles();
 
-    const { id, label, elements, handleChange, error, data, first,firstAction,  ...rest } = props;
-    const elementsView = elements.map(item => <MenuItem key={item} value={item}>{item}</MenuItem>);
+    const { id, label, elements, objects, handleChange, error, data, first,firstAction,  ...rest } = props;
+    let dropdownList: Array<any> = [];
+    
+    if (elements) {
+      dropdownList = elements.map(item => <MenuItem key={item} value={item}>{item}</MenuItem>);
+    } else if (objects) {
+      dropdownList = objects.map(item => <MenuItem key={item.key} value={item.key}>{item.value}</MenuItem>);
+    }
+    
     return (
         <>
-        <FormControl className={classes.formControl} className="arc-select">
+        <FormControl className={"arc-select " + classes.formControl}>
             <InputLabel htmlFor={id}>{label}</InputLabel>
             <Select
             value={data[id]}
@@ -39,22 +60,11 @@ function ArcSelect(props) {
             >
                 {first && <MenuItem value={first}>{first}</MenuItem>}
                 {firstAction && <MenuItem value={firstAction}><em>{firstAction}</em></MenuItem>}
-                {elementsView}
+                {dropdownList}
             </Select>
         </FormControl>
         </>
     )
-}
-
-ArcSelect.propTypes = {
-    id: PropTypes.string.isRequired,
-    label: PropTypes.string.isRequired,
-    handleChange: PropTypes.func.isRequired,
-    error: PropTypes.bool,
-    data: PropTypes.object.isRequired,
-    elements: PropTypes.array.isRequired,
-    first:  PropTypes.string,
-    firstAction:  PropTypes.string
 }
 
 export default ArcSelect;

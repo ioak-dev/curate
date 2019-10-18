@@ -5,13 +5,27 @@ import './style.scss';
 import developers1 from '../../images/developers1.jpg';
 import developers2 from '../../images/developers2.jpg';
 
-export default class Home extends React.Component {
+import { sendMessage, receiveMessage } from '../../events/MessageService';
+import { Profile } from '../Types/GeneralTypes';
+
+interface Props {
+  setProfile: Function,
+  profile: Profile,
+  match: any,
+  logout: Function
+}
+
+interface State {
+
+}
+
+export default class Home extends React.Component<Props, State> {
   componentWillMount() {
-    this.props.sendEvent('navbar-transparency');
+    sendMessage('navbar-transparency');
   }
 
   componentWillUnmount() {
-    this.props.sendEvent('navbar-transparency', false);
+    sendMessage('navbar-transparency', false);
   }
 
   render() {
@@ -91,10 +105,4 @@ export default class Home extends React.Component {
       </>
     );
   }
-}
-
-Home.propTypes = {
-  sendEvent: PropTypes.func.isRequired,
-  profile: PropTypes.object.isRequired,
-  event: PropTypes.object.isRequired
 }

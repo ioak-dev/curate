@@ -2,8 +2,18 @@ import React from 'react';
 import { TextField } from '@material-ui/core';
 import PropTypes from 'prop-types';
 
-function ArcTextField(props) {
-    const { id, label, value, handleChange, error, rows, multiline, data,  ...rest } = props;
+interface Props {
+    id: string,
+    label: string,
+    handleChange: any,
+    error?: boolean,
+    data: any,
+    rows?: number,
+    multiline?: boolean,
+    type?: string
+};
+function ArcTextField(props: Props) {
+    const { id, label, handleChange, error, rows, multiline, data, type,  ...rest } = props;
     return (
         <TextField
                 id={id}
@@ -17,17 +27,10 @@ function ArcTextField(props) {
                 error={error}
                 multiline={multiline}
                 rows={rows}
+                type={type}
                 {...rest}
                 />
     )
 }
-
-ArcTextField.propTypes = {
-    id: PropTypes.string.isRequired,
-    label: PropTypes.string.isRequired,
-    handleChange: PropTypes.func.isRequired,
-    error: PropTypes.bool,
-    data: PropTypes.object.isRequired
-};
 
 export default ArcTextField;

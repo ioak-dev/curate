@@ -1,17 +1,25 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import './ArcDialog.scss';
-import { receiveEvents, sendEvent } from '../../actions/EventActions';
+import { sendMessage } from '../../events/MessageService';
 
-class ArcDialog extends Component {
+interface Props {
+    visible: boolean,
+    title: string,
+    toggleVisibility: any
+}
+
+interface State {
+
+}
+
+class ArcDialog extends Component<Props, State> {
     componentWillReceiveProps(nextProps) {
         if (this.props.visible !== nextProps.visible) {
             if (nextProps.visible) {
-                this.props.sendEvent('dialog', true, null);
+                sendMessage('dialog');
                 window.scrollTo(500, 0);
             } else {
-                this.props.sendEvent('dialog', false, null);
+                sendMessage('dialog', false);
             }
         }
     }
@@ -31,16 +39,4 @@ class ArcDialog extends Component {
     }
 }
 
-ArcDialog.propTypes = {
-    visible: PropTypes.bool,
-    toggleVisibility: PropTypes.func.isRequired,
-    receiveEvents: PropTypes.func.isRequired,
-    sendEvent: PropTypes.func.isRequired,
-    event: PropTypes.object.isRequired
-}
-
-const mapStateToProps = state => ({
-    event: state.event
-})
-
-export default connect(mapStateToProps, {sendEvent, receiveEvents}) (ArcDialog);
+export default ArcDialog;

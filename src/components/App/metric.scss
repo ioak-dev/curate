@@ -50,6 +50,9 @@
     --textsize-1: var(--metric-typography-1);
 }
 
+.space-bottom-0 {
+  margin-bottom: calc(0.5 * var(--metric-space-vertical));
+}
 .space-bottom-1 {
   margin-bottom: calc(1 * var(--metric-space-vertical));
 }
