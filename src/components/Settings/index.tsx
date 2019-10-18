@@ -11,7 +11,7 @@ import ArcTextField from '../Ux/ArcTextField';
 import { isEmptyOrSpaces } from '../Utils';
 import {signin, updateUserDetails} from '../Auth/AuthService';
 import { Authorization, Profile } from '../Types/GeneralTypes';
-import { sendMessage, receiveMessage } from '../../events/MessageService';
+import { sendMessage } from '../../events/MessageService';
 import axios from "axios";
 import {constants} from "../Constants";
 
@@ -35,7 +35,7 @@ interface State {
   data:any
 }
 
-class Settings extends React.Component<Props, any> {
+class Settings extends React.Component<Props, State> {
 
   constructor(props) {
     super(props);
@@ -59,6 +59,7 @@ class Settings extends React.Component<Props, any> {
   handleChange = (event) => {
     this.setState(
         {
+          ...this.state,
             [event.currentTarget.name]: event.currentTarget.value
         }
     )
@@ -207,7 +208,7 @@ class Settings extends React.Component<Props, any> {
           that.setState({data: response.data});
 
           that.state.data.map(function(bookmark, i){
-            let htmlContent = '<DL><p>'+'<DT>'+'<A ' +'HREF="'+bookmark.href+'">'+bookmark.title+'</A>'+'</DL><p>';
+            let htmlContent = '<DL><p>' + '<DT>' + '<A ' + 'HREF="' + bookmark.href + '">' + bookmark.title + '</A>' + '</DL><p>';
             staticContent = staticContent+htmlContent;
           })
 

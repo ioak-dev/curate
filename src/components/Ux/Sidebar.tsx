@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import './Sidebar.scss';
-import { sendMessage } from '../../events/MessageService';
+import { sendMessage, receiveMessage } from '../../events/MessageService';
 
 interface Props {
-    show: boolean,
-    elements: Array<string>,
+    show?: boolean,
+    elements?: Array<string>,
     label: string,
     icon: string,
-    number: number,
-    animate: string
+    number?: number,
+    animate?: boolean
 }
 
 interface State {
@@ -22,7 +21,7 @@ class Sidebar extends Component<Props, State> {
     constructor(props) {
         super(props);
         this.state = {
-            show: this.props.show,
+            show: this.props.show ? true : false,
             elements: this.props.elements ? this.props.elements : []
         }
     }
@@ -39,14 +38,14 @@ class Sidebar extends Component<Props, State> {
         });
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.event && nextProps.event.name === 'sidebarExpanded' && nextProps.event.signal) {
-            if (nextProps.event.data && nextProps.event.data.label !== this.props.label) {
+    componentDidMount() {        
+        receiveMessage().subscribe(message => {
+            if (message.name === 'sidebarExpanded' && message.signal && message.data && message.data.label !== this.props.label) {
                 this.setState({
                     show: false
-                });
+                })
             }
-        }
+        })
     }
 
     render() {

@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getAuth, addAuth, removeAuth } from '../../actions/AuthActions';
-import PropTypes from 'prop-types';
 import { withCookies } from 'react-cookie';
 import './Login.scss';
 import ArcTextField from '../Ux/ArcTextField';
-import {signup, signin, updateUserDetails, sentPasswordChangeEmail} from './AuthService';
+import {signup, signin, sentPasswordChangeEmail} from './AuthService';
 import { Authorization } from '../Types/GeneralTypes';
-import { sendMessage, receiveMessage } from '../../events/MessageService';
+import { sendMessage } from '../../events/MessageService';
 import {isEmptyOrSpaces} from "../Utils";
 
 const queryString = require('query-string');
@@ -30,7 +29,7 @@ interface State {
     resetCode: string
 }
 
-class Login extends Component<Props, any> {
+class Login extends Component<Props, State> {
     constructor(props) {
         super(props);
         this.state = {
@@ -148,6 +147,7 @@ class Login extends Component<Props, any> {
     handleChange = (event) => {
         this.setState(
             {
+                ...this.state,
                 [event.currentTarget.name]: event.currentTarget.value
             }
         )

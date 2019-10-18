@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import Link from './Link';
-import PropTypes from 'prop-types';
 import { constants } from '../Constants';
-import axios from "axios";
 import ArcTextField from '../Ux/ArcTextField';
 import ArcDialog from '../Ux/ArcDialog';
 import ViewResolver from '../Ux/ViewResolver';
@@ -11,11 +9,43 @@ import './style.scss';
 import { Switch } from '@material-ui/core';
 import { isEmptyOrSpaces, match } from '../Utils';
 import Sidebar from '../Ux/Sidebar';
+import { httpGet, httpPut, httpDelete } from '../Lib/RestTemplate';
+import { sendMessage } from '../../events/MessageService';
+import { Authorization } from '../Types/GeneralTypes';
 
 const queryString = require('query-string');
-const baseUrl = process.env.REACT_APP_API_URL;
 
-class Bookmarks extends Component {
+interface Props {
+    authorization: Authorization
+    location: any,
+    logout: Function
+}
+
+interface State {
+    items: any,
+    view: any,
+
+    searchtext: string,
+    isFiltered: boolean,
+
+    id?: string,
+    title: string,
+    href: string,
+    tags: string,
+    editDialogLabel: string,
+    isEditDialogOpen: boolean,
+    firstLoad: boolean,
+
+    searchPref: {
+        title: boolean,
+        tags: boolean,
+        href: boolean,
+        content: boolean
+    },
+
+    sidebarElements: any
+}
+class Bookmarks extends Component<Props, State> {
     constructor(props) {
         super(props);
         this.state = {
@@ -26,7 +56,7 @@ class Bookmarks extends Component {
             searchtext: '',
             isFiltered: false,
 
-            id: null,
+            id: undefined,
             title: '',
             href: '',
             tags: '',
@@ -36,7 +66,8 @@ class Bookmarks extends Component {
             searchPref: {
                 title: true,
                 tags: true,
-                href: true
+                href: true,
+                content: true
             },
 
             sidebarElements: {
@@ -59,6 +90,7 @@ class Bookmarks extends Component {
                         searchPref: {
                             title: false,
                             tags: true,
+                            href: true,
                             content: false
                         }
                     })
@@ -84,7 +116,7 @@ class Bookmarks extends Component {
 
     initializeBookmarks(authorization) {
         const that = this;
-        axios.get(baseUrl + constants.API_URL_BOOKMARK,
+        httpGet(constants.API_URL_BOOKMARK,
             {
                 headers: {
                     Authorization: 'Bearer ' + authorization.token
@@ -102,7 +134,7 @@ class Bookmarks extends Component {
     toggleEditDialog = () => {
         this.setState({
             isEditDialogOpen: !this.state.isEditDialogOpen,
-            id: null,
+            id: undefined,
             title: '',
             href: '',
             tags: '',
@@ -123,7 +155,7 @@ class Bookmarks extends Component {
 
     deleteBookmark = (bookmarkId) => {
         const that = this;
-        axios.delete(baseUrl + constants.API_URL_BOOKMARK + "/" + bookmarkId,
+        httpDelete(constants.API_URL_BOOKMARK + "/" + bookmarkId,
         {
             headers: {
                 Authorization: 'Bearer ' + this.props.authorization.token
@@ -131,7 +163,7 @@ class Bookmarks extends Component {
         })
         .then(function(response) {
             if (response.status === 201) {
-                that.props.sendEvent('notification', true, {type: 'success', message: 'Bookmark deleted', duration: 5000});
+                sendMessage('notification', true, {type: 'success', message: 'Bookmark deleted', duration: 5000});
                 that.initializeBookmarks(that.props.authorization);
             }
         })
@@ -148,7 +180,7 @@ class Bookmarks extends Component {
             isFiltered: false,
             searchtext: ''
         })
-        this.props.sendEvent('sidebar', false)
+        sendMessage('sidebar', false)
     }
 
     searchByTag = (tagName) => {
@@ -165,7 +197,7 @@ class Bookmarks extends Component {
         }, () => this.initializeBookmarks(this.props.authorization));
     }
 
-    search = (event) => {
+    search = (event?: any) => {
         if (event) {
             event.preventDefault();
         }
@@ -190,7 +222,7 @@ class Bookmarks extends Component {
             }),
             isFiltered: true
         });
-        this.props.sendEvent('sidebar', false)
+        sendMessage('sidebar', false)
     }
 
     toggleSearchPref = (pref) => {
@@ -213,12 +245,12 @@ class Bookmarks extends Component {
         }
 
         if (isEmptyOrSpaces(bookmark.title)) {
-            that.props.sendEvent('notification', true, {type: 'failure', message: 'Title / description missing', duration: 5000});
+            sendMessage('notification', true, {type: 'failure', message: 'Title / description missing', duration: 5000});
             return;
         }
 
         if (isEmptyOrSpaces(bookmark.href)) {
-            that.props.sendEvent('notification', true, {type: 'failure', message: 'Website URL / Link is missing', duration: 5000});
+            sendMessage('notification', true, {type: 'failure', message: 'Website URL / Link is missing', duration: 5000});
             return;
         }
 
@@ -226,7 +258,7 @@ class Bookmarks extends Component {
             bookmark.tags = 'unsorted';
         }
 
-        axios.put(baseUrl + constants.API_URL_BOOKMARK, bookmark,
+        httpPut(constants.API_URL_BOOKMARK, bookmark,
         {
             headers: {
                 Authorization: 'Bearer ' + this.props.authorization.token
@@ -234,7 +266,7 @@ class Bookmarks extends Component {
         })
         .then(function(response) {
             if (response.status === 201) {
-                that.props.sendEvent('notification', true, {type: 'success', message: 'Bookmark created', duration: 5000});
+                sendMessage('notification', true, {type: 'success', message: 'Bookmark created', duration: 5000});
                 that.toggleEditDialog();
 
                 that.initializeBookmarks(that.props.authorization);
@@ -250,6 +282,7 @@ class Bookmarks extends Component {
     handleChange = (event) => {
         this.setState(
             {
+                ...this.state,
                 [event.currentTarget.name]: event.currentTarget.value
             }
         )
@@ -274,15 +307,15 @@ class Bookmarks extends Component {
                     </div>
                 </ArcDialog>
 
-                <ViewResolver event={this.props.event} sendEvent={this.props.sendEvent}>
+                <ViewResolver>
                     <View main>
                         {listview}
                     </View>
                     <View side>
                         <div className="filter-container">
                             <div className="section-main">
-                                <Sidebar label="Add New" elements={this.state.sidebarElements['addNew']} icon="add" event={this.props.event} sendEvent={this.props.sendEvent} animate />
-                                <Sidebar label="Search" elements={this.state.sidebarElements['search']} icon="search" event={this.props.event} sendEvent={this.props.sendEvent} animate number={this.state.isFiltered ? this.state.view.length : undefined}>
+                                <Sidebar label="Add New" elements={this.state.sidebarElements['addNew']} icon="add" animate />
+                                <Sidebar label="Search" elements={this.state.sidebarElements['search']} icon="search" animate number={this.state.isFiltered ? this.state.view.length : undefined}>
                                     <form method="GET" onSubmit={this.search} noValidate>
                                     <div className="space-top-2 space-left-4 space-right-4"><ArcTextField label="Keywords" id="searchtext" data={this.state} handleChange={e => this.handleChange(e)} /></div>
                                     </form>
@@ -325,11 +358,6 @@ class Bookmarks extends Component {
             </div>
         )
     }
-}
-
-Bookmarks.propTypes = {
-    receiveEvents: PropTypes.func.isRequired,
-    sendEvent: PropTypes.func.isRequired,
 }
 
 export default Bookmarks;

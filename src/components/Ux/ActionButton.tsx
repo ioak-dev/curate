@@ -1,8 +1,15 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import './ActionButton.scss';
 
-function ActionButton(props) {
+interface Props {
+    icon?: string,
+    leftLabel?: string,
+    leftAction?: any,
+    rightLabel?: string,
+    rightAction?: any,
+    type?: string
+}
+function ActionButton(props: Props) {
     const icon = <i className="material-icons">{props.icon}</i>;
     return (
         <div className="action-button">
@@ -12,12 +19,5 @@ function ActionButton(props) {
         </div>
     )
 }
-
-ActionButton.propTypes = {
-    leftLabel: PropTypes.string.isRequired,
-    leftAction: PropTypes.func.isRequired,
-    rightLabel: PropTypes.string,
-    rightAction: PropTypes.func
-};
 
 export default ActionButton;

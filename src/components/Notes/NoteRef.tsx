@@ -3,25 +3,27 @@ import ActionButton from '../Ux/ActionButton';
 import './style.scss';
 const removeMd = require('remove-markdown');
 
-class NoteRef extends Component {
+interface Props {
+    selectNote: Function,
+    note: any,
+    id: string,
+    selected: boolean,
+    showTag: boolean
+}
+interface State {
 
-    edit = () => {
-        this.props.editNote(this.props.note);
-    }
-
-    delete = () => {
-        this.props.deleteNote(this.props.id);
-    }
+}
+class NoteRef extends Component<Props, State> {
 
     selectNote = () => {
         this.props.selectNote(this.props.id);
     }
 
     render() {
-        const tags = [];
+        const tags: any = [];
         if (this.props.note.tags) {
             this.props.note.tags.split(" ").map(item => {
-                tags.push(<ActionButton key={item} leftLabel={item} leftAction={() => this.tag(item)} rightLabel="x" rightAction={() => this.removeTag(item)}></ActionButton>);
+                tags.push(<ActionButton leftLabel={item}></ActionButton>);
             })
         }
         return (

@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import './ArcSelect.scss';
 import { FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -27,15 +26,15 @@ interface Props {
   data: any,
   elements?: Array<string>,
   objects?: Array<any>,
-  first: string,
-  firstAction: string,
-  maxWidth: string
+  first?: string,
+  firstAction?: string,
+  maxWidth?: string
 }
 
 function ArcSelect(props: Props) {
     const classes = useStyles();
 
-    const { id, label, elements, objects, handleChange, error, data, first,firstAction,  ...rest } = props;
+    const { id, label, elements, objects, handleChange, data, first,firstAction } = props;
     let dropdownList: Array<any> = [];
     
     if (elements) {

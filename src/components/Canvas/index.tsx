@@ -7,7 +7,7 @@ let isDown, origX, origY, stroke;
 interface Props {
     attributes: any,
     data: any,
-    edit: boolean,
+    edit?: boolean,
     handleChange: Function
 }
 

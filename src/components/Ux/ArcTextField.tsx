@@ -1,6 +1,5 @@
 import React from 'react';
 import { TextField } from '@material-ui/core';
-import PropTypes from 'prop-types';
 
 interface Props {
     id: string,

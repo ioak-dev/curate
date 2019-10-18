@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { Route, Redirect } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getAuth } from '../../actions/AuthActions';
-import PropTypes from 'prop-types';
 import { Authorization } from '../Types/GeneralTypes';
 
 interface Props {
