@@ -1,8 +1,6 @@
-import axios from "axios";
+import { httpGet, httpPut } from '../components/Lib/RestTemplate';
 import { constants } from '../components/Constants';
 import { GET_PROFILE, SET_PROFILE } from './types';
-
-const baseUrl = process.env.REACT_APP_API_URL;
 
 export const getProfile = () => dispatch => {
     dispatch({
@@ -11,7 +9,7 @@ export const getProfile = () => dispatch => {
 }
 
 export const reloadProfile = (authorization) => dispatch => {
-    axios.get(baseUrl + constants.API_URL_PREFERENCES,
+    httpGet(constants.API_URL_PREFERENCES,
         {
             headers: {
                 Authorization: 'Bearer ' + authorization.token
@@ -27,7 +25,7 @@ export const reloadProfile = (authorization) => dispatch => {
 }
 
 export const persistProfile = (authorization, payload) => dispatch => {
-    axios.put(baseUrl + constants.API_URL_PREFERENCES, payload,
+    httpPut(constants.API_URL_PREFERENCES, payload,
         {
             headers: {
                 Authorization: 'Bearer ' + authorization.token

@@ -15,7 +15,6 @@ export default function(state = initialState, action) {
             };
         case SET_PROFILE:
             console.log('SET_PROFILE reducer');
-            console.log(action.payload);
             return {
                 ...state,
                 ...action.payload

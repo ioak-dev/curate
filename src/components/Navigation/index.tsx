@@ -55,8 +55,7 @@ class Navigation extends Component<Props, State> {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
-        
+    componentDidMount() {
         receiveMessage().subscribe(
             message => {
                 if (message.name === 'navbar-transparency') {
@@ -66,14 +65,20 @@ class Navigation extends Component<Props, State> {
                 }
 
                 if (message.name === 'loggedin') {
-                    this.props.reloadProfile(nextProps.authorization);
+                    this.props.reloadProfile(this.props.authorization);
                     this.setState({
                         firstLoad: false
                     })
                 }
+
+                if (message.name === 'loggedout') {
+                    this.props.history.push('/home');
+                }
             }
         )
+    }
 
+    componentWillReceiveProps(nextProps) {
         if (this.state.firstLoad && nextProps.authorization && nextProps.authorization.isAut) {
             this.props.reloadProfile(nextProps.authorization);
             this.setState({

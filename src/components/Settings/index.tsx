@@ -9,13 +9,11 @@ import {withCookies} from 'react-cookie';
 import { importBookmarks } from '../Bookmarks/BookmarkService';
 import ArcTextField from '../Ux/ArcTextField';
 import { isEmptyOrSpaces } from '../Utils';
-import {signin, updateUserDetails} from '../Auth/AuthService';
+import {signin, updateUserDetails, preSignin} from '../Auth/AuthService';
 import { Authorization, Profile } from '../Types/GeneralTypes';
 import { sendMessage } from '../../events/MessageService';
-import axios from "axios";
+import { httpGet } from "../Lib/RestTemplate";
 import {constants} from "../Constants";
-
-const baseUrl = process.env.REACT_APP_API_URL;
 
 interface Props {
   profile: Profile,
@@ -113,21 +111,27 @@ class Settings extends React.Component<Props, State> {
   }
 
   checkOldPassword = (type) => {
-    signin({
-      email: this.state.email,
-      password: this.state.oldPassword
+    preSignin(this.state.email).then((response) => {
+      if (response.status === 200) {
+          signin({
+              email: this.state.email,
+              password: this.state.oldPassword
+              }, response.data)
+              .then((response) => {
+                  if (response.status === 200) {
+                      this.updateUserDetailsImpl('password');
+                      // sendMessage('notification', true, {message: 'Passphrase updated successfully', type: 'success', duration: 3000});
+                  } else if (response.status === 401) {
+                      sendMessage('notification', true, {message: 'Incorrect passphrase', type: 'failure', duration: 3000});
+                  } else {
+                      sendMessage('notification', true, {message: 'Unknown response from server. Please try again or at a later time', type: 'failure', duration: 3000});
+                  }
+              })
+              .catch((error) => {
+                  sendMessage('notification', true, {'type': 'failure', message: 'Unknown error. Please try again or at a later time', duration: 3000});
+              })
+      }
     })
-        .then((response) => {
-          if (response.status === 200) {
-            sendMessage('notification', true, {message: 'Signed In successfully', type: 'success', duration: 3000});
-            this.updateUserDetailsImpl('password');
-          }else  if (response.status === 401) {
-            sendMessage('notification', true, {message: 'Incorrect oldpassword', type: 'failure', duration: 3000});
-          }
-        })
-        .catch((error) => {
-          sendMessage('notification', true, {'type': 'failure', message: 'Unknown error. Please try again or at a later time', duration: 3000});
-        })
   }
 
 
@@ -195,7 +199,7 @@ class Settings extends React.Component<Props, State> {
 
   exportBookmark = () => {
     const that = this;
-    axios.get(baseUrl + constants.API_URL_BOOKMARK,
+    httpGet(constants.API_URL_BOOKMARK,
         {
           headers: {
             Authorization: 'Bearer ' + that.props.authorization.token

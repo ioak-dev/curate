@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Note from './Note';
 import { Switch } from '@material-ui/core';
 import { constants } from '../Constants';
-import axios from "axios";
+import { httpGet, httpPut, httpDelete } from "../Lib/RestTemplate";
 import ArcTextField from '../Ux/ArcTextField';
 import ArcDialog from '../Ux/ArcDialog';
 import ViewResolver from '../Ux/ViewResolver';
@@ -18,7 +18,6 @@ import { sendMessage, receiveMessage } from '../../events/MessageService';
 import { Authorization } from '../Types/GeneralTypes';
 
 const queryString = require('query-string');
-const baseUrl = process.env.REACT_APP_API_URL;
 
 interface Props {
     authorization: Authorization
@@ -161,7 +160,7 @@ class Notes extends Component<Props, State> {
 
     initializeNotes(authorization: Authorization, selectedNoteId?: string) {
         const that = this;
-        axios.get(baseUrl + constants.API_URL_NOTE,
+        httpGet(constants.API_URL_NOTE,
             {
                 headers: {
                     Authorization: 'Bearer ' + authorization.token
@@ -327,7 +326,7 @@ class Notes extends Component<Props, State> {
 
     deleteNote = (noteId) => {
         const that = this;
-        axios.delete(baseUrl + constants.API_URL_NOTE + "/" + noteId,
+        httpDelete(constants.API_URL_NOTE + "/" + noteId,
         {
             headers: {
                 Authorization: 'Bearer ' + this.props.authorization.token
@@ -410,7 +409,7 @@ class Notes extends Component<Props, State> {
             note.tags = 'unsorted';
         }
 
-        axios.put(baseUrl + constants.API_URL_NOTE, {
+        httpPut(constants.API_URL_NOTE, {
             id: note.id,
             type: note.type,
             title: note.title,

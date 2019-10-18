@@ -49,6 +49,7 @@ interface Props {
     addAuth: Function,
     removeAuth: Function,
     cookies: any,
+    history: any,
 
     // event: PropTypes.object,
     profile: any,
@@ -75,6 +76,7 @@ class Content extends Component<Props, State> {
         this.props.cookies.remove('secret');
         this.props.cookies.remove('name');
         sendMessage('notification', true, {type: type, message: message, duration: 3000});
+        sendMessage('loggedout', true);
     }
 
     render() {
