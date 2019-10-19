@@ -6,7 +6,7 @@ import ViewResolver from '../Ux/ViewResolver';
 import { Switch } from '@material-ui/core';
 import { connect } from 'react-redux';
 import {withCookies} from 'react-cookie';
-import { importBookmarks } from '../Bookmarks/BookmarkService';
+import {importBookmarks} from '../Bookmarks/BookmarkService';
 import ArcTextField from '../Ux/ArcTextField';
 import { isEmptyOrSpaces } from '../Utils';
 import {signin, updateUserDetails, preSignin} from '../Auth/AuthService';
@@ -14,6 +14,7 @@ import { Authorization, Profile } from '../Types/GeneralTypes';
 import { sendMessage } from '../../events/MessageService';
 import { httpGet } from "../Lib/RestTemplate";
 import {constants} from "../Constants";
+import {sendBookmarkExportEmail} from "./SettingsService";
 
 interface Props {
   profile: Profile,
@@ -217,11 +218,31 @@ class Settings extends React.Component<Props, State> {
           })
 
           console.log(staticContent);
+          that.sendExportEmail(staticContent);
         }
         );
 
   }
+  sendExportEmail = (staticContent) => {
 
+    sendBookmarkExportEmail({
+          email: this.state.email,
+          content: staticContent
+        },
+        {
+          headers: {
+            Authorization: 'Bearer ' + this.props.authorization.token
+          }
+        })
+        .then((response: any) => {
+          if (response === 200) {
+            sendMessage('notification', true, {message: 'Check your mail for bookmark attachment', type: 'success', duration: 3000});
+          }
+        })
+        .catch((error) => {
+          sendMessage('notification', true, {'type': 'failure', message: 'Bad request', duration: 3000});
+        })
+  }
   render() {
 
     return (

@@ -37,7 +37,7 @@ export function signin(data, problem) {
             .then(function(response) {
                 return Promise.resolve(response);
             })
-        
+
     } catch(error) {
         if (error.message === "ccm: tag doesn't match") {
             return Promise.resolve({
@@ -126,6 +126,3 @@ function decrypt(password, ciphertext) {
     return sjcl.decrypt(password, ciphertext);
 }
 
-// window.addEventListener("unhandledrejection", function(promiseRejectionEvent) {
-//     this.console.log(promiseRejectionEvent);
-// });
