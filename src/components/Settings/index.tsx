@@ -6,16 +6,15 @@ import ViewResolver from '../Ux/ViewResolver';
 import { Switch } from '@material-ui/core';
 import { connect } from 'react-redux';
 import {withCookies} from 'react-cookie';
-import { importBookmarks } from '../Bookmarks/BookmarkService';
+import {importBookmarks} from '../Bookmarks/BookmarkService';
 import ArcTextField from '../Ux/ArcTextField';
 import { isEmptyOrSpaces } from '../Utils';
-import {signin, updateUserDetails} from '../Auth/AuthService';
+import {signin, updateUserDetails, preSignin} from '../Auth/AuthService';
 import { Authorization, Profile } from '../Types/GeneralTypes';
-import { sendMessage, receiveMessage } from '../../events/MessageService';
-import axios from "axios";
+import { sendMessage } from '../../events/MessageService';
+import { httpGet } from "../Lib/RestTemplate";
 import {constants} from "../Constants";
-
-const baseUrl = process.env.REACT_APP_API_URL;
+import {sendBookmarkExportEmail} from "./SettingsService";
 
 interface Props {
   profile: Profile,
@@ -35,7 +34,7 @@ interface State {
   data:any
 }
 
-class Settings extends React.Component<Props, any> {
+class Settings extends React.Component<Props, State> {
 
   constructor(props) {
     super(props);
@@ -59,6 +58,7 @@ class Settings extends React.Component<Props, any> {
   handleChange = (event) => {
     this.setState(
         {
+          ...this.state,
             [event.currentTarget.name]: event.currentTarget.value
         }
     )
@@ -112,21 +112,27 @@ class Settings extends React.Component<Props, any> {
   }
 
   checkOldPassword = (type) => {
-    signin({
-      email: this.state.email,
-      password: this.state.oldPassword
+    preSignin(this.state.email).then((response) => {
+      if (response.status === 200) {
+          signin({
+              email: this.state.email,
+              password: this.state.oldPassword
+              }, response.data)
+              .then((response) => {
+                  if (response.status === 200) {
+                      this.updateUserDetailsImpl('password');
+                      // sendMessage('notification', true, {message: 'Passphrase updated successfully', type: 'success', duration: 3000});
+                  } else if (response.status === 401) {
+                      sendMessage('notification', true, {message: 'Incorrect passphrase', type: 'failure', duration: 3000});
+                  } else {
+                      sendMessage('notification', true, {message: 'Unknown response from server. Please try again or at a later time', type: 'failure', duration: 3000});
+                  }
+              })
+              .catch((error) => {
+                  sendMessage('notification', true, {'type': 'failure', message: 'Unknown error. Please try again or at a later time', duration: 3000});
+              })
+      }
     })
-        .then((response) => {
-          if (response.status === 200) {
-            sendMessage('notification', true, {message: 'Signed In successfully', type: 'success', duration: 3000});
-            this.updateUserDetailsImpl('password');
-          }else  if (response.status === 401) {
-            sendMessage('notification', true, {message: 'Incorrect oldpassword', type: 'failure', duration: 3000});
-          }
-        })
-        .catch((error) => {
-          sendMessage('notification', true, {'type': 'failure', message: 'Unknown error. Please try again or at a later time', duration: 3000});
-        })
   }
 
 
@@ -194,7 +200,7 @@ class Settings extends React.Component<Props, any> {
 
   exportBookmark = () => {
     const that = this;
-    axios.get(baseUrl + constants.API_URL_BOOKMARK,
+    httpGet(constants.API_URL_BOOKMARK,
         {
           headers: {
             Authorization: 'Bearer ' + that.props.authorization.token
@@ -207,16 +213,36 @@ class Settings extends React.Component<Props, any> {
           that.setState({data: response.data});
 
           that.state.data.map(function(bookmark, i){
-            let htmlContent = '<DL><p>'+'<DT>'+'<A ' +'HREF="'+bookmark.href+'">'+bookmark.title+'</A>'+'</DL><p>';
+            let htmlContent = '<DL><p>' + '<DT>' + '<A ' + 'HREF="' + bookmark.href + '">' + bookmark.title + '</A>' + '</DL><p>';
             staticContent = staticContent+htmlContent;
           })
 
           console.log(staticContent);
+          that.sendExportEmail(staticContent);
         }
         );
 
   }
+  sendExportEmail = (staticContent) => {
 
+    sendBookmarkExportEmail({
+          email: this.state.email,
+          content: staticContent
+        },
+        {
+          headers: {
+            Authorization: 'Bearer ' + this.props.authorization.token
+          }
+        })
+        .then((response: any) => {
+          if (response === 200) {
+            sendMessage('notification', true, {message: 'Check your mail for bookmark attachment', type: 'success', duration: 3000});
+          }
+        })
+        .catch((error) => {
+          sendMessage('notification', true, {'type': 'failure', message: 'Bad request', duration: 3000});
+        })
+  }
   render() {
 
     return (

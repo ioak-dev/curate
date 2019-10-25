@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import Note from './Note';
 import { Switch } from '@material-ui/core';
-import PropTypes from 'prop-types';
 import { constants } from '../Constants';
-import axios from "axios";
+import { httpGet, httpPut, httpDelete } from "../Lib/RestTemplate";
 import ArcTextField from '../Ux/ArcTextField';
 import ArcDialog from '../Ux/ArcDialog';
 import ViewResolver from '../Ux/ViewResolver';
@@ -16,11 +15,51 @@ import Artboard from './Artboard';
 import Sidebar from '../Ux/Sidebar';
 
 import { sendMessage, receiveMessage } from '../../events/MessageService';
+import { Authorization } from '../Types/GeneralTypes';
 
 const queryString = require('query-string');
-const baseUrl = process.env.REACT_APP_API_URL;
 
-class Notes extends Component {
+interface Props {
+    authorization: Authorization
+    location: any,
+    logout: Function
+}
+
+interface State {
+    items: any,
+    view: any,
+
+    searchtext: string,
+    isFiltered: boolean,
+
+    id?: string,
+    title: string,
+    tags: string,
+    isAddDialogOpen: boolean,
+    isArtboardAddDialogOpen: boolean,
+    firstLoad: boolean,
+    selectedNoteId?: string,
+    content: string,
+    newNotebook: string,
+    existingNotebook: string,
+    existingNotebookList: any,
+    filteredNotebookList: any,
+    notebookFilter: string,
+    showFilter: boolean,
+    sortBy: string,
+    sortOrder: string,
+
+    searchPref: {
+        title: boolean,
+        tags: boolean,
+        content: boolean
+    },
+    searchResults: any,
+
+    sidebarElements: any
+}
+
+class Notes extends Component<Props, State> {
     constructor(props) {
         super(props);
         this.state = {
@@ -68,7 +107,6 @@ class Notes extends Component {
                 ]
             }
         }
-        this.props.receiveEvents();
     }
 
     sortTypes = 
@@ -120,9 +158,9 @@ class Notes extends Component {
         }
     }
 
-    initializeNotes(authorization, selectedNoteId) {
+    initializeNotes(authorization: Authorization, selectedNoteId?: string) {
         const that = this;
-        axios.get(baseUrl + constants.API_URL_NOTE,
+        httpGet(constants.API_URL_NOTE,
             {
                 headers: {
                     Authorization: 'Bearer ' + authorization.token
@@ -136,7 +174,7 @@ class Notes extends Component {
                     sendMessage('noteListRefreshed', true);
                 }
                 
-                const existingNotebookList = [];
+                const existingNotebookList: any = [];
                 response.data.map(item => existingNotebookList.push(item.notebook))
 
                 that.setState({
@@ -171,7 +209,7 @@ class Notes extends Component {
 
     resetForm = () => {
         this.setState({
-            id: null,
+            id: undefined,
             title: '',
             content: '',
             tags: '',
@@ -208,7 +246,7 @@ class Notes extends Component {
         sendMessage('sidebar', false);
     }
 
-    search = (event) => {
+    search = (event?: any) => {
         if (event) {
             event.preventDefault();
         }
@@ -230,13 +268,13 @@ class Notes extends Component {
                 return true;
             }
         });
-        let selectedNoteId = null;
+        let selectedNoteId = undefined;
         if (searchResults.length > 0) {
             selectedNoteId = searchResults[0]._id;
         }
 
         let notebookFilter = "all notebooks";
-        let notebookList = [];
+        let notebookList: any = [];
         searchResults.map(item => {
             notebookList.push(item.notebook);
         });
@@ -254,8 +292,8 @@ class Notes extends Component {
     }
 
     applyFilter = () => {
-        const notebookList = [];
-        let noteList = [];
+        const notebookList: any = [];
+        let noteList: any = [];
         this.state.searchResults.map(item => {
             if (isEmptyOrSpaces(this.state.notebookFilter) || this.state.notebookFilter === 'all notebooks' || item.notebook === this.state.notebookFilter) {
                 noteList.push(item);
@@ -288,7 +326,7 @@ class Notes extends Component {
 
     deleteNote = (noteId) => {
         const that = this;
-        axios.delete(baseUrl + constants.API_URL_NOTE + "/" + noteId,
+        httpDelete(constants.API_URL_NOTE + "/" + noteId,
         {
             headers: {
                 Authorization: 'Bearer ' + this.props.authorization.token
@@ -298,7 +336,7 @@ class Notes extends Component {
             if (response.status === 201) {
                 sendMessage('notification', true, {type: 'success', message: 'Note deleted', duration: 5000});
                 that.setState({
-                    selectedNoteId: null
+                    selectedNoteId: undefined
                 }, () => that.initializeNotes(that.props.authorization));
                 
             }
@@ -371,7 +409,7 @@ class Notes extends Component {
             note.tags = 'unsorted';
         }
 
-        axios.put(baseUrl + constants.API_URL_NOTE, {
+        httpPut(constants.API_URL_NOTE, {
             id: note.id,
             type: note.type,
             title: note.title,
@@ -409,6 +447,7 @@ class Notes extends Component {
     handleChange = (event) => {
         this.setState(
             {
+                ...this.state,
                 [event.target.name]: event.target.value
             }
         )
@@ -417,6 +456,7 @@ class Notes extends Component {
     handleNotebookFilterChange = (event) => {
         this.setState(
         {
+            ...this.state,
             [event.target.name]: event.target.value
         },
         () => this.applyFilter());
@@ -426,10 +466,9 @@ class Notes extends Component {
         const noteview = this.state.view.map(item => (
             <div key={item._id}>
                 {item._id === this.state.selectedNoteId && item.type !== 'Artboard' &&
-                        <Note key={item._id} id={item._id} note={item} saveNote={this.saveNote} deleteNote={this.deleteNote} event={this.props.event} 
-                        notebooks={this.state.existingNotebookList}/>}
+                        <Note key={item._id} id={item._id} note={item} saveNote={this.saveNote} deleteNote={this.deleteNote} notebooks={this.state.existingNotebookList}/>}
                 {item._id === this.state.selectedNoteId && item.type === 'Artboard' &&
-                        <Artboard key={item._id} id={item._id} note={item} saveNote={this.saveNote} deleteNote={this.deleteNote} event={this.props.event} notebooks={this.state.existingNotebookList}/>}
+                        <Artboard key={item._id} id={item._id} note={item} saveNote={this.saveNote} deleteNote={this.deleteNote} notebooks={this.state.existingNotebookList}/>}
             </div>
         ))
         const listNoteRef = this.state.view.map(item => (
@@ -466,15 +505,15 @@ class Notes extends Component {
                     </div>
                 </ArcDialog>
 
-                <ViewResolver event={this.props.event} sendEvent={sendMessage} sideLabel='More options'>
+                <ViewResolver sideLabel='More options'>
                     <View main>
                         {noteview}
                     </View>
                     <View side>
                         <div className="filter-container">
                             <div className="section-main">
-                            <Sidebar label="Add New" elements={this.state.sidebarElements['addNew']} icon="add" event={this.props.event} sendEvent={sendMessage} animate />
-                            <Sidebar label="Search" elements={this.state.sidebarElements['search']} icon="search" event={this.props.event} sendEvent={sendMessage} animate number={this.state.isFiltered ? this.state.searchResults.length : undefined}>
+                            <Sidebar label="Add New" elements={this.state.sidebarElements['addNew']} icon="add" animate />
+                            <Sidebar label="Search" elements={this.state.sidebarElements['search']} icon="search" animate number={this.state.isFiltered ? this.state.searchResults.length : undefined}>
                                 <div className="space-top-1" />
                                 <form method="GET" onSubmit={this.search} noValidate>
                                     <div className="space-left-4 space-right-4"><ArcTextField label="Keywords" id="searchtext" data={this.state} handleChange={e => this.handleChange(e)} /></div>
@@ -511,7 +550,7 @@ class Notes extends Component {
                                 </div>
                             </Sidebar>
                                 
-                            <Sidebar label={this.state.isFiltered ? "Search results" : "All Notes"} icon="notes" event={this.props.event} sendEvent={sendMessage} number={this.state.view.length}>
+                            <Sidebar label={this.state.isFiltered ? "Search results" : "All Notes"} icon="notes" number={this.state.view.length}>
                                 <div className="filter-bar">
                                     {this.state.filteredNotebookList.length > 1 && <div><ArcSelect maxWidth="max-width-200" label="Notebook" data={this.state} id="notebookFilter" handleChange={e => this.handleNotebookFilterChange(e)} elements={this.state.filteredNotebookList} first='all notebooks' /></div>}
                                     {this.state.filteredNotebookList.length === 1 && <div><ArcSelect maxWidth="max-width-200" label="Notebook" data={this.state} id="notebookFilter" handleChange={e => this.handleNotebookFilterChange(e)} elements={this.state.filteredNotebookList} /></div>}
@@ -528,12 +567,6 @@ class Notes extends Component {
             </div>
         )
     }
-}
-
-Notes.propTypes = {
-    receiveEvents: PropTypes.func.isRequired,
-    sendEvent: PropTypes.func.isRequired,
-    event: PropTypes.object
 }
 
 export default Notes;

@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getAuth, addAuth, removeAuth } from '../../actions/AuthActions';
-import PropTypes from 'prop-types';
 import { withCookies } from 'react-cookie';
 import './Login.scss';
 import ArcTextField from '../Ux/ArcTextField';
-import {signup, signin, updateUserDetails, sentPasswordChangeEmail} from './AuthService';
+import {signup, signin, sentPasswordChangeEmail, preSignup, preSignin} from './AuthService';
 import { Authorization } from '../Types/GeneralTypes';
-import { sendMessage, receiveMessage } from '../../events/MessageService';
+import { sendMessage } from '../../events/MessageService';
 import {isEmptyOrSpaces} from "../Utils";
 
 const queryString = require('query-string');
@@ -30,7 +29,7 @@ interface State {
     resetCode: string
 }
 
-class Login extends Component<Props, any> {
+class Login extends Component<Props, State> {
     constructor(props) {
         super(props);
         this.state = {
@@ -59,25 +58,31 @@ class Login extends Component<Props, any> {
         sendMessage('notification', false);
         sendMessage('spinner');
         if (this.state.email && this.state.password) {
-            signin({
-                email: this.state.email,
-                password: this.state.password
-                })
-                .then((response) => {
-                    if (response.status === 200) {
-                        sendMessage('notification', true, {message: 'Signed In successfully', type: 'success', duration: 3000});
-                        this.success(response.data);
-                    } else if (response.status === 404) {
-                        sendMessage('notification', true, {message: 'User name does not exist', type: 'failure', duration: 3000});
-                    } else if (response.status === 401) {
-                        sendMessage('notification', true, {message: 'Incorrect passphrase', type: 'failure', duration: 3000});
-                    } else {
-                        sendMessage('notification', true, {message: 'Unknown response from server. Please try again or at a later time', type: 'failure', duration: 3000});
-                    }
-                })
-                .catch((error) => {
-                    sendMessage('notification', true, {'type': 'failure', message: 'Unknown error. Please try again or at a later time', duration: 3000});
-                })
+            preSignin(this.state.email).then((response) => {
+                if (response.status === 200) {
+                    signin({
+                        email: this.state.email,
+                        password: this.state.password
+                        }, response.data)
+                        .then((response) => {
+                            if (response.status === 200) {
+                                sendMessage('notification', true, {message: 'Signed In successfully', type: 'success', duration: 3000});
+                                this.success(response.data);
+                            } else if (response.status === 401) {
+                                sendMessage('notification', true, {message: 'Incorrect passphrase', type: 'failure', duration: 3000});
+                            } else {
+                                sendMessage('notification', true, {message: 'Unknown response from server. Please try again or at a later time', type: 'failure', duration: 3000});
+                            }
+                        })
+                        .catch((error) => {
+                            sendMessage('notification', true, {'type': 'failure', message: 'Unknown error. Please try again or at a later time', duration: 3000});
+                        })
+                } else if (response.status === 404) {
+                    sendMessage('notification', true, {message: 'User name does not exist', type: 'failure', duration: 3000});
+                }
+            })
+
+            
         } else {
             sendMessage('notification', true, {type: 'failure', message: 'Username/password cannot be empty', duration: 3000});
         }
@@ -93,17 +98,23 @@ class Login extends Component<Props, any> {
                 sendMessage('notification', true, {type: 'failure', message: 'Email ID is invalid', duration: 3000});
                 return;
             }
-            signup({
-                name: this.state.name,
-                password: this.state.password,
-                email: this.state.email
-                })
-                .then(function(status) {
-                    if (status === 200) {
-                        sendMessage('notification', true, {'type': 'success', message: 'Your account has been created. You can login now', duration: 3000});
-                        that.toggle();
-                    }
-                })
+            preSignup().then(function(response) {
+                if (response.status === 200) {
+                    signup({
+                        name: that.state.name,
+                        password: that.state.password,
+                        email: that.state.email,
+                        solution: response.data.solution,
+                        salt: response.data.salt
+                        })
+                        .then(function(status) {
+                            if (status === 200) {
+                                sendMessage('notification', true, {'type': 'success', message: 'Your account has been created. You can login now', duration: 3000});
+                                that.toggle();
+                            }
+                        })
+                }
+            });
         } else if (!this.state.name) {
             sendMessage('notification', true, {type: 'failure', message: 'Name cannot be empty', duration: 3000});
         } else if (!this.state.email) {
@@ -148,6 +159,7 @@ class Login extends Component<Props, any> {
     handleChange = (event) => {
         this.setState(
             {
+                ...this.state,
                 [event.currentTarget.name]: event.currentTarget.value
             }
         )

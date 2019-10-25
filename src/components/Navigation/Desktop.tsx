@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 
 import './style.scss';
 import curate_white from '../../images/curate_white.svg';
 import curate_black from '../../images/curate_black.svg';
 import Links from './Links';
-import { receiveMessage, sendMessage } from '../../events/MessageService';
 import { Authorization, Profile } from '../Types/GeneralTypes';
 
 interface Props {    

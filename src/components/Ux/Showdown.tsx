@@ -1,9 +1,11 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import showdown  from 'showdown';
 import './Showdown.scss';
 
-function Showdown(props) {
+interface Props {
+    source: string
+}
+function Showdown(props: Props) {
     const converter = new showdown.Converter({tables: true});
     const html      = converter.makeHtml(props.source);
     return (
@@ -12,8 +14,5 @@ function Showdown(props) {
         </div>
     )
 }
-
-Showdown.propTypes = {
-};
 
 export default Showdown;

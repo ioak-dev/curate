@@ -8,10 +8,8 @@ import { HashRouter } from 'react-router-dom/cjs/react-router-dom.min';
 import Login from '../Auth/Login';
 import PrivateRoute from '../Auth/PrivateRoute';
 import AuthInit from '../Auth/AuthInit';
-import PropTypes from 'prop-types';
 import { withCookies } from 'react-cookie';
 import { connect } from 'react-redux';
-import { receiveEvents, sendEvent } from '../../actions/EventActions';
 import { getAuth, addAuth, removeAuth } from '../../actions/AuthActions';
 import { getProfile } from '../../actions/ProfileActions';
 
@@ -21,7 +19,7 @@ import Notification from '../Notification';
 import Navigation from '../Navigation';
 import Settings from '../Settings';
 import { Authorization } from '../Types/GeneralTypes';
-import {  sendMessage, receiveMessage } from '../../events/MessageService';
+import { sendMessage } from '../../events/MessageService';
 import ResetPassword from '../Auth/ResetPassword';
 
 const themes = {
@@ -51,6 +49,7 @@ interface Props {
     addAuth: Function,
     removeAuth: Function,
     cookies: any,
+    history: any,
 
     // event: PropTypes.object,
     profile: any,
@@ -77,6 +76,7 @@ class Content extends Component<Props, State> {
         this.props.cookies.remove('secret');
         this.props.cookies.remove('name');
         sendMessage('notification', true, {type: type, message: message, duration: 3000});
+        sendMessage('loggedout', true);
     }
 
     render() {
@@ -109,8 +109,7 @@ class Content extends Component<Props, State> {
 
 const mapStateToProps = state => ({
   authorization: state.authorization,
-  profile: state.profile,
-  event: state.event
+  profile: state.profile
 })
 
-export default connect(mapStateToProps, { getAuth, addAuth, removeAuth, receiveEvents, sendEvent, getProfile })(withCookies(Content));
+export default connect(mapStateToProps, { getAuth, addAuth, removeAuth, getProfile })(withCookies(Content));

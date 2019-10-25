@@ -1,10 +1,8 @@
-import axios from "axios";
+import { httpPost } from "../Lib/RestTemplate";
 import { constants } from '../Constants';
 
-const baseUrl = process.env.REACT_APP_API_URL;
-
 export function importBookmarks(data, token) {
-    return axios.post(baseUrl + constants.API_URL_BOOKMARK_IMPORT, data,
+    return httpPost(constants.API_URL_BOOKMARK_IMPORT, data,
         {
             headers: {
                 Authorization: 'Bearer ' + token
@@ -14,3 +12,4 @@ export function importBookmarks(data, token) {
             return Promise.resolve(response);
         })
 }
+

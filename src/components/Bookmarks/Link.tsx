@@ -1,7 +1,17 @@
 import React, { Component } from 'react';
 import './style.scss';
 
-class Link extends Component {
+interface Props {
+    editBookmark: Function,
+    deleteBookmark: Function,
+    searchByTag: Function,
+    bookmark: any,
+    id: string
+}
+interface State {
+}
+
+class Link extends Component<Props, State> {
 
     edit = () => {
         this.props.editBookmark(this.props.bookmark);
@@ -12,7 +22,7 @@ class Link extends Component {
     }
 
     render() {
-        const tags = [];
+        const tags: any = [];
         if (this.props.bookmark.tags) {
             this.props.bookmark.tags.split(" ").map(item => {
                 tags.push(<div className="tag" key={item} onClick={() => this.props.searchByTag(item)}>{item}</div>);

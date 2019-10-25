@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {withRouter} from 'react-router'
 import { getProfile, setProfile, reloadProfile } from '../../actions/ProfileActions';
-import PropTypes from 'prop-types';
 import {withCookies} from 'react-cookie';
 
 import './style.scss';
@@ -11,7 +10,7 @@ import Mobile from './Mobile';
 import { Switch } from '@material-ui/core';
 import ArcDialog from '../Ux/ArcDialog';
 import { Authorization, Profile } from '../Types/GeneralTypes';
-import { sendMessage, receiveMessage } from '../../events/MessageService';
+import { receiveMessage } from '../../events/MessageService';
 
 interface Props {    
     sendEvent: Function,
@@ -56,14 +55,31 @@ class Navigation extends Component<Props, State> {
         }
     }
 
+    componentDidMount() {
+        receiveMessage().subscribe(
+            message => {
+                if (message.name === 'navbar-transparency') {
+                    this.setState({
+                        transparentNavBar: message.signal
+                    })
+                }
+
+                if (message.name === 'loggedin') {
+                    this.props.reloadProfile(this.props.authorization);
+                    this.setState({
+                        firstLoad: false
+                    })
+                }
+
+                if (message.name === 'loggedout') {
+                    this.props.history.push('/home');
+                }
+            }
+        )
+    }
+
     componentWillReceiveProps(nextProps) {
-        if (nextProps.event && nextProps.event.name === 'navbar-transparency') {
-            this.setState({
-                transparentNavBar: nextProps.event.signal
-            })
-        }
-        if ((this.state.firstLoad && nextProps.authorization && nextProps.authorization.isAuth) || 
-            (nextProps.event && nextProps.event.name === 'loggedin')) {
+        if (this.state.firstLoad && nextProps.authorization && nextProps.authorization.isAut) {
             this.props.reloadProfile(nextProps.authorization);
             this.setState({
                 firstLoad: false
