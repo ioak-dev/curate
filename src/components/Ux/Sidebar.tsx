@@ -18,6 +18,8 @@ interface State {
 
 class Sidebar extends Component<Props, State> {
 
+    _isMounted = false;
+
     constructor(props) {
         super(props);
         this.state = {
@@ -38,14 +40,21 @@ class Sidebar extends Component<Props, State> {
         });
     }
 
-    componentDidMount() {        
+    componentDidMount() {
+        this._isMounted = true;
         receiveMessage().subscribe(message => {
-            if (message.name === 'sidebarExpanded' && message.signal && message.data && message.data.label !== this.props.label) {
-                this.setState({
-                    show: false
-                })
+            if (this._isMounted) {
+                if (message.name === 'sidebarExpanded' && message.signal && message.data && message.data.label !== this.props.label) {
+                    this.setState({
+                        show: false
+                    })
+                }
             }
         })
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
     }
 
     render() {

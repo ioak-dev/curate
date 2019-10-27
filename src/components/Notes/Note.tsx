@@ -28,6 +28,9 @@ interface State {
 }
 
 class Note extends Component<Props, State> {
+    
+    _isMounted = false;
+
     constructor(props) {
         super(props);
 
@@ -71,14 +74,19 @@ class Note extends Component<Props, State> {
     }
 
     componentDidMount() {
-        receiveMessage().subscribe(
-            message => {
+        this._isMounted = true;
+        receiveMessage().subscribe(message => {
+            if (this._isMounted) {
                 if (message.name === 'closeNoteEditView' && message.signal) {
                     this.hideEdit();
                     this.setState({newNotebook: ''});
                 }
             }
-        );
+        });
+    }
+    
+    componentWillUnmount() {
+        this._isMounted = false;
     }
 
     delete = () => {

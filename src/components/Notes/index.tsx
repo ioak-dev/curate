@@ -60,6 +60,9 @@ interface State {
 }
 
 class Notes extends Component<Props, State> {
+
+    _isMounted = false;
+
     constructor(props) {
         super(props);
         this.state = {
@@ -121,6 +124,7 @@ class Notes extends Component<Props, State> {
     ];
 
     componentDidMount() {
+        this._isMounted = true;
         if (this.props.location.search) {
             const query = queryString.parse(this.props.location.search);
             if (query && query.q) {
@@ -146,10 +150,16 @@ class Notes extends Component<Props, State> {
         }
 
         receiveMessage().subscribe(message => {
-            if (message.name === 'noteListRefreshed') {
-                this.applyFilter();
+            if (this._isMounted) {
+                if (message.name === 'noteListRefreshed') {
+                    this.applyFilter();
+                }
             }
         })
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
     }
     componentWillReceiveProps(nextProps) {
         if (this.state.firstLoad && nextProps.authorization) {
