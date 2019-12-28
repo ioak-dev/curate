@@ -136,6 +136,7 @@ code {
     --color-dialog: var(--color-nav);
 
     --color-tag: #404040;
+    --color-box-shadow: rgba(255,255,255,0.2);
   }
   
   .theme_light {
@@ -188,6 +189,7 @@ code {
     --color-dialog: var(--color-body);
 
     --color-tag: #E6E6E6;
+    --color-box-shadow: rgba(0,0,0,0.30);
     
   }
 }
