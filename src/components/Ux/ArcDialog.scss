@@ -56,9 +56,9 @@
             .dialog-footer {
                 background-color: var(--color-nav);
                 height: 70px;
-                display: grid;
+                display: flex;
                 align-items: center;
-                justify-items: center;
+                justify-content: center;
 
                 // &::before {
                 //     position: fixed;

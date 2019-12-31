@@ -298,10 +298,12 @@ class Bookmarks extends Component<Props, State> {
         return (
             <div className="bookmarks">
                 <ArcDialog title="Add Bookmark" visible={this.state.isEditDialogOpen} toggleVisibility={this.toggleEditDialog}>
-                    <ArcTextField label="Title" data={this.state} id="title" handleChange={e => this.handleChange(e)} />
-                    <ArcTextField label="URL" data={this.state} id="href" handleChange={e => this.handleChange(e)} />
-                    <ArcTextField label="Tags" data={this.state} id="tags" handleChange={e => this.handleChange(e)} />
-                    <div className="actions">
+                    <div className="dialog-body">
+                        <ArcTextField label="Title" data={this.state} id="title" handleChange={e => this.handleChange(e)} />
+                        <ArcTextField label="URL" data={this.state} id="href" handleChange={e => this.handleChange(e)} />
+                        <ArcTextField label="Tags" data={this.state} id="tags" handleChange={e => this.handleChange(e)} />
+                    </div>
+                    <div className="dialog-footer">
                         <button onClick={this.toggleEditDialog} className="default disabled"><i className="material-icons">close</i>Cancel</button>
                         <button onClick={this.addBookmark} className="primary block"><i className="material-icons">double_arrow</i>{this.state.editDialogLabel}</button>
                     </div>
