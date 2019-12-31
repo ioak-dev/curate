@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getAuth, addAuth, removeAuth } from '../../actions/AuthActions';
 import './Login.scss';
-import ArcTextField from '../Ux/ArcTextField';
+import OakTextField from '../Ux/OakTextField';
 import { resetPassword } from './AuthService';
 import { sendMessage } from '../../events/MessageService';
 import {isEmptyOrSpaces} from "../Utils";
@@ -98,8 +98,8 @@ class ResetPassword extends Component<Props, State> {
                     <form method="GET" onSubmit={this.changePassword} noValidate>
                         <h1>Reset password</h1>
                         <div className="form">
-                        <ArcTextField label="Password" id="password" type="password" data={this.state} handleChange={e => this.handleChange(e)} />
-                            <ArcTextField label="Repeat Password" id="repeatPassword" type="password" data={this.state} handleChange={e => this.handleChange(e)} />
+                        <OakTextField label="Password" id="password" type="password" data={this.state} handleChange={e => this.handleChange(e)} />
+                            <OakTextField label="Repeat Password" id="repeatPassword" type="password" data={this.state} handleChange={e => this.handleChange(e)} />
                         </div>
                         <br />
                         <button className="primary block"  onClick={this.changePassword}>Submit</button>

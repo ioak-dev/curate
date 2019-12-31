@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import Link from './Link';
 import { constants } from '../Constants';
-import ArcTextField from '../Ux/ArcTextField';
-import ArcDialog from '../Ux/ArcDialog';
+import OakTextField from '../Ux/OakTextField';
+import OakDialog from '../Ux/OakDialog';
 import ViewResolver from '../Ux/ViewResolver';
 import View from '../Ux/View';
 import './style.scss';
@@ -297,15 +297,17 @@ class Bookmarks extends Component<Props, State> {
         ))
         return (
             <div className="bookmarks">
-                <ArcDialog title="Add Bookmark" visible={this.state.isEditDialogOpen} toggleVisibility={this.toggleEditDialog}>
-                    <ArcTextField label="Title" data={this.state} id="title" handleChange={e => this.handleChange(e)} />
-                    <ArcTextField label="URL" data={this.state} id="href" handleChange={e => this.handleChange(e)} />
-                    <ArcTextField label="Tags" data={this.state} id="tags" handleChange={e => this.handleChange(e)} />
-                    <div className="actions">
+                <OakDialog title="Add Bookmark" visible={this.state.isEditDialogOpen} toggleVisibility={this.toggleEditDialog}>
+                    <div className="dialog-body">
+                        <OakTextField label="Title" data={this.state} id="title" handleChange={e => this.handleChange(e)} />
+                        <OakTextField label="URL" data={this.state} id="href" handleChange={e => this.handleChange(e)} />
+                        <OakTextField label="Tags" data={this.state} id="tags" handleChange={e => this.handleChange(e)} />
+                    </div>
+                    <div className="dialog-footer">
                         <button onClick={this.toggleEditDialog} className="default disabled"><i className="material-icons">close</i>Cancel</button>
                         <button onClick={this.addBookmark} className="primary block"><i className="material-icons">double_arrow</i>{this.state.editDialogLabel}</button>
                     </div>
-                </ArcDialog>
+                </OakDialog>
 
                 <ViewResolver>
                     <View main>
@@ -317,7 +319,7 @@ class Bookmarks extends Component<Props, State> {
                                 <Sidebar label="Add New" elements={this.state.sidebarElements['addNew']} icon="add" animate />
                                 <Sidebar label="Search" elements={this.state.sidebarElements['search']} icon="search" animate number={this.state.isFiltered ? this.state.view.length : undefined}>
                                     <form method="GET" onSubmit={this.search} noValidate>
-                                    <div className="space-top-2 space-left-4 space-right-4"><ArcTextField label="Keywords" id="searchtext" data={this.state} handleChange={e => this.handleChange(e)} /></div>
+                                    <div className="space-top-2 space-left-4 space-right-4"><OakTextField label="Keywords" id="searchtext" data={this.state} handleChange={e => this.handleChange(e)} /></div>
                                     </form>
                                     <div className="typography-5 space-top-2 space-left-4">
                                         <Switch
