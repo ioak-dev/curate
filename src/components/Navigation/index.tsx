@@ -8,7 +8,7 @@ import './style.scss';
 import Desktop from './Desktop';
 import Mobile from './Mobile';
 import { Switch } from '@material-ui/core';
-import ArcDialog from '../Ux/ArcDialog';
+import OakDialog from '../Ux/OakDialog';
 import { Authorization, Profile } from '../Types/GeneralTypes';
 import { receiveMessage } from '../../events/MessageService';
 
@@ -131,7 +131,7 @@ class Navigation extends Component<Props, State> {
                 <Desktop {...this.props} logout={this.props.logout} login={this.login} toggleSettings={this.toggleSettings} transparent={this.state.transparentNavBar} />
                 <Mobile {...this.props} logout={this.props.logout} login={this.login} toggleSettings={this.toggleSettings} transparent={this.state.transparentNavBar} />
 
-                <ArcDialog title="Appearance" visible={this.state.showSettings} toggleVisibility={this.toggleSettings}>
+                <OakDialog title="Appearance" visible={this.state.showSettings} toggleVisibility={this.toggleSettings}>
                     <div className="dialog-body">
                         <div className="settings">
                             <div>Dark mode</div>
@@ -162,7 +162,7 @@ class Navigation extends Component<Props, State> {
                     <div className="dialog-footer">
                         <button className="primary"  onClick={this.toggleSettings}>Close</button>
                     </div>
-                </ArcDialog>
+                </OakDialog>
             </div>
         );
     }
