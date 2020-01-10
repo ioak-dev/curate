@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import Showdown from '../Ux/Showdown';
-import OakTextField from '../Ux/OakTextField';
 import OakSelect from '../Ux/OakSelect';
 import { receiveMessage } from '../../events/MessageService';
+import OakText from '../Ux/OakText';
 
 interface Props {
     note: any,
@@ -182,19 +182,19 @@ class Note extends Component<Props, State> {
                     <div><OakSelect label="Flag" data={this.state} id="flag" handleChange={e => this.handleChange(e)} objects={this.state.flags} /></div>
                     <div><OakSelect label="Notebook" data={this.state} id="notebook" handleChange={e => this.handleChange(e)} elements={this.props.notebooks} firstAction="<create new>" /></div>
                     <div>
-                        {this.state.notebook === '<create new>' && <OakTextField label="Notebook name" data={this.state} id="newNotebook" handleChange={e => this.handleChange(e)} />}
+                        {this.state.notebook === '<create new>' && <OakText label="Notebook name" data={this.state} id="newNotebook" handleChange={e => this.handleChange(e)} />}
                     </div>
-                    <OakTextField label="Title" data={this.state} id="title" handleChange={e => this.handleChange(e)} />
-                    <OakTextField label="Tags (separated by blank spaces)" data={this.state} id="tags" handleChange={e => this.handleChange(e)} />
+                    <OakText label="Title" data={this.state} id="title" handleChange={e => this.handleChange(e)} />
+                    <OakText label="Tags (separated by blank spaces)" data={this.state} id="tags" handleChange={e => this.handleChange(e)} />
 
                     {this.state.preview && <div className="edit-note-view">
-                        <div><OakTextField label="Content (Markdown / HTML / Plaintext)" data={this.state} id="content" multiline handleChange={e => this.handleChange(e)} /></div>
+                        <div><OakText label="Content (Markdown / HTML / Plaintext)" data={this.state} id="content" multiline handleChange={e => this.handleChange(e)} /></div>
                         <div>
                             <div className="typography-5 space-bottom-1">Preview</div>
                             <Showdown source={this.state.content} />
                         </div>
                     </div>}
-                    {!this.state.preview && <OakTextField label="Content (Markdown / HTML / Plaintext)" data={this.state} id="content" multiline handleChange={e => this.handleChange(e)} />}
+                    {!this.state.preview && <OakText label="Content (Markdown / HTML / Plaintext)" data={this.state} id="content" multiline handleChange={e => this.handleChange(e)} />}
                     <div className="space-top-2" />
             </div>}
             </>

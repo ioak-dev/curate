@@ -3,7 +3,6 @@ import Note from './Note';
 import { Switch } from '@material-ui/core';
 import { constants } from '../Constants';
 import { httpGet, httpPut, httpDelete } from "../Lib/RestTemplate";
-import OakTextField from '../Ux/OakTextField';
 import OakDialog from '../Ux/OakDialog';
 import ViewResolver from '../Ux/ViewResolver';
 import View from '../Ux/View';
@@ -16,6 +15,7 @@ import Sidebar from '../Ux/Sidebar';
 
 import { sendMessage, receiveMessage } from '../../events/MessageService';
 import { Authorization } from '../Types/GeneralTypes';
+import OakText from '../Ux/OakText';
 
 const queryString = require('query-string');
 
@@ -492,11 +492,11 @@ class Notes extends Component<Props, State> {
                     <div className="dialog-body">
                         <div><OakSelect label="Notebook" data={this.state} id="existingNotebook" handleChange={e => this.handleChange(e)} elements={this.state.existingNotebookList} firstAction="<create new>" /></div>
                         <div>
-                        {this.state.existingNotebook === '<create new>' && <OakTextField label="Notebook name" data={this.state} id="newNotebook" handleChange={e => this.handleChange(e)} />}
+                        {this.state.existingNotebook === '<create new>' && <OakText label="Notebook name" data={this.state} id="newNotebook" handleChange={e => this.handleChange(e)} />}
                         </div>
-                        <div><OakTextField label="Title" data={this.state} id="title" handleChange={e => this.handleChange(e)} /></div>
-                        <div><OakTextField label="Tags (separated by blank spaces)" data={this.state} id="tags" handleChange={e => this.handleChange(e)} /></div>
-                        <div><OakTextField label="Content (Markdown / HTML / Plaintext)" data={this.state} id="content" multiline handleChange={e => this.handleChange(e)} /></div>
+                        <div><OakText label="Title" data={this.state} id="title" handleChange={e => this.handleChange(e)} /></div>
+                        <div><OakText label="Tags (separated by blank spaces)" data={this.state} id="tags" handleChange={e => this.handleChange(e)} /></div>
+                        <div><OakText label="Content (Markdown / HTML / Plaintext)" data={this.state} id="content" multiline handleChange={e => this.handleChange(e)} /></div>
                     </div>
                     <div className="dialog-footer">
                         <button onClick={this.toggleAddDialog} className="default disabled left"><i className="material-icons">close</i>Cancel</button>
@@ -508,10 +508,10 @@ class Notes extends Component<Props, State> {
                     <div className="dialog-body">
                         <div><OakSelect label="Notebook" data={this.state} id="existingNotebook" handleChange={e => this.handleChange(e)} elements={this.state.existingNotebookList} firstAction="<create new>" /></div>
                         <div>
-                        {this.state.existingNotebook === '<create new>' && <OakTextField label="Notebook name" data={this.state} id="newNotebook" handleChange={e => this.handleChange(e)} />}
+                        {this.state.existingNotebook === '<create new>' && <OakText label="Notebook name" data={this.state} id="newNotebook" handleChange={e => this.handleChange(e)} />}
                         </div>
-                        <div><OakTextField label="Title" data={this.state} id="title" handleChange={e => this.handleChange(e)} /></div>
-                        <div><OakTextField label="Tags (separated by blank spaces)" data={this.state} id="tags" handleChange={e => this.handleChange(e)} /></div>
+                        <div><OakText label="Title" data={this.state} id="title" handleChange={e => this.handleChange(e)} /></div>
+                        <div><OakText label="Tags (separated by blank spaces)" data={this.state} id="tags" handleChange={e => this.handleChange(e)} /></div>
                     </div>
                     <div className="dialog-footer">
                         <button onClick={this.toggleArtboardAddDialog} className="default disabled left"><i className="material-icons">close</i>Cancel</button>
@@ -530,7 +530,7 @@ class Notes extends Component<Props, State> {
                             <Sidebar label="Search" elements={this.state.sidebarElements['search']} icon="search" animate number={this.state.isFiltered ? this.state.searchResults.length : undefined}>
                                 <div className="space-top-1" />
                                 <form method="GET" onSubmit={this.search} noValidate>
-                                    <div className="space-left-4 space-right-4"><OakTextField label="Keywords" id="searchtext" data={this.state} handleChange={e => this.handleChange(e)} /></div>
+                                    <div className="space-left-4 space-right-4"><OakText label="Keywords" id="searchtext" data={this.state} handleChange={e => this.handleChange(e)} /></div>
                                 </form>
                                 <div className="typography-5 space-top-2 space-left-4">
                                     <Switch

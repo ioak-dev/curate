@@ -7,7 +7,6 @@ import { Switch } from '@material-ui/core';
 import { connect } from 'react-redux';
 import {withCookies} from 'react-cookie';
 import {importBookmarks} from '../Bookmarks/BookmarkService';
-import OakTextField from '../Ux/OakTextField';
 import { isEmptyOrSpaces } from '../Utils';
 import {signin, updateUserDetails, preSignin} from '../Auth/AuthService';
 import { Authorization, Profile } from '../Types/GeneralTypes';
@@ -15,6 +14,7 @@ import { sendMessage } from '../../events/MessageService';
 import { httpGet } from "../Lib/RestTemplate";
 import {constants} from "../Constants";
 import {sendBookmarkExportEmail} from "./SettingsService";
+import OakText from '../Ux/OakText';
 
 interface Props {
   profile: Profile,
@@ -291,14 +291,14 @@ class Settings extends React.Component<Props, State> {
           </div>
 
           <div className="typography-3 space-top-4">User Account</div>
-          <div><OakTextField label="Name" data={this.state} id="name" handleChange={e => this.handleChange(e)} /></div>
-          <div><OakTextField label="Email" data={this.state} id="email" handleChange={e => this.handleChange(e)} /></div>
+          <div><OakText label="Name" data={this.state} id="name" handleChange={e => this.handleChange(e)} /></div>
+          <div><OakText label="Email" data={this.state} id="email" handleChange={e => this.handleChange(e)} /></div>
           <div><button className="secondary animate space-top-1" onClick={this.updateUserDetails}>Update details</button></div>
 
           <div className="typography-3 space-top-4">Password</div>
-          <div><OakTextField type="password" label="Old Password" data={this.state} id="oldPassword" handleChange={e => this.handleChange(e)} /></div>
-          <div><OakTextField type="password" label="New Password" data={this.state} id="newPassword" handleChange={e => this.handleChange(e)} /></div>
-          <div><OakTextField type="password" label="Repeat New Password" data={this.state} id="repeatPassword" handleChange={e => this.handleChange(e)} /></div>
+          <div><OakText type="password" label="Old Password" data={this.state} id="oldPassword" handleChange={e => this.handleChange(e)} /></div>
+          <div><OakText type="password" label="New Password" data={this.state} id="newPassword" handleChange={e => this.handleChange(e)} /></div>
+          <div><OakText type="password" label="Repeat New Password" data={this.state} id="repeatPassword" handleChange={e => this.handleChange(e)} /></div>
           <div><button className="secondary animate space-top-1" onClick={this.changePassword}>Change Password</button></div>
           </View>
         </ViewResolver>

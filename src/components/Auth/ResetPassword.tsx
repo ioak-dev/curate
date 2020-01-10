@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getAuth, addAuth, removeAuth } from '../../actions/AuthActions';
 import './Login.scss';
-import OakTextField from '../Ux/OakTextField';
 import { resetPassword } from './AuthService';
 import { sendMessage } from '../../events/MessageService';
 import {isEmptyOrSpaces} from "../Utils";
+import OakText from '../Ux/OakText';
 
 const queryString = require('query-string');
 
@@ -98,8 +98,8 @@ class ResetPassword extends Component<Props, State> {
                     <form method="GET" onSubmit={this.changePassword} noValidate>
                         <h1>Reset password</h1>
                         <div className="form">
-                        <OakTextField label="Password" id="password" type="password" data={this.state} handleChange={e => this.handleChange(e)} />
-                            <OakTextField label="Repeat Password" id="repeatPassword" type="password" data={this.state} handleChange={e => this.handleChange(e)} />
+                            <OakText label="Password" id="password" type="password" data={this.state} handleChange={e => this.handleChange(e)} />
+                            <OakText label="Repeat Password" id="repeatPassword" type="password" data={this.state} handleChange={e => this.handleChange(e)} />
                         </div>
                         <br />
                         <button className="primary block"  onClick={this.changePassword}>Submit</button>
