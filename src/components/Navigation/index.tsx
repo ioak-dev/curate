@@ -11,6 +11,7 @@ import { Switch } from '@material-ui/core';
 import OakDialog from '../Ux/OakDialog';
 import { Authorization, Profile } from '../Types/GeneralTypes';
 import { receiveMessage } from '../../events/MessageService';
+import OakButton from '../Ux/OakButton';
 
 interface Props {    
     sendEvent: Function,
@@ -160,7 +161,7 @@ class Navigation extends Component<Props, State> {
                         </div>
                     </div>
                     <div className="dialog-footer">
-                        <button className="primary"  onClick={this.toggleSettings}>Close</button>
+                        <OakButton theme="primary" variant="animate none" action={this.toggleSettings}>Close</OakButton>
                     </div>
                 </OakDialog>
             </div>

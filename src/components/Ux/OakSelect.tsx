@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
   
 interface Props {
   id: string,
-  label: string,
+  label?: string,
   handleChange: Function,
   error?: boolean,
   data: any,

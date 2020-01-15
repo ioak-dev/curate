@@ -15,6 +15,7 @@ import { httpGet } from "../Lib/RestTemplate";
 import {constants} from "../Constants";
 import {sendBookmarkExportEmail} from "./SettingsService";
 import OakText from '../Ux/OakText';
+import OakButton from '../Ux/OakButton';
 
 interface Props {
   profile: Profile,
@@ -259,7 +260,7 @@ class Settings extends React.Component<Props, State> {
 
 
           <div className="typography-3 space-top-4">Export Bookmarks</div>
-          <div className="space-top-2"><button className="secondary animate space-left-2" onClick={this.exportBookmark}>Export</button></div>
+          <div className="space-top-2"><OakButton theme="secondary" variant="animate in" action={this.exportBookmark}>Export</OakButton></div>
 
 
           <div className="typography-3 space-top-4">Appearance</div>
@@ -293,13 +294,13 @@ class Settings extends React.Component<Props, State> {
           <div className="typography-3 space-top-4">User Account</div>
           <div><OakText label="Name" data={this.state} id="name" handleChange={e => this.handleChange(e)} /></div>
           <div><OakText label="Email" data={this.state} id="email" handleChange={e => this.handleChange(e)} /></div>
-          <div><button className="secondary animate space-top-1" onClick={this.updateUserDetails}>Update details</button></div>
+          <div><OakButton theme="secondary" variant="animate in" action={this.updateUserDetails}>Update details</OakButton></div>
 
           <div className="typography-3 space-top-4">Password</div>
           <div><OakText type="password" label="Old Password" data={this.state} id="oldPassword" handleChange={e => this.handleChange(e)} /></div>
           <div><OakText type="password" label="New Password" data={this.state} id="newPassword" handleChange={e => this.handleChange(e)} /></div>
           <div><OakText type="password" label="Repeat New Password" data={this.state} id="repeatPassword" handleChange={e => this.handleChange(e)} /></div>
-          <div><button className="secondary animate space-top-1" onClick={this.changePassword}>Change Password</button></div>
+          <div><OakButton theme="secondary" variant="animate in" action={this.changePassword}>Change Password</OakButton></div>
           </View>
         </ViewResolver>
       </div>

@@ -12,6 +12,7 @@ import { httpGet, httpPut, httpDelete } from '../Lib/RestTemplate';
 import { sendMessage } from '../../events/MessageService';
 import { Authorization } from '../Types/GeneralTypes';
 import OakText from '../Ux/OakText';
+import OakButton from '../Ux/OakButton';
 
 const queryString = require('query-string');
 
@@ -304,8 +305,8 @@ class Bookmarks extends Component<Props, State> {
                         <OakText label="Tags" data={this.state} id="tags" handleChange={e => this.handleChange(e)} />
                     </div>
                     <div className="dialog-footer">
-                        <button onClick={this.toggleEditDialog} className="default disabled align-left"><i className="material-icons">close</i>Cancel</button>
-                        <button onClick={this.addBookmark} className="primary block align-right"><i className="material-icons">double_arrow</i>{this.state.editDialogLabel}</button>
+                        <OakButton action={this.toggleEditDialog} theme="default" variant="outline" align="left"><i className="material-icons">close</i>Cancel</OakButton>
+                        <OakButton action={this.addBookmark} theme="primary" variant="animate in" align="right"><i className="material-icons">double_arrow</i>{this.state.editDialogLabel}</OakButton>
                     </div>
                 </OakDialog>
 
@@ -345,10 +346,10 @@ class Bookmarks extends Component<Props, State> {
                                     {this.state.isFiltered && <div className="typography-4 space-top-2 space-left-2">Found {this.state.view.length} bookmarks matching the search criteria</div>}
                                     <div className="actionbar-2 space-top-2 space-bottom-2">
                                         <div>
-                                            <button onClick={this.clearSearch} className="default">Clear</button>
+                                            <OakButton action={this.clearSearch} theme="default">Clear</OakButton>
                                         </div>
                                         <div>
-                                            <button onClick={this.search} className="default animate space-right-2">Search</button>
+                                        <OakButton action={this.search} theme="primary" variant="animate in">Search</OakButton>
                                         </div>
                                     </div>
 

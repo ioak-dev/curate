@@ -16,6 +16,7 @@ import Sidebar from '../Ux/Sidebar';
 import { sendMessage, receiveMessage } from '../../events/MessageService';
 import { Authorization } from '../Types/GeneralTypes';
 import OakText from '../Ux/OakText';
+import OakButton from '../Ux/OakButton';
 
 const queryString = require('query-string');
 
@@ -499,8 +500,8 @@ class Notes extends Component<Props, State> {
                         <div><OakText label="Content (Markdown / HTML / Plaintext)" data={this.state} id="content" multiline handleChange={e => this.handleChange(e)} /></div>
                     </div>
                     <div className="dialog-footer">
-                        <button onClick={this.toggleAddDialog} className="default disabled left"><i className="material-icons">close</i>Cancel</button>
-                        <button onClick={this.saveNoteEvent} className="primary animate right"><i className="material-icons">double_arrow</i>Save</button>
+                        <OakButton action={this.toggleAddDialog} theme="default" variant="outline"><i className="material-icons">close</i>Cancel</OakButton>
+                        <OakButton action={this.saveNoteEvent} theme="primary" variant="animate in"><i className="material-icons">double_arrow</i>Save</OakButton>
                     </div>
                 </OakDialog>
 
@@ -514,8 +515,8 @@ class Notes extends Component<Props, State> {
                         <div><OakText label="Tags (separated by blank spaces)" data={this.state} id="tags" handleChange={e => this.handleChange(e)} /></div>
                     </div>
                     <div className="dialog-footer">
-                        <button onClick={this.toggleArtboardAddDialog} className="default disabled left"><i className="material-icons">close</i>Cancel</button>
-                        <button onClick={this.saveArtboardEvent} className="primary animate right"><i className="material-icons">double_arrow</i>Save</button>
+                        <OakButton action={this.toggleArtboardAddDialog} theme="default" variant="outline"><i className="material-icons">close</i>Cancel</OakButton>
+                        <OakButton action={this.saveArtboardEvent} theme="primary" variant="animate in"><i className="material-icons">double_arrow</i>Save</OakButton>
                     </div>
                 </OakDialog>
 
@@ -556,10 +557,10 @@ class Notes extends Component<Props, State> {
                                 {this.state.isFiltered && <div className="typography-4 space-top-2">Found {this.state.searchResults.length} notes matching the search criteria</div>}
                                 <div className="actionbar-2 space-top-2 space-bottom-2">
                                     <div>
-                                        <button onClick={this.clearSearch} className="default">Clear</button>
+                                        <OakButton action={this.clearSearch} theme="default" variant="animate none">Clear</OakButton>
                                     </div>
                                     <div>
-                                        <button onClick={this.search} className="default animate space-right-2">Search</button>
+                                        <OakButton action={this.search} theme="default" variant="animate in">Search</OakButton>
                                     </div>
                                 </div>
                             </Sidebar>

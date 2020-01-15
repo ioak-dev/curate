@@ -6,6 +6,7 @@ import { resetPassword } from './AuthService';
 import { sendMessage } from '../../events/MessageService';
 import {isEmptyOrSpaces} from "../Utils";
 import OakText from '../Ux/OakText';
+import OakButton from '../Ux/OakButton';
 
 const queryString = require('query-string');
 
@@ -102,7 +103,7 @@ class ResetPassword extends Component<Props, State> {
                             <OakText label="Repeat Password" id="repeatPassword" type="password" data={this.state} handleChange={e => this.handleChange(e)} />
                         </div>
                         <br />
-                        <button className="primary block"  onClick={this.changePassword}>Submit</button>
+                        <OakButton theme="primary" variant="animate in"  action={this.changePassword}>Submit</OakButton>
                     </form>
                 </div>
             </div>
