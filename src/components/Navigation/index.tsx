@@ -132,7 +132,7 @@ class Navigation extends Component<Props, State> {
                 <Desktop {...this.props} logout={this.props.logout} login={this.login} toggleSettings={this.toggleSettings} transparent={this.state.transparentNavBar} />
                 <Mobile {...this.props} logout={this.props.logout} login={this.login} toggleSettings={this.toggleSettings} transparent={this.state.transparentNavBar} />
 
-                <OakDialog title="Appearance" visible={this.state.showSettings} toggleVisibility={this.toggleSettings}>
+                <OakDialog visible={this.state.showSettings} toggleVisibility={this.toggleSettings}>
                     <div className="dialog-body">
                         <div className="settings">
                             <div>Dark mode</div>

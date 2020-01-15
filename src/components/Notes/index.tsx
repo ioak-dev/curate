@@ -489,7 +489,7 @@ class Notes extends Component<Props, State> {
         ))
         return (
             <div className="notes">
-                <OakDialog title="Add Note" visible={this.state.isAddDialogOpen} toggleVisibility={this.toggleAddDialog}>
+                <OakDialog visible={this.state.isAddDialogOpen} toggleVisibility={this.toggleAddDialog}>
                     <div className="dialog-body">
                         <div><OakSelect label="Notebook" data={this.state} id="existingNotebook" handleChange={e => this.handleChange(e)} elements={this.state.existingNotebookList} firstAction="<create new>" /></div>
                         <div>
@@ -505,7 +505,7 @@ class Notes extends Component<Props, State> {
                     </div>
                 </OakDialog>
 
-                <OakDialog title="Create Artboard" visible={this.state.isArtboardAddDialogOpen} toggleVisibility={this.toggleArtboardAddDialog}>
+                <OakDialog visible={this.state.isArtboardAddDialogOpen} toggleVisibility={this.toggleArtboardAddDialog}>
                     <div className="dialog-body">
                         <div><OakSelect label="Notebook" data={this.state} id="existingNotebook" handleChange={e => this.handleChange(e)} elements={this.state.existingNotebookList} firstAction="<create new>" /></div>
                         <div>

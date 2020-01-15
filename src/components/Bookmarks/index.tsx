@@ -298,7 +298,7 @@ class Bookmarks extends Component<Props, State> {
         ))
         return (
             <div className="bookmarks">
-                <OakDialog title="Add Bookmark" visible={this.state.isEditDialogOpen} toggleVisibility={this.toggleEditDialog}>
+                <OakDialog visible={this.state.isEditDialogOpen} toggleVisibility={this.toggleEditDialog}>
                     <div className="dialog-body">
                         <OakText label="Title" data={this.state} id="title" handleChange={e => this.handleChange(e)} />
                         <OakText label="URL" data={this.state} id="href" handleChange={e => this.handleChange(e)} />
