@@ -491,7 +491,7 @@ class Notes extends Component<Props, State> {
             <div className="notes">
                 <OakDialog visible={this.state.isAddDialogOpen} toggleVisibility={this.toggleAddDialog}>
                     <div className="dialog-body">
-                        <div><OakSelect label="Notebook" data={this.state} id="existingNotebook" handleChange={e => this.handleChange(e)} elements={this.state.existingNotebookList} firstAction="<create new>" /></div>
+                        <div><OakSelect label="Notebook" theme="default" data={this.state} id="existingNotebook" handleChange={e => this.handleChange(e)} elements={this.state.existingNotebookList} firstAction="<create new>" /></div>
                         <div>
                         {this.state.existingNotebook === '<create new>' && <OakText label="Notebook name" data={this.state} id="newNotebook" handleChange={e => this.handleChange(e)} />}
                         </div>
@@ -507,7 +507,7 @@ class Notes extends Component<Props, State> {
 
                 <OakDialog visible={this.state.isArtboardAddDialogOpen} toggleVisibility={this.toggleArtboardAddDialog}>
                     <div className="dialog-body">
-                        <div><OakSelect label="Notebook" data={this.state} id="existingNotebook" handleChange={e => this.handleChange(e)} elements={this.state.existingNotebookList} firstAction="<create new>" /></div>
+                        <div><OakSelect label="Notebook" theme="primary" data={this.state} id="existingNotebook" handleChange={e => this.handleChange(e)} elements={this.state.existingNotebookList} firstAction="<create new>" /></div>
                         <div>
                         {this.state.existingNotebook === '<create new>' && <OakText label="Notebook name" data={this.state} id="newNotebook" handleChange={e => this.handleChange(e)} />}
                         </div>
@@ -567,8 +567,8 @@ class Notes extends Component<Props, State> {
                                 
                             <Sidebar label={this.state.isFiltered ? "Search results" : "All Notes"} icon="notes" number={this.state.view.length}>
                                 <div className="filter-bar">
-                                    {this.state.filteredNotebookList.length > 1 && <div><OakSelect maxWidth="max-width-200" label="Notebook" data={this.state} id="notebookFilter" handleChange={e => this.handleNotebookFilterChange(e)} elements={this.state.filteredNotebookList} first='all notebooks' /></div>}
-                                    {this.state.filteredNotebookList.length === 1 && <div><OakSelect maxWidth="max-width-200" label="Notebook" data={this.state} id="notebookFilter" handleChange={e => this.handleNotebookFilterChange(e)} elements={this.state.filteredNotebookList} /></div>}
+                                    {this.state.filteredNotebookList.length > 1 && <div><OakSelect label="Notebook" data={this.state} id="notebookFilter" handleChange={e => this.handleNotebookFilterChange(e)} elements={this.state.filteredNotebookList} first='all notebooks' /></div>}
+                                    {this.state.filteredNotebookList.length === 1 && <div><OakSelect label="Notebook" data={this.state} id="notebookFilter" handleChange={e => this.handleNotebookFilterChange(e)} elements={this.state.filteredNotebookList} /></div>}
                                     <div></div>
                                     <div><OakSelect label="Sort by" data={this.state} id="sortBy" handleChange={e => this.handleNotebookFilterChange(e)} elements={Object.keys(this.sortTypes)} /></div>
                                     <div><OakSelect label="Sort Order" data={this.state} id="sortOrder" handleChange={e => this.handleNotebookFilterChange(e)} elements={this.sortOrders} /></div>
