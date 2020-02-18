@@ -3,7 +3,6 @@ import Note from './Note';
 import { Switch } from '@material-ui/core';
 import { constants } from '../Constants';
 import { httpGet, httpPut, httpDelete } from "../Lib/RestTemplate";
-import OakTextField from '../Ux/OakTextField';
 import OakDialog from '../Ux/OakDialog';
 import ViewResolver from '../Ux/ViewResolver';
 import View from '../Ux/View';
@@ -16,6 +15,8 @@ import Sidebar from '../Ux/Sidebar';
 
 import { sendMessage, receiveMessage } from '../../events/MessageService';
 import { Authorization } from '../Types/GeneralTypes';
+import OakText from '../Ux/OakText';
+import OakButton from '../Ux/OakButton';
 
 const queryString = require('query-string');
 
@@ -488,34 +489,34 @@ class Notes extends Component<Props, State> {
         ))
         return (
             <div className="notes">
-                <OakDialog title="Add Note" visible={this.state.isAddDialogOpen} toggleVisibility={this.toggleAddDialog}>
+                <OakDialog visible={this.state.isAddDialogOpen} toggleVisibility={this.toggleAddDialog}>
                     <div className="dialog-body">
-                        <div><OakSelect label="Notebook" data={this.state} id="existingNotebook" handleChange={e => this.handleChange(e)} elements={this.state.existingNotebookList} firstAction="<create new>" /></div>
+                        <div><OakSelect label="Notebook" theme="default" data={this.state} id="existingNotebook" handleChange={e => this.handleChange(e)} elements={this.state.existingNotebookList} firstAction="<create new>" /></div>
                         <div>
-                        {this.state.existingNotebook === '<create new>' && <OakTextField label="Notebook name" data={this.state} id="newNotebook" handleChange={e => this.handleChange(e)} />}
+                        {this.state.existingNotebook === '<create new>' && <OakText label="Notebook name" data={this.state} id="newNotebook" handleChange={e => this.handleChange(e)} />}
                         </div>
-                        <div><OakTextField label="Title" data={this.state} id="title" handleChange={e => this.handleChange(e)} /></div>
-                        <div><OakTextField label="Tags (separated by blank spaces)" data={this.state} id="tags" handleChange={e => this.handleChange(e)} /></div>
-                        <div><OakTextField label="Content (Markdown / HTML / Plaintext)" data={this.state} id="content" multiline handleChange={e => this.handleChange(e)} /></div>
+                        <div><OakText label="Title" data={this.state} id="title" handleChange={e => this.handleChange(e)} /></div>
+                        <div><OakText label="Tags (separated by blank spaces)" data={this.state} id="tags" handleChange={e => this.handleChange(e)} /></div>
+                        <div><OakText label="Content (Markdown / HTML / Plaintext)" data={this.state} id="content" multiline handleChange={e => this.handleChange(e)} /></div>
                     </div>
                     <div className="dialog-footer">
-                        <button onClick={this.toggleAddDialog} className="default disabled left"><i className="material-icons">close</i>Cancel</button>
-                        <button onClick={this.saveNoteEvent} className="primary animate right"><i className="material-icons">double_arrow</i>Save</button>
+                        <OakButton action={this.toggleAddDialog} theme="default" variant="outline"><i className="material-icons">close</i>Cancel</OakButton>
+                        <OakButton action={this.saveNoteEvent} theme="primary" variant="animate in"><i className="material-icons">double_arrow</i>Save</OakButton>
                     </div>
                 </OakDialog>
 
-                <OakDialog title="Create Artboard" visible={this.state.isArtboardAddDialogOpen} toggleVisibility={this.toggleArtboardAddDialog}>
+                <OakDialog visible={this.state.isArtboardAddDialogOpen} toggleVisibility={this.toggleArtboardAddDialog}>
                     <div className="dialog-body">
-                        <div><OakSelect label="Notebook" data={this.state} id="existingNotebook" handleChange={e => this.handleChange(e)} elements={this.state.existingNotebookList} firstAction="<create new>" /></div>
+                        <div><OakSelect label="Notebook" theme="primary" data={this.state} id="existingNotebook" handleChange={e => this.handleChange(e)} elements={this.state.existingNotebookList} firstAction="<create new>" /></div>
                         <div>
-                        {this.state.existingNotebook === '<create new>' && <OakTextField label="Notebook name" data={this.state} id="newNotebook" handleChange={e => this.handleChange(e)} />}
+                        {this.state.existingNotebook === '<create new>' && <OakText label="Notebook name" data={this.state} id="newNotebook" handleChange={e => this.handleChange(e)} />}
                         </div>
-                        <div><OakTextField label="Title" data={this.state} id="title" handleChange={e => this.handleChange(e)} /></div>
-                        <div><OakTextField label="Tags (separated by blank spaces)" data={this.state} id="tags" handleChange={e => this.handleChange(e)} /></div>
+                        <div><OakText label="Title" data={this.state} id="title" handleChange={e => this.handleChange(e)} /></div>
+                        <div><OakText label="Tags (separated by blank spaces)" data={this.state} id="tags" handleChange={e => this.handleChange(e)} /></div>
                     </div>
                     <div className="dialog-footer">
-                        <button onClick={this.toggleArtboardAddDialog} className="default disabled left"><i className="material-icons">close</i>Cancel</button>
-                        <button onClick={this.saveArtboardEvent} className="primary animate right"><i className="material-icons">double_arrow</i>Save</button>
+                        <OakButton action={this.toggleArtboardAddDialog} theme="default" variant="outline"><i className="material-icons">close</i>Cancel</OakButton>
+                        <OakButton action={this.saveArtboardEvent} theme="primary" variant="animate in"><i className="material-icons">double_arrow</i>Save</OakButton>
                     </div>
                 </OakDialog>
 
@@ -530,7 +531,7 @@ class Notes extends Component<Props, State> {
                             <Sidebar label="Search" elements={this.state.sidebarElements['search']} icon="search" animate number={this.state.isFiltered ? this.state.searchResults.length : undefined}>
                                 <div className="space-top-1" />
                                 <form method="GET" onSubmit={this.search} noValidate>
-                                    <div className="space-left-4 space-right-4"><OakTextField label="Keywords" id="searchtext" data={this.state} handleChange={e => this.handleChange(e)} /></div>
+                                    <div className="space-left-4 space-right-4"><OakText label="Keywords" id="searchtext" data={this.state} handleChange={e => this.handleChange(e)} /></div>
                                 </form>
                                 <div className="typography-5 space-top-2 space-left-4">
                                     <Switch
@@ -556,18 +557,18 @@ class Notes extends Component<Props, State> {
                                 {this.state.isFiltered && <div className="typography-4 space-top-2">Found {this.state.searchResults.length} notes matching the search criteria</div>}
                                 <div className="actionbar-2 space-top-2 space-bottom-2">
                                     <div>
-                                        <button onClick={this.clearSearch} className="default">Clear</button>
+                                        <OakButton action={this.clearSearch} theme="default" variant="animate none">Clear</OakButton>
                                     </div>
                                     <div>
-                                        <button onClick={this.search} className="default animate space-right-2">Search</button>
+                                        <OakButton action={this.search} theme="default" variant="animate in">Search</OakButton>
                                     </div>
                                 </div>
                             </Sidebar>
                                 
                             <Sidebar label={this.state.isFiltered ? "Search results" : "All Notes"} icon="notes" number={this.state.view.length}>
                                 <div className="filter-bar">
-                                    {this.state.filteredNotebookList.length > 1 && <div><OakSelect maxWidth="max-width-200" label="Notebook" data={this.state} id="notebookFilter" handleChange={e => this.handleNotebookFilterChange(e)} elements={this.state.filteredNotebookList} first='all notebooks' /></div>}
-                                    {this.state.filteredNotebookList.length === 1 && <div><OakSelect maxWidth="max-width-200" label="Notebook" data={this.state} id="notebookFilter" handleChange={e => this.handleNotebookFilterChange(e)} elements={this.state.filteredNotebookList} /></div>}
+                                    {this.state.filteredNotebookList.length > 1 && <div><OakSelect label="Notebook" data={this.state} id="notebookFilter" handleChange={e => this.handleNotebookFilterChange(e)} elements={this.state.filteredNotebookList} first='all notebooks' /></div>}
+                                    {this.state.filteredNotebookList.length === 1 && <div><OakSelect label="Notebook" data={this.state} id="notebookFilter" handleChange={e => this.handleNotebookFilterChange(e)} elements={this.state.filteredNotebookList} /></div>}
                                     <div></div>
                                     <div><OakSelect label="Sort by" data={this.state} id="sortBy" handleChange={e => this.handleNotebookFilterChange(e)} elements={Object.keys(this.sortTypes)} /></div>
                                     <div><OakSelect label="Sort Order" data={this.state} id="sortOrder" handleChange={e => this.handleNotebookFilterChange(e)} elements={this.sortOrders} /></div>

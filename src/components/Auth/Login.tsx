@@ -3,11 +3,12 @@ import { connect } from 'react-redux';
 import { getAuth, addAuth, removeAuth } from '../../actions/AuthActions';
 import { withCookies } from 'react-cookie';
 import './Login.scss';
-import OakTextField from '../Ux/OakTextField';
 import {signup, signin, sentPasswordChangeEmail, preSignup, preSignin} from './AuthService';
 import { Authorization } from '../Types/GeneralTypes';
 import { sendMessage } from '../../events/MessageService';
 import {isEmptyOrSpaces} from "../Utils";
+import OakText from '../Ux/OakText';
+import OakButton from '../Ux/OakButton';
 
 const queryString = require('query-string');
 
@@ -195,18 +196,18 @@ class Login extends Component<Props, State> {
                     <form method="GET" onSubmit={this.signin} noValidate>
                         <h1>Log In</h1>
                         <div className="form">
-                            <OakTextField label="Username/e-mail" id="email" data={this.state} handleChange={e => this.handleChange(e)} />
-                            <OakTextField label="Password" id="password" type="password" data={this.state} handleChange={e => this.handleChange(e)} />
+                            <OakText label="Username/e-mail" id="email" data={this.state} handleChange={e => this.handleChange(e)} />
+                            <OakText label="Password" id="password" type="password" data={this.state} handleChange={e => this.handleChange(e)} />
                         </div>
                         <br />
-                        <button className="primary block"  onClick={this.signin}>Sign In</button>
+                        <OakButton theme="primary" variant="animate in"  action={this.signin}>Sign In</OakButton>
                         <br /><br />
-                        Don't have an account? &nbsp; <button className="secondary"  onClick={this.toggle}>Sign Up</button>
+                        Don't have an account? &nbsp; <OakButton theme="secondary" variant="outline"  action={this.toggle}>Sign Up</OakButton>
                         <br /><br />
 
                     </form>
 
-                    <button onClick={this.sentEmailWithCode}>Forgot password ?</button>
+                    <OakButton action={this.sentEmailWithCode}>Forgot password ?</OakButton>
 
                 </div>}
 
@@ -214,14 +215,14 @@ class Login extends Component<Props, State> {
                     <form method="GET" onSubmit={this.signup} noValidate>
                         <h1>Sign Up</h1>
                         <div className="form">
-                            <OakTextField label="Name" id="name" data={this.state} handleChange={e => this.handleChange(e)} />
-                            <OakTextField label="Email / User Name" id="email" data={this.state} handleChange={e => this.handleChange(e)} />
-                            <OakTextField label="Password" id="password" type="password" data={this.state} handleChange={e => this.handleChange(e)} />
+                            <OakText label="Name" id="name" data={this.state} handleChange={e => this.handleChange(e)} />
+                            <OakText label="Email / User Name" id="email" data={this.state} handleChange={e => this.handleChange(e)} />
+                            <OakText label="Password" id="password" type="password" data={this.state} handleChange={e => this.handleChange(e)} />
                         </div>
                         <br />
-                        <button className="primary block"  onClick={this.signup}>Create account</button>
+                        <OakButton theme="primary" variant="animate in"  action={this.signup}>Create account</OakButton>
                         <br /><br />
-                        Already have a account? &nbsp; <button className="secondary"  onClick={this.toggle}>Sign In</button>
+                        Already have a account? &nbsp; <OakButton theme="secondary" variant="outline"  action={this.toggle}>Sign In</OakButton>
                     </form>
                 </div>}
             </div>

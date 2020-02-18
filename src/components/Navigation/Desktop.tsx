@@ -5,6 +5,7 @@ import curate_white from '../../images/curate_white.svg';
 import curate_black from '../../images/curate_black.svg';
 import Links from './Links';
 import { Authorization, Profile } from '../Types/GeneralTypes';
+import OakButton from '../Ux/OakButton';
 
 interface Props {    
     sendEvent: Function,
@@ -48,15 +49,14 @@ class Desktop extends Component<Props, State> {
                 </div>
                 <div className="right">
                     <div className="action">
-                        {/* <button className="default disabled small" onClick={this.props.toggleSettings}><i className="material-icons">palette</i>Theme</button> */}
                         {this.props.authorization.isAuth && 
-                            <button className="default disabled small" onClick={this.props.toggleSettings}><i className="material-icons">brush</i>Appearance</button>}
+                            <OakButton theme="default" variant="outline" small action={this.props.toggleSettings}><i className="material-icons">brush</i>Appearance</OakButton>}
                         {this.props.authorization.isAuth && 
-                            <button className="default disabled small" onClick={this.props.logout()}><i className="material-icons">power_settings_new</i>Logout</button>}
+                            <OakButton theme="default" variant="outline" small action={this.props.logout()}><i className="material-icons">power_settings_new</i>Logout</OakButton>}
                         {!this.props.authorization.isAuth && 
-                            <button className="default disabled small" onClick={() => this.signin('signin')}><i className="material-icons">person</i>Login</button>}
+                            <OakButton theme="default" variant="outline" small action={() => this.signin('signin')}><i className="material-icons">person</i>Login</OakButton>}
                         {!this.props.authorization.isAuth && 
-                            <button className="default disabled small" onClick={() => this.signin('signup')}><i className="material-icons">person_add</i>Signup</button>}
+                            <OakButton theme="default" variant="outline" small action={() => this.signin('signup')}><i className="material-icons">person_add</i>Signup</OakButton>}
                     </div>
                 </div>
             </div>
