@@ -14,6 +14,13 @@ body {
   .MuiInputLabel-root {
     color: var(--color-body-invert-dim);
   }
+  // overflow-y: overlay;
+}
+
+body.oak-dialog-open {
+  // height: 100vh;
+  overflow-y: hidden;
+  padding-right: var(--scrollbar-width);
 }
 
 .body {
