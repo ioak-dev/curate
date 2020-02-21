@@ -10,7 +10,24 @@ import OakText from '../Ux/OakText';
 import OakButton from '../Ux/OakButton';
 import { receiveMessage, sendMessage } from '../../events/MessageService';
 
-const BookmarkView = (props) => {
+interface Props {
+    selectBookmark: Function,
+    deleteBookmark: Function,
+    search: any,
+    searchByTag: Function,
+    
+    bookmark: any,
+    searchPref: any,
+    view: any[],
+
+    handleBookmarkDataChange: Function,
+    handleSearchPrefDataChange: Function,
+    toggleSearchPref: Function,
+    clearSearch: Function,
+    update: Function
+}
+
+const BookmarkView = (props: Props) => {
     const [editDialog, setEditDialog] = useState(false);
     
     const domain = "bookmark";    
@@ -53,9 +70,9 @@ const BookmarkView = (props) => {
             <div className="bookmarks">
                 <OakDialog visible={editDialog} toggleVisibility={toggleEditDialog}>
                     <div className="dialog-body">
-                        <OakText label="Title" data={props.data.bookmark} id="title" handleChange={e => props.handleChange(e, domain)} />
-                        <OakText label="URL" data={props.data.bookmark} id="href" handleChange={e => props.handleChange(e, domain)} />
-                        <OakText label="Tags" data={props.data.bookmark} id="tags" handleChange={e => props.handleChange(e, domain)} />
+                        <OakText label="Title" data={props.bookmark} id="title" handleChange={e => props.handleBookmarkDataChange(e)} />
+                        <OakText label="URL" data={props.bookmark} id="href" handleChange={e => props.handleBookmarkDataChange(e)} />
+                        <OakText label="Tags" data={props.bookmark} id="tags" handleChange={e => props.handleBookmarkDataChange(e)} />
                     </div>
                     <div className="dialog-footer">
                         <OakButton action={toggleEditDialog} theme="default" variant="outline" align="left"><i className="material-icons">close</i>Cancel</OakButton>
@@ -65,9 +82,9 @@ const BookmarkView = (props) => {
 
                 <ViewResolver>
                     <View main>
-                    {props.view.map(item => (
+                    {props.view.map((item: any) => (
                         <div key={item._id}>
-                        <Link id={item._id} bookmark={item} editBookmark={selectBookmark} deleteBookmark={props.delete} searchByTag={props.searchByTag} />
+                        <Link id={item._id} bookmark={item} editBookmark={selectBookmark} deleteBookmark={props.deleteBookmark} searchByTag={props.searchByTag} />
                         <br />
                         </div>
                     ))}
@@ -76,32 +93,32 @@ const BookmarkView = (props) => {
                         <div className="filter-container">
                             <div className="section-main">
                                 <Sidebar label="Add New" elements={sidebarElements['addNew']} icon="add" animate />
-                                <Sidebar label="Search" elements={sidebarElements['search']} icon="search" animate number={props.isFiltered ? props.view.length : undefined}>
+                                <Sidebar label="Search" elements={sidebarElements['search']} icon="search" animate number={props.searchPref.filtered ? props.view.length : undefined}>
                                     <form method="GET" onSubmit={props.search} noValidate>
-                                    <div className="space-top-2 space-left-4 space-right-4"><OakText label="Keywords" id="searchtext" data={props.data.searchPref} handleChange={e => props.handleChange(e, "searchPref")} /></div>
+                                    <div className="space-top-2 space-left-4 space-right-4"><OakText label="Keywords" id="searchText" data={props.searchPref} handleChange={e => props.handleSearchPrefDataChange(e)} /></div>
                                     </form>
                                     <div className="typography-5 space-top-2 space-left-4">
                                         <Switch
-                                            checked={props.data.searchPref.title}
+                                            checked={props.searchPref.title}
                                             onChange={() => props.toggleSearchPref('title')}
                                             inputProps={{ 'aria-label': 'primary checkbox' }}/>
                                         Include title
                                     </div>
                                     <div className="typography-5 space-top-2 space-left-4">
                                         <Switch
-                                            checked={props.data.searchPref.tags}
+                                            checked={props.searchPref.tags}
                                             onChange={() => props.toggleSearchPref('tags')}
                                             inputProps={{ 'aria-label': 'primary checkbox' }}/>
                                         Include tags
                                     </div>
                                     <div className="typography-5 space-top-2 space-left-4">
                                         <Switch
-                                            checked={props.data.searchPref.href}
+                                            checked={props.searchPref.href}
                                             onChange={() => props.toggleSearchPref('href')}
                                             inputProps={{ 'aria-label': 'primary checkbox' }}/>
                                         Include URL
                                     </div>
-                                    {props.isFiltered && <div className="typography-4 space-top-2 space-left-2">Found {props.view.length} bookmarks matching the search criteria</div>}
+                                    {props.searchPref.filtered && <div className="typography-4 space-top-2 space-left-2">Found {props.view.length} bookmarks matching the search criteria</div>}
                                     <div className="actionbar-2 space-top-2 space-bottom-2">
                                         <div>
                                             <OakButton action={props.clearSearch} theme="default">Clear</OakButton>

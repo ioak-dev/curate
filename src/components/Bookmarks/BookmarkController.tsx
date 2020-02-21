@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import './style.scss';
 import { isEmptyOrSpaces, match } from '../Utils';
@@ -20,190 +20,123 @@ interface Props {
     bookmark: any
 }
 
-interface State {
-    view: any,
-    isFiltered: boolean,
-    data: any,
-    firstLoad: boolean
-}
-class BookmarkController extends Component<Props, State> {
-    constructor(props) {
-        super(props);
-        this.state = {
-            view: [],
+const BookmarkController = (props: Props) => {
+    const [bookmark, setBookmark] = useState({
+        id: undefined,
+        title: '',
+        href: '',
+        tags: ''
+    });
 
-            isFiltered: false,
-            data: {
-                bookmark: {
-                    id: undefined,
-                    title: '',
-                    href: '',
-                    tags: ''
-                },
-                searchPref: {
-                    title: true,
-                    tags: true,
-                    href: true,
-                    content: true,
-                    searchtext: ''
-                }
-            },
-            firstLoad: true
-        }
-    }
+    const [searchPref, setSearchPref] = useState({
+        title: true,
+        tags: true,
+        href: true,
+        content: true,
+        searchText: "",
+        filtered: false,
+        filterActivator: false
+    });
 
-    componentDidMount() {
-        if (this.props.location.search) {
-            const query = queryString.parse(this.props.location.search);
+    const [firstLoad, setFirstLoad] = useState(true);
+    const [view, setView] = useState([]);
+
+    useEffect(() => {
+        if (props.location.search) {
+            const query = queryString.parse(props.location.search);
             if (query && query.q) {
                 if (query.q.startsWith('tags')) {
-                    this.setState({
-                        data: {
-                            bookmark: {
-                                id: undefined,
-                                title: '',
-                                href: '',
-                                tags: '',
-                            },
-                            searchPref: {
-                                title: false,
-                                tags: true,
-                                href: true,
-                                content: false
-                            }
-                        }
-                    })
+                    setSearchPref({
+                        ...searchPref,
+                        title: false,
+                        tags: true,
+                        href: true,
+                        content: false
+                    });
                 }
-                this.setState({
-                    data: {
-                        ...this.state.data,
-                        searchtext: query.q,
-                    },
-                    isFiltered: true
-                })
+                setSearchPref({...searchPref, searchText: query.q, filterActivator: !searchPref.filterActivator});
             }
         }
+    }, [props.location.search])
 
-        if(this.state.firstLoad && this.props.authorization.isAuth) {
-            this.props.fetchBookmark(this.props.authorization);
-            this.setState({firstLoad: false})
+    useEffect(() => {
+        if (firstLoad && props.authorization?.isAuth) {
+            props.fetchBookmark(props.authorization);
+            setFirstLoad(false);
         }
+    }, [props.authorization])
+
+    useEffect(() => {
+        setSearchPref({...searchPref, filterActivator: !searchPref.filterActivator});
+    }, [props.bookmark])
+
+    useEffect(() => {
+        search();
+    }, [searchPref.filterActivator]);
+
+    const selectBookmark = (bookmark) => {
+        setBookmark({
+            id: bookmark ? bookmark._id : '',
+            title: bookmark ? bookmark.title : '',
+            href: bookmark ? bookmark.href : '',
+            tags: bookmark ? bookmark.tags : ''
+        });
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.authorization && nextProps.authorization !== this.props.authorization) {
-            this.props.fetchBookmark(nextProps.authorization);
-            this.setState({firstLoad: false})
-        }
-        if (nextProps?.bookmark?.items !== this.props?.bookmark?.items) {
-            if (this.state.isFiltered) {
-                this.search();
-            } else {
-                this.setState({
-                    view: nextProps.bookmark.items
-                })
-            }
-        }
+    const deleteBookmark = (bookmarkId) => {
+        props.deleteBookmark(props.authorization, bookmarkId);
     }
 
-    selectBookmark = (bookmark) => {
-        this.setState({
-            data: {
-                ...this.state.data,
-                bookmark: {
-                    id: bookmark ? bookmark._id : '',
-                    title: bookmark ? bookmark.title : '',
-                    href: bookmark ? bookmark.href : '',
-                    tags: bookmark ? bookmark.tags : ''
-                }
-            }
-        })
-    }
-
-    delete = (bookmarkId) => {
-        this.props.deleteBookmark(this.props.authorization, bookmarkId);
-    }
-
-    clearSearch = () => {
-        this.setState({
-            view: this.props.bookmark?.items,
-            isFiltered: false,
-            data: {
-                ...this.state.data,
-                searchPref: {
-                    ...this.state.data.searchPref,
-                    searchtext: ''
-                }
-            }
-        })
+    const clearSearch = () => {
+        setView(props.bookmark?.items);
+        setFirstLoad(false);
+        setSearchPref({...searchPref, searchText: "", filterActivator: !searchPref.filterActivator});
         sendMessage('sidebar', false)
     }
 
-    searchByTag = (tagName) => {
-        
-        this.setState({
-            data: {
-                ...this.state.data,
-                searchPref: {
-                    ...this.state.data.searchPref,
-                    title: false,
-                    tags: true,
-                    href: false,
-                    searchtext: tagName
-                }
-            },
-            isFiltered: true
-        }, () => this.search());
+    const searchByTag = (tagName) => {
+        setSearchPref({
+            ...searchPref,
+            title: false,
+            tags: true,
+            href: false,
+            searchText: tagName,
+            filterActivator: !searchPref.filterActivator
+        });
     }
 
-    search = (event?: any) => {
+    const search = (event?: any) => {
         if (event) {
             event.preventDefault();
         }
-
-        if (isEmptyOrSpaces(this.state.data.searchPref.searchtext)) {
-            this.setState({
-                view: this.props.bookmark?.items,
-                isFiltered: false
-            });
+        if (isEmptyOrSpaces(searchPref.searchText)) {
+            setView(props.bookmark?.items);
+            setSearchPref({...searchPref, filtered: false});
             return;
         }
 
-        this.setState({
-            view: this.props.bookmark?.items?.filter((item) => {
-                if (this.state.data.searchPref.title && match(item.title, this.state.data.searchPref.searchtext)) {
+        setView(props.bookmark?.items?.filter((item) => {
+                if (searchPref.title && match(item.title, searchPref.searchText)) {
                     return true;
-                } else if (this.state.data.searchPref.tags && match(item.tags, this.state.data.searchPref.searchtext)) {
+                } else if (searchPref.tags && match(item.tags, searchPref.searchText)) {
                     return true;
-                } else if (this.state.data.searchPref.href && match(item.href, this.state.data.searchPref.searchtext)) {
+                } else if (searchPref.href && match(item.href, searchPref.searchText)) {
                     return true;
                 }
-            }),
-            isFiltered: true
-        });
+            })
+        );
+        setSearchPref({...searchPref, filtered: true});
         sendMessage('sidebar', false)
     }
 
-    toggleSearchPref = (pref) => {
-        this.setState({
-            data: {
-                ...this.state.data,
-                searchPref: {
-                    ...this.state.data.searchPref,
-                    [pref]: !this.state.data.searchPref[pref]
-                }
-            }
-        })
+    const toggleSearchPref = (pref) => {
+        setSearchPref({
+            ...searchPref,
+            [pref]: !searchPref[pref]
+        });
     }
 
-    update = () => {
-
-        let bookmark = {
-            id: this.state.data.bookmark.id,
-            title: this.state.data.bookmark.title,
-            href: this.state.data.bookmark.href,
-            tags: this.state.data.bookmark.tags
-        }
+    const update = () => {
 
         if (isEmptyOrSpaces(bookmark.title)) {
             sendMessage('notification', true, {type: 'failure', message: 'Title / description missing', duration: 5000});
@@ -216,33 +149,27 @@ class BookmarkController extends Component<Props, State> {
         }
 
         if (isEmptyOrSpaces(bookmark.tags)) {
-            bookmark.tags = 'unsorted';
+            setBookmark({...bookmark, tags: "unsorted"});
         }
 
-        this.props.saveBookmark(this.props.authorization, bookmark);
+        props.saveBookmark(props.authorization, bookmark);
     }
 
-    handleChange = (event, domain) => {
-        this.setState(
-            {
-                ...this.state,
-                data: {
-                    ...this.state.data,
-                    [domain]: {
-                        ...this.state.data[domain],
-                        [event.currentTarget.name]: event.currentTarget.value
-                    }
-                }
-            }
-        )
+    const handleBookmarkDataChange = (event) => {
+        setBookmark({...bookmark, [event.currentTarget.name]: event.currentTarget.value});
     }
 
-    render() {
-        return (
-            <BookmarkView handleChange={this.handleChange} data={this.state.data} selectBookmark={this.selectBookmark} update={this.update} delete={this.delete} 
-            search={this.search} view={this.state.view} isFiltered={this.state.isFiltered} toggleSearchPref={this.toggleSearchPref} 
-            clearSearch={this.clearSearch} searchByTag={this.searchByTag} />        )
+    const handleSearchPrefDataChange = (event) => {
+        setSearchPref({...searchPref, [event.currentTarget.name]: event.currentTarget.value});
     }
+
+    return (
+        <BookmarkView view={view}
+            bookmark={bookmark} handleBookmarkDataChange={handleBookmarkDataChange} selectBookmark={selectBookmark} update={update} deleteBookmark={deleteBookmark}
+            searchPref={searchPref} handleSearchPrefDataChange={handleSearchPrefDataChange} toggleSearchPref={toggleSearchPref} clearSearch={clearSearch} 
+            search={search} searchByTag={searchByTag}
+        />
+    )
 }
 
 const mapStateToProps = state => ({
