@@ -1,22 +1,18 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 interface Props {
     main?: any,
-    side?: any
+    side?: any,
+    children?: any
 }
 
-interface State {
-}
-
-class View extends Component<Props, State> {
-    render() {
-        return (
-            <div>
-               {/* {this.props} */}
-               {this.props.children}
-            </div>
-        )
-    }
+const View = (props: Props) => {
+    return (
+        <div>
+            {/* {this.props} */}
+            {props.children}
+        </div>
+    )
 }
 
 export default View;

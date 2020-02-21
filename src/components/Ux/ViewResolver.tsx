@@ -1,129 +1,94 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import './ViewResolver.scss';
 import { sendMessage, receiveMessage } from '../../events/MessageService';
 import OakButton from './OakButton';
 
 interface Props {
-    sideLabel?: string
+    sideLabel?: string,
+    children: any
 }
 
-interface State {
-    views: any,
-    main?: any,
-    side?: any,
-    showSide: boolean,
-    mobileViewPort: any
-}
+const ViewResolver = (props: Props) => {
 
-class ViewResolver extends Component<Props, State> {
+    const [mobileViewPort, setMobileViewPort] = useState(false);
 
-    _isMounted = false;
+    const [showSide, setShowSide] = useState(false);
+
+    const [views, setViews] = useState();
+
+    const [main, setMain] = useState();
+    const [side, setSide] = useState();
     
-    viewPort = window.matchMedia("(max-width: 767px)");
+    const viewPort = window.matchMedia("(max-width: 767px)");
 
-    viewPortChange = (port) => {
-        this.setState({
-            mobileViewPort: port.matches
-        });
-    }
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            views: this.props.children,
-            showSide: false,
-            mobileViewPort: false
-        }
-    }
-
-    componentWillMount() {
-        this.initializeViews();
-    }
-
-    componentDidMount() {
-        this._isMounted = true;
-        this.viewPortChange(this.viewPort);
-        this.viewPort.addListener(this.viewPortChange);
-
+    useEffect(() => {
+        setMobileViewPort(viewPort.matches);
+        viewPort.addListener(() => setMobileViewPort(viewPort.matches));
+        setViews(props.children);
+        
         receiveMessage().subscribe(message => {
-            if (this._isMounted) {
-                if (message.name === 'sidebar') {
-                    this.setState({
-                        showSide: message.signal
-                    })
-                }
+            if (message.name === 'sidebar') {
+                setShowSide(message.signal);
             }
         })
-    }
+    }, [])
 
-    componentWillUnmount() {
-        this._isMounted = false;
-    }
+    useEffect(() => {
+        setViews(props.children);
+    }, [props.children])
 
-    initializeViews() {
-        React.Children.toArray(this.state.views).forEach((node: any) => {
+    useEffect(() => {
+        initializeViews();
+    }, [views])
+
+    const initializeViews = () => {
+        React.Children.toArray(props.children).forEach((node: any) => {
             // node.type.name is minified after build and so static build result has different alphabet
             // if (node.type.name === 'View') {
                 if (node.props.main) {
-                    this.setState({
-                        main: node
-                    })
+                    setMain(node);
                 } else if (node.props.side) {
-                    this.setState({
-                        side: node
-                    })
+                    setSide(node);
                 }
             // }
         })
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.children) {
-            this.setState({
-                views: nextProps.children
-            }, () => {
-                this.initializeViews();
-            })
-        }
+    const toggleSideView = () => {
+        sendMessage('sidebar', !showSide);
     }
 
-    toggleSideView = () => {
-        sendMessage('sidebar', !this.state.showSide);
-    }
-
-    render() {
-        return (
-            <>
-            {!this.state.mobileViewPort && <div className="view-desktop">
-                {this.state.side && <div className="view-side">
-                    {this.state.side}
-                </div>}
-                <div className={'view-content' + (this.state.side ? ' side-present' : '')}>
-                    {this.state.main}
-                </div>
+    return (
+        <>
+        {!mobileViewPort && <div className="view-desktop">
+            {side && <div className="view-side">
+                {side}
             </div>}
+            <div className={'view-content' + (side ? ' side-present' : '')}>
+                {main}
+            </div>
+        </div>}
 
-            {this.state.mobileViewPort && <div className="view-mobile">
-                <div className={(this.state.showSide ? "slider show" : "slider hide")}>
-                    <div className="topbar" onClick={this.toggleSideView}>
-                        <div>
-                            <OakButton theme="default" variant="disabled" action={this.toggleSideView}>
-                                {!this.state.showSide && <><i className="material-icons">expand_more</i>{this.props.sideLabel ? this.props.sideLabel : 'Menu'}</>}
-                                {this.state.showSide && <><i className="material-icons">expand_less</i>Collapse</>}
-                            </OakButton>
-                        </div>
-                    </div>
-                    <div className="view-side">
-                        {this.state.showSide && this.state.side}
+        {mobileViewPort && <div className="view-mobile">
+            <div className={(showSide ? "slider show" : "slider hide")}>
+                <div className="topbar" onClick={toggleSideView}>
+                    <div>
+                        <OakButton theme="default" variant="disabled" action={toggleSideView}>
+                            {!showSide && <><i className="material-icons">expand_more</i>{props.sideLabel ? props.sideLabel : 'Menu'}</>}
+                            {showSide && <><i className="material-icons">expand_less</i>Collapse</>}
+                        </OakButton>
                     </div>
                 </div>
-                {!this.state.showSide && <div className="view-main">
-                    {this.state.main}
-                </div>}
+                <div className="view-side">
+                    {showSide && side}
+                </div>
+            </div>
+            {!showSide && <div className="view-main">
+                {main}
             </div>}
-            </>
-        )
-    }
+        </div>}
+        </>
+    )
 }
 
 export default ViewResolver;
