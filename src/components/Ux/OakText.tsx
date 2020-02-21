@@ -12,14 +12,7 @@ interface Props {
     rows?: number,
     multiline?: boolean
 }
-function OakText(props: Props) {
-    function handleChange(event) {
-        event.preventDefault();
-        event.target.name = props.id;
-        event.target.value = event.target.textContent;
-        console.log(event.target);
-        props.handleChange(event);
-    }
+const OakText = (props: Props) => {
     return (
         <div className="oak-text-field">
             <label>{props.label}</label>
@@ -36,8 +29,5 @@ function OakText(props: Props) {
         </div>
     )
 }
-
-OakText.propTypes = {
-};
 
 export default OakText;

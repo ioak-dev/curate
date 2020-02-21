@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import './style.scss';
 import { sendMessage } from '../../events/MessageService';
@@ -28,7 +28,8 @@ const NoteController = (props: Props) => {
         title: '',
         content: '',
         tags: '',
-        notebook: ''
+        notebook: '',
+        newNotebook: ''
     }
     const [note, setNote] = useState(emptyNote);
 
@@ -110,16 +111,6 @@ const NoteController = (props: Props) => {
         sendMessage('sidebar', false)
     }
 
-    const searchByTag = (tagName) => {
-        setSearchPref({
-            ...searchPref,
-            title: false,
-            tags: true,
-            searchText: tagName,
-            filterActivator: !searchPref.filterActivator
-        });
-    }
-
     const search = (event?: any) => {
         if (event) {
             event.preventDefault();
@@ -141,6 +132,7 @@ const NoteController = (props: Props) => {
         );
         setSearchPref({...searchPref, filtered: true});
         setFilterPref({...filterPref, filterActivator: !filterPref.filterActivator});
+        sendMessage('sidebar', false);
     }
 
     const filter = () => {
@@ -154,12 +146,6 @@ const NoteController = (props: Props) => {
         });
     
         noteList = sort(noteList, filterPref.sortBy, filterPref.sortOrder === 'descending' ? true : false);
-
-        let selectedNoteId = '';
-        if (noteList && noteList.length > 0) {
-            selectedNoteId = noteList[0]._id;
-        }
-
         
         if (noteList.length > 0) {
             let activeSelection = false;
@@ -174,9 +160,15 @@ const NoteController = (props: Props) => {
             }
         }
 
+        // if (!notebookList.find(item => item === filterPref.notebookFilter)) {
+        //     setFilterPref({
+        //         ...filterPref, notebookFilter: (notebookList.length === 1 ? notebookList[0] : "all notebooks"), notebookList: Array.from(new Set(notebookList)), filtered: true
+        //     });
+        // } else {
+            setFilterPref({...filterPref, notebookList: Array.from(new Set(notebookList)), filtered: true});
+        // }
+
         setView(noteList);
-        setFilterPref({...filterPref, notebookList: Array.from(new Set(notebookList)), filtered: true});
-        sendMessage('sidebar', false);
     }
 
     const toggleSearchPref = (pref) => {
@@ -193,7 +185,7 @@ const NoteController = (props: Props) => {
             return;
         }
 
-        if (isEmptyOrSpaces(note.notebook)) {
+        if (isEmptyOrSpaces(note.notebook) || (note.notebook === "<create new>" && isEmptyOrSpaces(note.newNotebook))) {
             sendMessage('notification', true, {type: 'failure', message: 'Notebook not chosen', duration: 5000});
             return;
         }
@@ -205,6 +197,10 @@ const NoteController = (props: Props) => {
 
         if (isEmptyOrSpaces(note.tags)) {
             note.tags = 'unsorted';
+        }
+
+        if (note.notebook === "<create new>") {
+            note.notebook = note.newNotebook;
         }
 
         props.saveNote(props.authorization, note);
@@ -234,11 +230,11 @@ const NoteController = (props: Props) => {
     // ))
 
     return (
-        <NoteView view={view} notebooks={existingNotebookList}
+        <NoteView view={view} notebooks={existingNotebookList} searchResults={searchResults}
             note={note} handleNoteDataChange={handleNoteDataChange} selectNote={selectNote} deleteNote={deleteNote} saveNote={saveNote}
             searchPref={searchPref} handleSearchPrefDataChange={handleSearchPrefDataChange} toggleSearchPref={toggleSearchPref} clearSearch={clearSearch} 
             filterPref={filterPref} handleFilterPrefDataChange={handleFilterPrefDataChange}
-            search={search} searchByTag={searchByTag}
+            search={search}
         />
     )
 }

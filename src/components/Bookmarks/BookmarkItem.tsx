@@ -12,7 +12,7 @@ interface Props {
 interface State {
 }
 
-class Link extends Component<Props, State> {
+class BookmarkItem extends Component<Props, State> {
 
     state = {
         showDeletePrompt: false
@@ -57,4 +57,4 @@ class Link extends Component<Props, State> {
     }
 }
 
-export default Link;
+export default BookmarkItem;

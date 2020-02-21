@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Link from './Link';
+import NoteItem from './NoteItem';
 import OakDialog from '../Ux/OakDialog';
 import ViewResolver from '../Ux/ViewResolver';
 import View from '../Ux/View';
@@ -31,12 +31,12 @@ interface Props {
     saveNote: Function,
     deleteNote: Function,
     search: any,
-    searchByTag: Function,
     
     note: any,
     searchPref: any,
     filterPref: any,
     view: any[],
+    searchResults: any[],
 
     notebooks: any,
 
@@ -52,13 +52,15 @@ const emptyNote = {
     title: '',
     content: '',
     tags: '',
-    notebook: ''
+    notebook: '',
+    newNotebook: ''
 }
 
 const NoteView = (props: Props) => {
     const [editDialog, setEditDialog] = useState(false);
+    const [editNote, setEditNote] = useState(false);
     
-    const domain = "bookmark";    
+    const domain = "note";    
     const sidebarElements = {
         addNew: [
             {
@@ -79,14 +81,22 @@ const NoteView = (props: Props) => {
             message => {
                 if (message.name === domain && message.signal) {
                     sendMessage('notification', true, {type: 'success', message: domain + " " + message.data.action, duration: 5000});
-                    if (message.data.action !== 'deleted') {
+                    if (message.data.action === 'created') {
                         toggleEditDialog();
+                    } else if (message.data.action === 'updated') {
+                        setEditNote(false);
                     }
                 }
             }
         );
         return () => eventBus.unsubscribe();
     })
+
+    // useEffect(() => {
+    //     if (!editNote) {
+    //         selectNote(emptyNote);
+    //     }
+    // }, [editNote])
 
     function newNote() {
         props.selectNote(emptyNote);
@@ -95,6 +105,7 @@ const NoteView = (props: Props) => {
 
     function selectNote(item) {
         props.selectNote(item);
+        sendMessage('sidebar', false);
     }
 
     function toggleEditDialog() {
@@ -107,7 +118,7 @@ const NoteView = (props: Props) => {
                     <div className="dialog-body">
                         <div><OakSelect label="Notebook" theme="default" data={props.note} id="notebook" handleChange={e => props.handleNoteDataChange(e)} elements={props.notebooks} firstAction="<create new>" /></div>
                         <div>
-                        {/* {this.state.existingNotebook === '<create new>' && <OakText label="Notebook name" data={props.note} id="newNotebook" handleChange={e => props.handleNoteDataChange(e)} />} */}
+                        {props.note.notebook === '<create new>' && <OakText label="Notebook name" data={props.note} id="newNotebook" handleChange={e => props.handleNoteDataChange(e)} />}
                         </div>
                         <div><OakText label="Title" data={props.note} id="title" handleChange={e => props.handleNoteDataChange(e)} /></div>
                         <div><OakText label="Tags (separated by blank spaces)" data={props.note} id="tags" handleChange={e => props.handleNoteDataChange(e)} /></div>
@@ -121,13 +132,15 @@ const NoteView = (props: Props) => {
 
                 <ViewResolver>
                     <View main>
-                        {(props.note?._id || props.note?.id) && <Link note={props.note} saveNote={props.saveNote} deleteNote={props.deleteNote} notebooks={props.notebooks} handleChange={e => props.handleNoteDataChange(e)} />}
+                        {(props.note?._id || props.note?.id) && 
+                            <NoteItem note={props.note} saveNote={props.saveNote} editNote={editNote} setEditNote={setEditNote}
+                                deleteNote={props.deleteNote} notebooks={props.notebooks} handleChange={e => props.handleNoteDataChange(e)} />}
                     </View>
                     <View side>
                         <div className="filter-container">
                             <div className="section-main">
                                 <Sidebar label="Add New" elements={sidebarElements['addNew']} icon="add" animate />
-                                <Sidebar label="Search" elements={sidebarElements['search']} icon="search" animate number={props.searchPref.filtered ? props.view.length : undefined}>
+                                <Sidebar label="Search" elements={sidebarElements['search']} icon="search" animate number={props.searchPref.filtered ? props.searchResults.length : undefined}>
                                 <div className="space-top-1" />
                                 <form method="GET" onSubmit={props.search} noValidate>
                                     <div className="space-left-4 space-right-4"><OakText label="Keywords" id="searchText" data={props.searchPref} handleChange={e => props.handleSearchPrefDataChange(e)} /></div>
@@ -153,7 +166,7 @@ const NoteView = (props: Props) => {
                                         inputProps={{ 'aria-label': 'primary checkbox' }}/>
                                     Include Content
                                 </div>
-                                {props.searchPref.filtered && <div className="typography-4 space-top-2">Found {props.view.length} notes matching the search criteria</div>}
+                                {props.searchPref.filtered && <div className="typography-4 space-top-2">Found {props.searchResults.length} notes matching the search criteria</div>}
                                 <div className="actionbar-2 space-top-2 space-bottom-2">
                                     <div>
                                         <OakButton action={props.clearSearch} theme="default" variant="animate none">Clear</OakButton>
@@ -166,15 +179,15 @@ const NoteView = (props: Props) => {
                             
                             <Sidebar label={props.searchPref.filtered ? "Search results" : "All Notes"} icon="notes" number={props.view.length}>
                                 <div className="filter-bar">
-                                    {props.view.length > 1 && <div><OakSelect label="Notebook" data={props.filterPref} id="notebookFilter" handleChange={e => props.handleFilterPrefDataChange(e)} elements={props.filterPref.notebookList} first='all notebooks' /></div>}
-                                    {props.view.length === 1 && <div><OakSelect label="Notebook" data={props.filterPref} id="notebookFilter" handleChange={e => props.handleFilterPrefDataChange(e)} elements={props.filterPref.notebookList} /></div>}
+                                    {props.searchResults.length > 1 && <div><OakSelect label="Notebook" data={props.filterPref} id="notebookFilter" handleChange={e => props.handleFilterPrefDataChange(e)} elements={props.filterPref.notebookList} first='all notebooks' /></div>}
+                                    {props.searchResults.length === 1 && <div><OakSelect label="Notebook" data={props.filterPref} id="notebookFilter" handleChange={e => props.handleFilterPrefDataChange(e)} elements={props.filterPref.notebookList} /></div>}
                                     <div></div>
                                     <div><OakSelect label="Sort by" data={props.filterPref} id="sortBy" handleChange={e => props.handleFilterPrefDataChange(e)} objects={sortTypes} /></div>
                                     <div><OakSelect label="Sort Order" data={props.filterPref} id="sortOrder" handleChange={e => props.handleFilterPrefDataChange(e)} elements={sortOrders} /></div>
                                 </div>
                                 {
                                     props.view?.map((item: any) => (
-                                        <div key={item._id}>
+                                        <div key={item._id ? item._id : item.id}>
                                             {/* <NoteRef selected={props.note?.id === item._id ? true : false} id={item._id} note={item} selectNote={() => selectNote(item)} showTag={notebookFilter === 'all notebooks'}/> */}
                                             <NoteRef selected={props.note?._id === item._id || props.note?.id === item._id ? true : false} id={item._id} note={item} selectNote={() => selectNote(item)} showTag={true} />
                                         </div>

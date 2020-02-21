@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Link from './Link';
+import BookmarkItem from './BookmarkItem';
 import OakDialog from '../Ux/OakDialog';
 import ViewResolver from '../Ux/ViewResolver';
 import View from '../Ux/View';
@@ -87,7 +87,7 @@ const BookmarkView = (props: Props) => {
                     <View main>
                     {props.view.map((item: any) => (
                         <div key={item._id}>
-                        <Link id={item._id} bookmark={item} editBookmark={selectBookmark} deleteBookmark={props.deleteBookmark} searchByTag={props.searchByTag} />
+                        <BookmarkItem id={item._id} bookmark={item} editBookmark={selectBookmark} deleteBookmark={props.deleteBookmark} searchByTag={props.searchByTag} />
                         <br />
                         </div>
                     ))}
