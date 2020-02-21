@@ -4,7 +4,7 @@ import { sendMessage, receiveMessage } from '../../events/MessageService';
 
 interface Props {
     show?: boolean,
-    elements?: Array<string>,
+    elements?: Array<any>,
     label: string,
     icon: string,
     number?: number,

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './style.scss';
+import OakPrompt from '../Ux/OakPrompt';
 
 interface Props {
     editBookmark: Function,
@@ -12,6 +13,16 @@ interface State {
 }
 
 class Link extends Component<Props, State> {
+
+    state = {
+        showDeletePrompt: false
+    }
+
+    toggleDeletePrompt = () => {
+        this.setState ({
+            showDeletePrompt: !this.state.showDeletePrompt
+        })
+    }
 
     edit = () => {
         this.props.editBookmark(this.props.bookmark);
@@ -31,10 +42,11 @@ class Link extends Component<Props, State> {
         
         return (
             <div>
+                <OakPrompt visible={this.state.showDeletePrompt} toggleVisibility={this.toggleDeletePrompt} action={this.delete} text="Are you sure, you want to delete the bookmark?" />
                 <div className="title typography-4">{this.props.bookmark.title}
                     <div className="action-icon">
                         <i onClick={this.edit} className="material-icons">edit</i>
-                        <i onClick={this.delete} className="material-icons">delete</i>
+                        <i onClick={this.toggleDeletePrompt} className="material-icons">delete</i>
                     </div>
                 </div>
                 <div className="url typography-6"><a target="_blank" rel="noopener noreferrer" href={this.props.bookmark.href}>{this.props.bookmark.href}</a></div>

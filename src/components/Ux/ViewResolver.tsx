@@ -61,7 +61,7 @@ class ViewResolver extends Component<Props, State> {
     }
 
     initializeViews() {
-        React.Children.toArray(this.state.views).forEach((node) => {
+        React.Children.toArray(this.state.views).forEach((node: any) => {
             // node.type.name is minified after build and so static build result has different alphabet
             // if (node.type.name === 'View') {
                 if (node.props.main) {

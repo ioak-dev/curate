@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import './style.scss';
 import Home from '../Home';
-import Bookmarks from '../Bookmarks';
+import BookmarkController from '../Bookmarks/BookmarkController';
 import Notes from '../Notes';
 import { HashRouter } from 'react-router-dom/cjs/react-router-dom.min';
 import Login from '../Auth/Login';
@@ -19,7 +19,7 @@ import Notification from '../Notification';
 import Navigation from '../Navigation';
 import Settings from '../Settings';
 import { Authorization } from '../Types/GeneralTypes';
-import { sendMessage } from '../../events/MessageService';
+import { sendMessage, receiveMessage } from '../../events/MessageService';
 import ResetPassword from '../Auth/ResetPassword';
 
 const themes = {
@@ -68,6 +68,16 @@ class Content extends Component<Props, State> {
         this.props.getProfile();
         this.props.getAuth();
     }
+
+    componentDidMount() {
+        receiveMessage().subscribe(
+            message => {
+                if (message.name === 'session expired') {
+                    this.logout(null, 'failure', 'Session expired. Login again');
+                }
+            }
+        )
+    }
     
     logout = (event, type = 'success', message = 'You have been logged out') => {
         this.props.removeAuth();
@@ -95,7 +105,7 @@ class Content extends Component<Props, State> {
                                 <Route path="/home" render={(props) => <Home {...props} {...this.props} logout={() => this.logout}/>} />
                                 <Route path="/login" render={(props) => <Login {...props} {...this.props} logout={() => this.logout}/>} />
                                 <Route path="/reset" render={(props) => <ResetPassword {...props} {...this.props} logout={() => this.logout}/>} />
-                                <PrivateRoute path="/bookmarks" render={(props) => <Bookmarks {...props} {...this.props} logout={this.logout} />} />
+                                <PrivateRoute path="/bookmarks" render={(props) => <BookmarkController {...props} {...this.props} logout={this.logout} />} />
                                 <PrivateRoute path="/notes" render={(props) => <Notes {...props} {...this.props} logout={() => this.logout} />} />
                                 <Route path="/settings" render={(props) => <Settings {...props} {...this.props} logout={() => this.logout}/>} />
                             </MuiThemeProvider>
