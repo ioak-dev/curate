@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from './Link';
 import OakDialog from '../Ux/OakDialog';
 import ViewResolver from '../Ux/ViewResolver';
@@ -40,17 +40,20 @@ const BookmarkView = (props: Props) => {
             }
         ]
     };
-        
-    receiveMessage().subscribe(
-        message => {
-            if (message.name === domain && message.signal) {
-                sendMessage('notification', true, {type: 'success', message: domain + " " + message.data.action, duration: 5000});
-                if (message.data.action !== 'deleted') {
-                    toggleEditDialog();
+    
+    useEffect(() => {
+        const eventBus = receiveMessage().subscribe(
+            message => {
+                if (message.name === domain && message.signal) {
+                    sendMessage('notification', true, {type: 'success', message: domain + " " + message.data.action, duration: 5000});
+                    if (message.data.action !== 'deleted') {
+                        toggleEditDialog();
+                    }
                 }
             }
-        }
-    )
+        );
+        return () => eventBus.unsubscribe();
+    })
 
     function newBookmark() {
         props.selectBookmark(null);
