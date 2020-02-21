@@ -7,9 +7,9 @@ import OakButton from '../Ux/OakButton';
 
 interface Props {
     note: any,
-    id: string,
     deleteNote: Function,
     saveNote: Function,
+    handleChange: Function,
     notebooks: any
 }
 
@@ -18,17 +18,10 @@ interface State {
     preview: boolean,
 
     newNotebook: string,
-
-    id?: string,
-    title: string,
-    tags: string,
-    content: any,
-    notebook: string,
-    flags: any,
-    flag: string
+    flags: any
 }
 
-class Note extends Component<Props, State> {
+class Link extends Component<Props, State> {
     
     _isMounted = false;
 
@@ -39,11 +32,6 @@ class Note extends Component<Props, State> {
             editNote: false,
             preview: true,
             newNotebook: '',
-            title: '',
-            content: '',
-            tags: '',
-            notebook: '',
-            flag: '',
 
             flags: [
                 {
@@ -91,17 +79,12 @@ class Note extends Component<Props, State> {
     }
 
     delete = () => {
-        this.props.deleteNote(this.props.id);
+        this.props.deleteNote(this.props.note._id);
     }
 
     showEdit = () => {
         this.setState({
-            editNote: true,
-            title: this.props.note.title,
-            content: this.props.note.content,
-            tags: this.props.note.tags,
-            notebook: this.props.note.notebook,
-            flag: this.props.note.flag
+            editNote: true
         })
     }
 
@@ -112,20 +95,13 @@ class Note extends Component<Props, State> {
     }
 
     save = () => {
-        let notebook = this.state.notebook;
+        let notebook = this.props.note.notebook;
 
         if (notebook === '<create new>') {
             notebook = this.state.newNotebook;
         }
 
-        this.props.saveNote({
-            id: this.props.id,
-            title: this.state.title,
-            content: this.state.content,
-            tags: this.state.tags,
-            flag: this.state.flag,
-            notebook: notebook
-        }, true)
+        this.props.saveNote(this.props.note, true)
     }
 
     togglepreview = () => {
@@ -134,14 +110,14 @@ class Note extends Component<Props, State> {
         })
     }
 
-    handleChange = (event) => {
-        this.setState(
-            {
-                ...this.state,
-                [event.target.name]: event.target.value
-            }
-        )
-    }
+    // handleChange = (event) => {
+    //     this.setState(
+    //         {
+    //             ...this.state,
+    //             [event.target.name]: event.target.value
+    //         }
+    //     )
+    // }
 
     render() {
         const tags: any = [];
@@ -172,7 +148,7 @@ class Note extends Component<Props, State> {
             
             {this.state.editNote && 
                 <div>
-                    <div className="typography-3 space-bottom-1">{this.state.title}</div>
+                    <div className="typography-3 space-bottom-1">{this.props.note.title}</div>
                     
                     <OakButton action={this.save} theme="primary" variant="animate in" align="left"><i className="material-icons">double_arrow</i>Save</OakButton>
                     <OakButton action={this.showEdit} theme="default" variant="outline" align="center"><i className="material-icons">refresh</i>Undo All</OakButton>
@@ -180,22 +156,22 @@ class Note extends Component<Props, State> {
                     {!this.state.preview && <OakButton action={this.togglepreview} theme="default" variant="outline" align="right"><i className="material-icons">visibility</i>Show Preview</OakButton>}
                     {this.state.preview && <OakButton action={this.togglepreview} theme="default" variant="outline" align="right"><i className="material-icons">visibility_off</i>Hide Preview</OakButton>}
                     
-                    <div><OakSelect width="width-25" label="Flag" data={this.state} id="flag" handleChange={e => this.handleChange(e)} objects={this.state.flags} /></div>
-                    <div><OakSelect label="Notebook" data={this.state} id="notebook" handleChange={e => this.handleChange(e)} elements={this.props.notebooks} firstAction="<create new>" /></div>
+                    <div><OakSelect width="width-25" label="Flag" data={this.props.note} id="flag" handleChange={e => this.props.handleChange(e)} objects={this.state.flags} /></div>
+                    {/* <div><OakSelect label="Notebook" data={this.state} id="notebook" handleChange={e => this.handleChange(e)} elements={this.props.notebooks} firstAction="<create new>" /></div> */}
                     <div>
-                        {this.state.notebook === '<create new>' && <OakText label="Notebook name" data={this.state} id="newNotebook" handleChange={e => this.handleChange(e)} />}
+                        {this.props.note.notebook === '<create new>' && <OakText label="Notebook name" data={this.props.note} id="newNotebook" handleChange={e => this.props.handleChange(e)} />}
                     </div>
-                    <OakText label="Title" data={this.state} id="title" handleChange={e => this.handleChange(e)} />
-                    <OakText label="Tags (separated by blank spaces)" data={this.state} id="tags" handleChange={e => this.handleChange(e)} />
+                    <OakText label="Title" data={this.props.note} id="title" handleChange={e => this.props.handleChange(e)} />
+                    <OakText label="Tags (separated by blank spaces)" data={this.props.note} id="tags" handleChange={e => this.props.handleChange(e)} />
 
                     {this.state.preview && <div className="edit-note-view">
-                        <div><OakText label="Content (Markdown / HTML / Plaintext)" data={this.state} id="content" multiline handleChange={e => this.handleChange(e)} /></div>
+                        <div><OakText label="Content (Markdown / HTML / Plaintext)" data={this.props.note} id="content" multiline handleChange={e => this.props.handleChange(e)} /></div>
                         <div>
                             <div className="typography-5 space-bottom-1">Preview</div>
-                            <Showdown source={this.state.content} />
+                            <Showdown source={this.props.note.content} />
                         </div>
                     </div>}
-                    {!this.state.preview && <OakText label="Content (Markdown / HTML / Plaintext)" data={this.state} id="content" multiline handleChange={e => this.handleChange(e)} />}
+                    {!this.state.preview && <OakText label="Content (Markdown / HTML / Plaintext)" data={this.props.note} id="content" multiline handleChange={e => this.props.handleChange(e)} />}
                     <div className="space-top-2" />
             </div>}
             </>
@@ -203,4 +179,4 @@ class Note extends Component<Props, State> {
     }
 }
 
-export default Note;
+export default Link;

@@ -54,7 +54,7 @@ export default class OakSelect extends React.Component<Props, State> {
     if (this.props.elements) {
       dropdownList = this.props.elements.map(item => <div className="option" key={item} onClick={(e) => this.changeSelection(e, item)}>{item}</div>);
     } else if (this.props.objects) {
-      dropdownList = this.props.objects.map(item => <div className="option" key={item} onClick={(e) => this.changeSelection(e, item.key)}>{item.value}</div>);
+      dropdownList = this.props.objects.map(item => <div className="option" key={item.key} onClick={(e) => this.changeSelection(e, item.key)}>{item.value}</div>);
     }
 
     return (

@@ -3,7 +3,7 @@ import { Route } from 'react-router-dom';
 import './style.scss';
 import Home from '../Home';
 import BookmarkController from '../Bookmarks/BookmarkController';
-import Notes from '../Notes';
+import NoteController from '../Notes/NoteController';
 import { HashRouter } from 'react-router-dom/cjs/react-router-dom.min';
 import Login from '../Auth/Login';
 import PrivateRoute from '../Auth/PrivateRoute';
@@ -106,7 +106,7 @@ class Content extends Component<Props, State> {
                                 <Route path="/login" render={(props) => <Login {...props} {...this.props} logout={() => this.logout}/>} />
                                 <Route path="/reset" render={(props) => <ResetPassword {...props} {...this.props} logout={() => this.logout}/>} />
                                 <PrivateRoute path="/bookmarks" render={(props) => <BookmarkController {...props} {...this.props} logout={this.logout} />} />
-                                <PrivateRoute path="/notes" render={(props) => <Notes {...props} {...this.props} logout={() => this.logout} />} />
+                                <PrivateRoute path="/notes" render={(props) => <NoteController {...props} {...this.props} logout={() => this.logout} />} />
                                 <Route path="/settings" render={(props) => <Settings {...props} {...this.props} logout={() => this.logout}/>} />
                             </MuiThemeProvider>
                         </div>

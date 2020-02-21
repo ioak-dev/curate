@@ -1,0 +1,250 @@
+import React, { Component, useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import './style.scss';
+import { sendMessage } from '../../events/MessageService';
+import { Authorization } from '../Types/GeneralTypes';
+import { fetchNote, saveNote, deleteNote } from '../../actions/NoteActions';
+import NoteView from './NoteView';
+import { isEmptyOrSpaces, match, sort } from '../Utils';
+
+const queryString = require('query-string');
+
+interface Props {
+    authorization: Authorization
+    location: any,
+    logout: Function,
+
+    fetchNote: Function,
+    saveNote: Function,
+    deleteNote: Function,
+    note: any
+}
+
+const NoteController = (props: Props) => {
+    const emptyNote = {
+        _id: undefined,
+        id: undefined,
+        type: 'Notebook',
+        title: '',
+        content: '',
+        tags: '',
+        notebook: ''
+    }
+    const [note, setNote] = useState(emptyNote);
+
+    const [searchPref, setSearchPref] = useState({
+        title: true,
+        tags: true,
+        content: true,
+        searchText: "",
+        filtered: false,
+        filterActivator: false
+    });
+
+    const [filterPref, setFilterPref] = useState({
+        notebookFilter: "all notebooks",
+        notebookList: [...new Set()],
+        sortBy: 'lastModifiedAt',
+        sortOrder: 'descending',
+        filtered: false,
+        filterActivator: false
+    });
+
+    const [firstLoad, setFirstLoad] = useState(true);
+    const [searchResults, setSearchResults] = useState([]);
+    const [view, setView] = useState([]);
+    const [existingNotebookList, setExistingNotebookList] = useState([]);
+
+    useEffect(() => {
+        if (props.location.search) {
+            const query = queryString.parse(props.location.search);
+            if (query && query.q) {
+                if (query.q.startsWith('tags')) {
+                    setSearchPref({
+                        ...searchPref,
+                        title: false,
+                        tags: true,
+                        content: false
+                    });
+                }
+                setSearchPref({...searchPref, searchText: query.q, filterActivator: !searchPref.filterActivator});
+            }
+        }
+    }, [props.location.search])
+
+    useEffect(() => {
+        if (firstLoad && props.authorization?.isAuth) {
+            props.fetchNote(props.authorization);
+            setFirstLoad(false);
+        }
+    }, [props.authorization])
+
+    useEffect(() => {
+        setSearchPref({...searchPref, filterActivator: !searchPref.filterActivator});
+
+        const existingNotebookList: any = [];
+        props.note?.items?.map(item => existingNotebookList.push(item.notebook));
+        setExistingNotebookList(Array.from(new Set(existingNotebookList)));
+    }, [props.note])
+
+    useEffect(() => {
+        search();
+    }, [searchPref.filterActivator]);
+
+    useEffect(() => {
+        filter();
+    }, [filterPref.filterActivator]);
+
+    const selectNote = (note) => {
+        setNote(note);
+    }
+
+    const deleteNote = (bookmarkId) => {
+        props.deleteNote(props.authorization, bookmarkId);
+    }
+
+    const clearSearch = () => {
+        setView(props.note?.items);
+        setFirstLoad(false);
+        setSearchPref({...searchPref, searchText: "", filterActivator: !searchPref.filterActivator});
+        sendMessage('sidebar', false)
+    }
+
+    const searchByTag = (tagName) => {
+        setSearchPref({
+            ...searchPref,
+            title: false,
+            tags: true,
+            searchText: tagName,
+            filterActivator: !searchPref.filterActivator
+        });
+    }
+
+    const search = (event?: any) => {
+        if (event) {
+            event.preventDefault();
+        }
+        if (isEmptyOrSpaces(searchPref.searchText)) {
+            setSearchResults(props.note?.items);
+            setSearchPref({...searchPref, filtered: false});
+            setFilterPref({...filterPref, filterActivator: !filterPref.filterActivator});
+            return;
+        }
+
+        setSearchResults(props.note?.items?.filter((item) => {
+                if (searchPref.title && match(item.title, searchPref.searchText)) {
+                    return true;
+                } else if (searchPref.tags && match(item.tags, searchPref.searchText)) {
+                    return true;
+                }
+            })
+        );
+        setSearchPref({...searchPref, filtered: true});
+        setFilterPref({...filterPref, filterActivator: !filterPref.filterActivator});
+    }
+
+    const filter = () => {
+        const notebookList: any = [];
+        let noteList: any = [];
+        searchResults.map((item: any) => {
+            if (isEmptyOrSpaces(filterPref.notebookFilter) || filterPref.notebookFilter === 'all notebooks' || item.notebook === filterPref.notebookFilter) {
+                noteList.push(item);
+            }
+            notebookList.push(item.notebook);
+        });
+    
+        noteList = sort(noteList, filterPref.sortBy, filterPref.sortOrder === 'descending' ? true : false);
+
+        let selectedNoteId = '';
+        if (noteList && noteList.length > 0) {
+            selectedNoteId = noteList[0]._id;
+        }
+
+        
+        if (noteList.length > 0) {
+            let activeSelection = false;
+            noteList.map((item: any) => {
+                if (item._id == note.id || item._id == note._id) {
+                    activeSelection = true;
+                }
+            })
+
+            if (!activeSelection) {
+                setNote(searchResults[0]);
+            }
+        }
+
+        setView(noteList);
+        setFilterPref({...filterPref, notebookList: Array.from(new Set(notebookList)), filtered: true});
+        sendMessage('sidebar', false);
+    }
+
+    const toggleSearchPref = (pref) => {
+        setSearchPref({
+            ...searchPref,
+            [pref]: !searchPref[pref]
+        });
+    }
+
+    const saveNote = () => {
+
+        if (!note) {
+            sendMessage('notification', true, {type: 'failure', message: 'Unknown error', duration: 5000});
+            return;
+        }
+
+        if (isEmptyOrSpaces(note.notebook)) {
+            sendMessage('notification', true, {type: 'failure', message: 'Notebook not chosen', duration: 5000});
+            return;
+        }
+
+        if (isEmptyOrSpaces(note.title)) {
+            sendMessage('notification', true, {type: 'failure', message: 'Note name / title missing', duration: 5000});
+            return;
+        }
+
+        if (isEmptyOrSpaces(note.tags)) {
+            note.tags = 'unsorted';
+        }
+
+        props.saveNote(props.authorization, note);
+    }
+
+    const handleNoteDataChange = (event) => {
+        setNote({...note, [event.currentTarget.name]: event.currentTarget.value});
+    }
+
+    const handleSearchPrefDataChange = (event) => {
+        setSearchPref({...searchPref, [event.currentTarget.name]: event.currentTarget.value});
+    }
+
+    const handleFilterPrefDataChange = (event) => {
+        setFilterPref({...filterPref, [event.currentTarget.name]: event.currentTarget.value, filterActivator: !filterPref.filterActivator});
+    }
+
+    // const noteview = 
+    //     <>
+    //         {note.type !== 'Artboard' && <Link key={note.id} note={note} saveNote={saveNote} deleteNote={deleteNote} notebooks={existingNotebookList}/>}
+    //         {note.type === 'Artboard' && <Artboard key={note.id} note={note} saveNote={saveNote} deleteNote={deleteNote} notebooks={existingNotebookList}/>}
+    //     </>;
+    // const listNoteRef = view?.map((item: any) => (
+    //     <div key={item._id}>
+    //         {/* <NoteRef selected={selectedNote?.id === item._id ? true : false} id={item._id} note={item} selectNote={() => selectNote(item)} showTag={notebookFilter === 'all notebooks'}/> */}
+    //     </div>
+    // ))
+
+    return (
+        <NoteView view={view} notebooks={existingNotebookList}
+            note={note} handleNoteDataChange={handleNoteDataChange} selectNote={selectNote} deleteNote={deleteNote} saveNote={saveNote}
+            searchPref={searchPref} handleSearchPrefDataChange={handleSearchPrefDataChange} toggleSearchPref={toggleSearchPref} clearSearch={clearSearch} 
+            filterPref={filterPref} handleFilterPrefDataChange={handleFilterPrefDataChange}
+            search={search} searchByTag={searchByTag}
+        />
+    )
+}
+
+const mapStateToProps = state => ({
+    note: state.note
+})
+  
+export default connect(mapStateToProps, { fetchNote, saveNote, deleteNote })(NoteController);

@@ -7,7 +7,6 @@ import OakButton from '../Ux/OakButton';
 
 interface Props {
     note: any,
-    id: string,
     deleteNote: Function,
     saveNote: Function,
     notebooks: any
@@ -86,7 +85,7 @@ class Artboard extends Component<Props, State> {
     }
 
     delete = () => {
-        this.props.deleteNote(this.props.id);
+        this.props.deleteNote(this.props.note.id);
     }
 
     showEdit = () => {
@@ -109,7 +108,7 @@ class Artboard extends Component<Props, State> {
         }
 
         this.props.saveNote({
-            id: this.props.id,
+            id: this.props.note.id,
             title: this.state.title,
             attributes: this.state.attributes,
             content: this.state.content,

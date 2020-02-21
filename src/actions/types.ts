@@ -6,5 +6,4 @@ export const GET_PROFILE = 'GET_PROFILE';
 export const SET_PROFILE = 'SET_PROFILE';
 
 export const FETCH_BOOKMARK = 'FETCH_BOOKMARK';
-export const SAVE_BOOKMARK = 'SAVE_BOOKMARK';
-export const REMOVE_BOOKMARK = 'REMOVE_BOOKMARK';
+export const FETCH_NOTE = 'FETCH_NOTE';

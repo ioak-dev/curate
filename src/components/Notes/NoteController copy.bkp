@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import Note from './Note';
+import { connect } from 'react-redux';
+import Link from './Link';
 import { Switch } from '@material-ui/core';
 import { constants } from '../Constants';
 import { httpGet, httpPut, httpDelete } from "../Lib/RestTemplate";
@@ -7,16 +8,17 @@ import OakDialog from '../Ux/OakDialog';
 import ViewResolver from '../Ux/ViewResolver';
 import View from '../Ux/View';
 import './style.scss';
-import NoteRef from './NoteRef';
 import { isEmptyOrSpaces, match, sort } from '../Utils';
 import OakSelect from '../Ux/OakSelect';
-import Artboard from './Artboard';
 import Sidebar from '../Ux/Sidebar';
 
 import { sendMessage, receiveMessage } from '../../events/MessageService';
 import { Authorization } from '../Types/GeneralTypes';
+import { fetchNote, saveNote, deleteNote } from '../../actions/NoteActions';
 import OakText from '../Ux/OakText';
 import OakButton from '../Ux/OakButton';
+import NoteRef from './NoteRef';
+import Artboard from './Artboard';
 
 const queryString = require('query-string');
 
@@ -60,7 +62,7 @@ interface State {
     sidebarElements: any
 }
 
-class Notes extends Component<Props, State> {
+class NoteController extends Component<Props, State> {
 
     _isMounted = false;
 
@@ -477,7 +479,7 @@ class Notes extends Component<Props, State> {
         const noteview = this.state.view.map(item => (
             <div key={item._id}>
                 {item._id === this.state.selectedNoteId && item.type !== 'Artboard' &&
-                        <Note key={item._id} id={item._id} note={item} saveNote={this.saveNote} deleteNote={this.deleteNote} notebooks={this.state.existingNotebookList}/>}
+                        <Link key={item._id} id={item._id} note={item} saveNote={this.saveNote} deleteNote={this.deleteNote} notebooks={this.state.existingNotebookList}/>}
                 {item._id === this.state.selectedNoteId && item.type === 'Artboard' &&
                         <Artboard key={item._id} id={item._id} note={item} saveNote={this.saveNote} deleteNote={this.deleteNote} notebooks={this.state.existingNotebookList}/>}
             </div>
@@ -584,4 +586,8 @@ class Notes extends Component<Props, State> {
     }
 }
 
-export default Notes;
+const mapStateToProps = state => ({
+    note: state.note
+})
+  
+export default connect(mapStateToProps, { fetchNote, saveNote, deleteNote })(NoteController);
