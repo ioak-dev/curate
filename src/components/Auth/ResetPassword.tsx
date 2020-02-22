@@ -5,8 +5,8 @@ import './Login.scss';
 import { resetPassword } from './AuthService';
 import { sendMessage } from '../../events/MessageService';
 import {isEmptyOrSpaces} from "../Utils";
-import OakText from '../Ux/OakText';
-import OakButton from '../Ux/OakButton';
+import OakText from '../../oakui/OakText';
+import OakButton from '../../oakui/OakButton';
 
 const queryString = require('query-string');
 

@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import BookmarkItem from './BookmarkItem';
-import OakDialog from '../Ux/OakDialog';
-import ViewResolver from '../Ux/ViewResolver';
-import View from '../Ux/View';
+import OakDialog from '../../oakui/OakDialog';
+import ViewResolver from '../../oakui/ViewResolver';
+import View from '../../oakui/View';
 import './style.scss';
 import { Switch } from '@material-ui/core';
-import Sidebar from '../Ux/Sidebar';
-import OakText from '../Ux/OakText';
-import OakButton from '../Ux/OakButton';
+import Sidebar from '../../oakui/Sidebar';
+import OakText from '../../oakui/OakText';
+import OakButton from '../../oakui/OakButton';
 import { receiveMessage, sendMessage } from '../../events/MessageService';
+import OakPagination from '../../oakui/OakPagination';
 
 interface Props {
     selectBookmark: Function,
@@ -29,6 +30,10 @@ interface Props {
 
 const BookmarkView = (props: Props) => {
     const [editDialog, setEditDialog] = useState(false);
+    const [paginationData, setPaginationData] = useState({
+        pageNo: 1,
+        rowsPerPage: 6,
+    });
     
     const domain = "bookmark";    
     const sidebarElements = {
@@ -66,7 +71,15 @@ const BookmarkView = (props: Props) => {
     }
 
     function toggleEditDialog() {
+        console.log(editDialog);
         setEditDialog(!editDialog);
+    }
+
+    const onChangePage = (pageNo: number, rowsPerPage: number) => {
+        setPaginationData({
+            pageNo: pageNo,
+            rowsPerPage: rowsPerPage
+        });
     }
 
     return (
@@ -85,7 +98,9 @@ const BookmarkView = (props: Props) => {
 
                 <ViewResolver>
                     <View main>
-                    {props.view.map((item: any) => (
+                    <OakPagination totalRows={props.view.length} onChangePage={onChangePage} label="Items per page" />
+                    <div className="space-bottom-2" />
+                    {props.view.slice((paginationData.pageNo - 1) * paginationData.rowsPerPage, paginationData.pageNo * paginationData.rowsPerPage).map((item: any) => (
                         <div key={item._id}>
                         <BookmarkItem id={item._id} bookmark={item} editBookmark={selectBookmark} deleteBookmark={props.deleteBookmark} searchByTag={props.searchByTag} />
                         <br />

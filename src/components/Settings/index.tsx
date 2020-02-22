@@ -1,8 +1,8 @@
 import React from 'react';
 import { getProfile, setProfile, persistProfile } from '../../actions/ProfileActions';
 import './style.scss';
-import View from '../Ux/View';
-import ViewResolver from '../Ux/ViewResolver';
+import View from '../../oakui/View';
+import ViewResolver from '../../oakui/ViewResolver';
 import { Switch } from '@material-ui/core';
 import { connect } from 'react-redux';
 import {withCookies} from 'react-cookie';
@@ -14,8 +14,8 @@ import { sendMessage } from '../../events/MessageService';
 import { httpGet } from "../Lib/RestTemplate";
 import {constants} from "../Constants";
 import {sendBookmarkExportEmail} from "./SettingsService";
-import OakText from '../Ux/OakText';
-import OakButton from '../Ux/OakButton';
+import OakText from '../../oakui/OakText';
+import OakButton from '../../oakui/OakButton';
 
 interface Props {
   profile: Profile,

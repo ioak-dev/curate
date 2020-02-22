@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import NoteItem from './NoteItem';
-import OakDialog from '../Ux/OakDialog';
-import ViewResolver from '../Ux/ViewResolver';
-import View from '../Ux/View';
+import OakDialog from '../../oakui/OakDialog';
+import ViewResolver from '../../oakui/ViewResolver';
+import View from '../../oakui/View';
 import './style.scss';
 import { Switch } from '@material-ui/core';
-import Sidebar from '../Ux/Sidebar';
-import OakText from '../Ux/OakText';
-import OakButton from '../Ux/OakButton';
+import Sidebar from '../../oakui/Sidebar';
+import OakText from '../../oakui/OakText';
+import OakButton from '../../oakui/OakButton';
 import { receiveMessage, sendMessage } from '../../events/MessageService';
-import OakSelect from '../Ux/OakSelect';
+import OakSelect from '../../oakui/OakSelect';
 import NoteRef from './NoteRef';
 
 

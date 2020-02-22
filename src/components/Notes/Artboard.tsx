@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { receiveMessage } from '../../events/MessageService';
-import OakSelect from '../Ux/OakSelect';
+import OakSelect from '../../oakui/OakSelect';
 import Canvas from '../Canvas';
-import OakText from '../Ux/OakText';
-import OakButton from '../Ux/OakButton';
+import OakText from '../../oakui/OakText';
+import OakButton from '../../oakui/OakButton';
 
 interface Props {
     note: any,

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './ViewResolver.scss';
-import { sendMessage, receiveMessage } from '../../events/MessageService';
+import { sendMessage, receiveMessage } from '../events/MessageService';
 import OakButton from './OakButton';
 
 interface Props {

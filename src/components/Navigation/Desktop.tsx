@@ -5,7 +5,7 @@ import curate_white from '../../images/curate_white.svg';
 import curate_black from '../../images/curate_black.svg';
 import Links from './Links';
 import { Authorization, Profile } from '../Types/GeneralTypes';
-import OakButton from '../Ux/OakButton';
+import OakButton from '../../oakui/OakButton';
 
 interface Props {    
     sendEvent: Function,

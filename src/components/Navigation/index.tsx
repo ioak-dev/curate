@@ -8,10 +8,10 @@ import './style.scss';
 import Desktop from './Desktop';
 import Mobile from './Mobile';
 import { Switch } from '@material-ui/core';
-import OakDialog from '../Ux/OakDialog';
+import OakDialog from '../../oakui/OakDialog';
 import { Authorization, Profile } from '../Types/GeneralTypes';
 import { receiveMessage } from '../../events/MessageService';
-import OakButton from '../Ux/OakButton';
+import OakButton from '../../oakui/OakButton';
 
 interface Props {    
     sendEvent: Function,

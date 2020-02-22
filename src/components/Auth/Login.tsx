@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { getAuth, addAuth, removeAuth } from '../../actions/AuthActions';
 import { withCookies } from 'react-cookie';
@@ -7,8 +7,8 @@ import {signup, signin, sentPasswordChangeEmail, preSignup, preSignin} from './A
 import { Authorization } from '../Types/GeneralTypes';
 import { sendMessage } from '../../events/MessageService';
 import {isEmptyOrSpaces} from "../Utils";
-import OakText from '../Ux/OakText';
-import OakButton from '../Ux/OakButton';
+import OakText from '../../oakui/OakText';
+import OakButton from '../../oakui/OakButton';
 
 const queryString = require('query-string');
 
@@ -30,45 +30,45 @@ interface State {
     resetCode: string
 }
 
-class Login extends Component<Props, State> {
-    constructor(props) {
-        super(props);
-        this.state = {
-            newuser: false,
-            name: '',
-            email: '',
-            password: '',
-            resetCode:''
-        }
-    }
+const Login = (props: Props) => {
 
-    componentDidMount() {
-        if (this.props.location.search) {
-            const query = queryString.parse(this.props.location.search);
+    const [data, setData] = useState({
+        newuser: false,
+        name: '',
+        email: '',
+        password: '',
+        resetCode:''
+    })
+
+    useEffect(() => {
+        if (props.location.search) {
+            const query = queryString.parse(props.location.search);
             if (query && query.type === 'signup') {
-                this.setState({
-                    newuser: true
-                })
+                setData({...data, newuser: true});
             }
         }
-    }
+    }, []);
 
-    signin = (event) => {
+    useEffect(() => {
+        console.log(data.newuser);
+    })
+
+    const signinAction = (event) => {
         event.preventDefault();
 
         sendMessage('notification', false);
         sendMessage('spinner');
-        if (this.state.email && this.state.password) {
-            preSignin(this.state.email).then((response) => {
+        if (data.email && data.password) {
+            preSignin(data.email).then((response) => {
                 if (response.status === 200) {
                     signin({
-                        email: this.state.email,
-                        password: this.state.password
+                        email: data.email,
+                        password: data.password
                         }, response.data)
                         .then((response) => {
                             if (response.status === 200) {
                                 sendMessage('notification', true, {message: 'Signed In successfully', type: 'success', duration: 3000});
-                                this.success(response.data);
+                                success(response.data);
                             } else if (response.status === 401) {
                                 sendMessage('notification', true, {message: 'Incorrect passphrase', type: 'failure', duration: 3000});
                             } else {
@@ -89,58 +89,57 @@ class Login extends Component<Props, State> {
         }
     }
 
-    signup = (event) => {
+    const signupAction = (event) => {
         event.preventDefault();
-        const that = this;
         sendMessage('notification', false);
         sendMessage('spinner');
-        if (this.state.name && this.state.password && this.state.email) {
-            if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.state.email))) {
+        if (data.name && data.password && data.email) {
+            if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(data.email))) {
                 sendMessage('notification', true, {type: 'failure', message: 'Email ID is invalid', duration: 3000});
                 return;
             }
-            preSignup().then(function(response) {
+            preSignup().then((response) => {
                 if (response.status === 200) {
                     signup({
-                        name: that.state.name,
-                        password: that.state.password,
-                        email: that.state.email,
+                        name: data.name,
+                        password: data.password,
+                        email: data.email,
                         solution: response.data.solution,
                         salt: response.data.salt
                         })
-                        .then(function(status) {
+                        .then((status) => {
                             if (status === 200) {
                                 sendMessage('notification', true, {'type': 'success', message: 'Your account has been created. You can login now', duration: 3000});
-                                that.toggle();
+                                setData({...data, newuser: !data.newuser});
                             }
                         })
                 }
             });
-        } else if (!this.state.name) {
+        } else if (!data.name) {
             sendMessage('notification', true, {type: 'failure', message: 'Name cannot be empty', duration: 3000});
-        } else if (!this.state.email) {
+        } else if (!data.email) {
             sendMessage('notification', true, {type: 'failure', message: 'Email cannot be empty', duration: 3000});
-        } else if (!this.state.password) {
+        } else if (!data.password) {
             sendMessage('notification', true, {type: 'failure', message: 'Password cannot be empty', duration: 3000});
         }
     }
 
-    sentEmailWithCode = () => {
-        if (isEmptyOrSpaces(this.state.email)) {
+    const sentEmailWithCode = () => {
+        if (isEmptyOrSpaces(data.email)) {
             sendMessage('notification', true, {message: 'Email cannot be empty', type: 'failure', duration: 5000});
             return;
         }
 
-        this.sentPasswordChangeEmail('password');
+        sentPasswordChangeEmailAction('password');
 
     }
 
-    sentPasswordChangeEmail = (type) => {
+    const sentPasswordChangeEmailAction = (type) => {
         const min = 1;
         const max = 100;
         const rand = min + Math.random() * (max - min);
         sentPasswordChangeEmail({
-            email: this.state.email,
+            email: data.email,
             resetCode: rand
         }, type)
             .then((response: any) => {
@@ -157,77 +156,68 @@ class Login extends Component<Props, State> {
             })
     }
 
-    handleChange = (event) => {
-        this.setState(
-            {
-                ...this.state,
-                [event.currentTarget.name]: event.currentTarget.value
-            }
-        )
+    const handleChange = (event) => {
+        setData({...data, [event.currentTarget.name]: event.currentTarget.value});
     }
 
-    success = (data) => {
-        this.props.addAuth({
+    const toggle = () => {
+        setData({...data, newuser: !data.newuser});
+    }
+
+    const success = (data) => {
+        props.addAuth({
             isAuth: true,
             token: data.token,
             secret: data.secret,
             name: data.name
         });
         sendMessage('loggedin', true);
-        this.props.cookies.set('isAuth', true);
-        this.props.cookies.set('token', data.token);
-        this.props.cookies.set('secret', data.secret);
-        this.props.cookies.set('name', data.name);
-        this.props.cookies.set('email', data.email);
-        this.props.history.push("/bookmarks");
+        props.cookies.set('isAuth', true);
+        props.cookies.set('token', data.token);
+        props.cookies.set('secret', data.secret);
+        props.cookies.set('name', data.name);
+        props.cookies.set('email', data.email);
+        props.history.push("/bookmarks");
         // this.props.history.push("/notes");
     }
 
-    toggle = () => {
-        this.setState({
-            newuser: !this.state.newuser
-        });
-    }
+    return (
+        <div className="login">
+            {!data.newuser && <div className="container">
+                <form method="GET" onSubmit={signinAction} noValidate>
+                    <h1>Log In</h1>
+                    <div className="form">
+                        <OakText label="Username/e-mail" id="email" data={data} handleChange={e => handleChange(e)} />
+                        <OakText label="Password" id="password" type="password" data={data} handleChange={e => handleChange(e)} />
+                    </div>
+                    <br />
+                    <OakButton theme="primary" variant="animate in"  action={signinAction}>Sign In</OakButton>
+                    <br /><br />
+                    Don't have an account? &nbsp; <OakButton theme="secondary" variant="outline"  action={toggle}>Sign Up</OakButton>
+                    <br /><br />
 
-    render() {
-        return (
-            <div className="login">
-                {!this.state.newuser && <div className="container">
-                    <form method="GET" onSubmit={this.signin} noValidate>
-                        <h1>Log In</h1>
-                        <div className="form">
-                            <OakText label="Username/e-mail" id="email" data={this.state} handleChange={e => this.handleChange(e)} />
-                            <OakText label="Password" id="password" type="password" data={this.state} handleChange={e => this.handleChange(e)} />
-                        </div>
-                        <br />
-                        <OakButton theme="primary" variant="animate in"  action={this.signin}>Sign In</OakButton>
-                        <br /><br />
-                        Don't have an account? &nbsp; <OakButton theme="secondary" variant="outline"  action={this.toggle}>Sign Up</OakButton>
-                        <br /><br />
+                </form>
 
-                    </form>
+                <OakButton action={sentEmailWithCode}>Forgot password ?</OakButton>
 
-                    <OakButton action={this.sentEmailWithCode}>Forgot password ?</OakButton>
+            </div>}
 
-                </div>}
-
-                {this.state.newuser && <div className="container">
-                    <form method="GET" onSubmit={this.signup} noValidate>
-                        <h1>Sign Up</h1>
-                        <div className="form">
-                            <OakText label="Name" id="name" data={this.state} handleChange={e => this.handleChange(e)} />
-                            <OakText label="Email / User Name" id="email" data={this.state} handleChange={e => this.handleChange(e)} />
-                            <OakText label="Password" id="password" type="password" data={this.state} handleChange={e => this.handleChange(e)} />
-                        </div>
-                        <br />
-                        <OakButton theme="primary" variant="animate in"  action={this.signup}>Create account</OakButton>
-                        <br /><br />
-                        Already have a account? &nbsp; <OakButton theme="secondary" variant="outline"  action={this.toggle}>Sign In</OakButton>
-                    </form>
-                </div>}
-            </div>
-        );
-    }
+            {data.newuser && <div className="container">
+                <form method="GET" onSubmit={signupAction} noValidate>
+                    <h1>Sign Up</h1>
+                    <div className="form">
+                        <OakText label="Name" id="name" data={data} handleChange={e => handleChange(e)} />
+                        <OakText label="Email / User Name" id="email" data={data} handleChange={e => handleChange(e)} />
+                        <OakText label="Password" id="password" type="password" data={data} handleChange={e => handleChange(e)} />
+                    </div>
+                    <br />
+                    <OakButton theme="primary" variant="animate in"  action={signupAction}>Create account</OakButton>
+                    <br /><br />
+                    Already have a account? &nbsp; <OakButton theme="secondary" variant="outline"  action={toggle}>Sign In</OakButton>
+                </form>
+            </div>}
+        </div>
+    );
 }
 
 const mapStateToProps = state => ({

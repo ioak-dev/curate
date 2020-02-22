@@ -150,7 +150,7 @@ const NoteController = (props: Props) => {
         if (noteList.length > 0) {
             let activeSelection = false;
             noteList.map((item: any) => {
-                if (item._id == note.id || item._id == note._id) {
+                if (item._id === note.id || item._id === note._id) {
                     activeSelection = true;
                 }
             })

@@ -4,6 +4,8 @@ import { shallow } from "enzyme";
 import Backdrop from "./Backdrop";
 import { sendMessage } from "../../events/MessageService";
 
+jest.spyOn(React, 'useEffect').mockImplementation(f => f())
+
 describe("backdrop interaction with dialog component", () => {
     it("should not fade by default", () => {
         const wrapper = shallow(<Backdrop />);

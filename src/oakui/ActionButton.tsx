@@ -9,7 +9,7 @@ interface Props {
     rightAction?: any,
     type?: string
 }
-function ActionButton(props: Props) {
+const ActionButton = (props: Props) => {
     const icon = <i className="material-icons">{props.icon}</i>;
     return (
         <div className="action-button">
