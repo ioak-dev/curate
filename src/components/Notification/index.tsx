@@ -1,35 +1,22 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import './style.scss';
 import { receiveMessage, sendMessage } from '../../events/MessageService';
 
 interface Props {
 }
 
-interface State {
-    notification: any,
-    spinner: boolean
-}
+const Notification= (props: Props) => {
+    const [spinner, setSpinner] = useState(false);
+    const [notification, setNotification] = useState({type: undefined, message: undefined});
 
-class Notification extends Component<Props, State> {
-    constructor(props: Props) {
-        super(props);
-        this.state = {
-            spinner: false,
-            notification: null
-        }
-    }
-    componentWillMount() {
-        receiveMessage().subscribe(message => {
+    useEffect(() => {
+        const eventBus = receiveMessage().subscribe(message => {
             if (message.name === 'notification') {
                 if (!message.signal) {
-                    this.setState({
-                        notification: null,
-                    })
+                    setNotification({type: undefined, message: undefined});
                 } else {
-                    this.setState({
-                        notification: message.data,
-                        spinner: false
-                    })
+                    setNotification(message.data);
+                    setSpinner(false);
                     
                     if (message.data && message.data.duration) {
                         setTimeout(() => {
@@ -40,23 +27,20 @@ class Notification extends Component<Props, State> {
             }
 
             if (message.name === 'spinner') {
-                this.setState({
-                    spinner: message.signal
-                })
+                setSpinner(message.signal)
             }
         });
-    }
+        return () => eventBus.unsubscribe();
+    }, []);
 
-    render() {
-        return (
-            <>
-            {this.state.notification && <div className={"notification " + this.state.notification.type}><div className="message">{this.state.notification.message}</div></div>}
-            {this.state.spinner && <div className="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>}
-            {/* {this.props.spinner && <div className="lds-facebook"><div></div><div></div><div></div></div>} */}
-            {/* {this.props.spinner && <div className="lds-dual-ring"></div>} */}
-            </>
-        );
-    }
+    return (
+        <>
+        {notification && <div className={"notification " + notification?.type}><div className="message">{notification?.message}</div></div>}
+        {spinner && <div className="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>}
+        {/* {this.props.spinner && <div className="lds-facebook"><div></div><div></div><div></div></div>} */}
+        {/* {this.props.spinner && <div className="lds-dual-ring"></div>} */}
+        </>
+    );
 }
 
 export default Notification;

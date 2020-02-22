@@ -1,40 +1,26 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { receiveMessage } from '../../events/MessageService';
 
-interface Props {
-}
-
-interface State {
-    backdrop: string
-}
-
-class Backdrop extends Component<Props, State> {
-    constructor(props: Props) {
-        super(props);
-        this.state = {
-            backdrop: ''
-        }
-    }
-
-    componentDidMount() {
-        receiveMessage().subscribe(
+const Backdrop = () => {
+    const [backdrop, setBackdrop] = useState("");
+    useEffect(() => {
+        const eventBus = receiveMessage().subscribe(
             message => {
                 if (message.name === 'dialog') {
                     if (message.signal) {
-                        this.setState({backdrop: 'backdrop-fade'});
+                        setBackdrop("backdrop-fade");
                     } else {
-                        this.setState({backdrop: ''});
+                        setBackdrop("");
                     }
                 }
             }
-        )
-    }
-
-    render() {
-        return (
-            <div className={this.state.backdrop}></div>
         );
-    }
+        return () => eventBus.unsubscribe();
+    }, []);
+
+    return (
+        <div className={backdrop}></div>
+    );
 }
 
 export default Backdrop;

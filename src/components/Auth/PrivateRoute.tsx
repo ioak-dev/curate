@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getAuth } from '../../actions/AuthActions';
@@ -11,23 +11,17 @@ interface Props {
   render: any
 }
 
-interface State {
-
-}
-
-class PrivateRoute extends Component<Props, State> {
-  componentWillMount() {
-    this.props.getAuth();
-  }
-
-  render() {
+const PrivateRoute = (props: Props) => {
+    useEffect(() => {
+      props.getAuth();
+    }, [props.authorization.isAuth]);
+    
     return (
       <>
-        {this.props.authorization.isAuth && <Route path={this.props.path} render={this.props.render} />}
+        {props.authorization.isAuth && <Route path={props.path} render={props.render} />}
         {/* {!this.props.authorization.isAuth && <Redirect to={{pathname: "/login"}} />} */}
       </>
     );
-  }
 }
 
 const mapStateToProps = state => ({
