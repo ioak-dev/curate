@@ -26,6 +26,7 @@ const BookmarkItem = (props: Props) => {
             <OakPrompt visible={showDeletePrompt} toggleVisibility={() => setShowDeletePrompt(!showDeletePrompt)} action={() => props.deleteBookmark(props.id)} text="Are you sure, you want to delete the bookmark?" />
             <div className="item-container">
                 <div className="item-actions">
+                    <div className="item-edit"><i onClick={() => window.open(props.bookmark.href)} className="material-icons">link</i></div>
                     <div className="item-edit"><i onClick={() => props.editBookmark(props.bookmark)} className="material-icons">edit</i></div>
                     <div className="item-delete"><i onClick={() => setShowDeletePrompt(!showDeletePrompt)} className="material-icons">delete</i></div>
                 </div>

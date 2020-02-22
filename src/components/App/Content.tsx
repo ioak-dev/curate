@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 import { Route } from 'react-router-dom';
 import './style.scss';
 import Home from '../Home';
@@ -62,59 +62,56 @@ interface State {
     event: any
 }
 
-class Content extends Component<Props, State> {
-    constructor(props: Props) {
-        super(props);
-        this.props.getProfile();
-        this.props.getAuth();
-    }
+const Content = (props: Props) => {
+    useEffect(() => {
+        props.getProfile();
+        props.getAuth();
+    }, []);
 
-    componentDidMount() {
+    useEffect(() => {
         receiveMessage().subscribe(
             message => {
                 if (message.name === 'session expired') {
-                    this.logout(null, 'failure', 'Session expired. Login again');
+                    logout(null, 'failure', 'Session expired. Login again');
                 }
             }
         )
-    }
+    });
     
-    logout = (event, type = 'success', message = 'You have been logged out') => {
-        this.props.removeAuth();
-        this.props.cookies.remove('isAuth');
-        this.props.cookies.remove('token');
-        this.props.cookies.remove('secret');
-        this.props.cookies.remove('name');
+    const logout = (event, type = 'success', message = 'You have been logged out') => {
+        props.removeAuth();
+        props.cookies.remove('isAuth');
+        props.cookies.remove('token');
+        props.cookies.remove('secret');
+        props.cookies.remove('name');
         sendMessage('notification', true, {type: type, message: message, duration: 3000});
         sendMessage('loggedout', true);
     }
 
-    render() {
-        return (
-            <div className={"App " + this.props.profile.theme + " " + this.props.profile.textSize + " " + this.props.profile.themeColor}>
-                
-                <HashRouter>
-                    <AuthInit />
-                    <Backdrop />
-                    <div className="body">
-                        <div className="body-content">
-                            <Notification />
-                            <MuiThemeProvider theme={themes[this.props.profile.themeColor]}>
-                                <Navigation {...this.props} logout={() => this.logout}/>
-                                <Route exact path="/" render={(props) => <Home {...props} {...this.props} logout={() => this.logout}/>} />
-                                <Route path="/home" render={(props) => <Home {...props} {...this.props} logout={() => this.logout}/>} />
-                                <Route path="/login" render={(props) => <Login {...props} {...this.props} logout={() => this.logout}/>} />
-                                <Route path="/reset" render={(props) => <ResetPassword {...props} {...this.props} logout={() => this.logout}/>} />
-                                <PrivateRoute path="/bookmarks" render={(props) => <BookmarkController {...props} {...this.props} logout={this.logout} />} />
-                                <PrivateRoute path="/notes" render={(props) => <NoteController {...props} {...this.props} logout={() => this.logout} />} />
-                                <Route path="/settings" render={(props) => <Settings {...props} {...this.props} logout={() => this.logout}/>} />
-                            </MuiThemeProvider>
-                        </div>
+    return (
+        <div className={"App " + props.profile.theme + " " + props.profile.textSize + " " + props.profile.themeColor}>
+            
+            <HashRouter>
+                <AuthInit />
+                <Backdrop />
+                <div className="body">
+                    <div className="body-content">
+                        <Notification />
+                        <MuiThemeProvider theme={themes[props.profile.themeColor]}>
+                            <Navigation {...props} logout={() => logout}/>
+                            <Route exact path="/" render={(propsLocal) => <Home {...props} {...propsLocal} logout={() => logout}/>} />
+                            <Route path="/home" render={(propsLocal) => <Home {...props} {...propsLocal} logout={() => logout}/>} />
+                            <Route path="/login" render={(propsLocal) => <Login {...props} {...propsLocal} logout={() => logout}/>} />
+                            <Route path="/reset" render={(propsLocal) => <ResetPassword {...props} {...propsLocal} logout={() => logout}/>} />
+                            <PrivateRoute path="/bookmarks" render={(propsLocal) => <BookmarkController {...props} {...propsLocal} logout={logout} />} />
+                            <PrivateRoute path="/notes" render={(propsLocal) => <NoteController {...props} {...propsLocal} logout={() => logout} />} />
+                            <Route path="/settings" render={(propsLocal) => <Settings {...props} {...propsLocal} logout={() => logout}/>} />
+                        </MuiThemeProvider>
                     </div>
-                </HashRouter>
-            </div>
-        );
-    }
+                </div>
+            </HashRouter>
+        </div>
+    );
 }
 
 const mapStateToProps = state => ({

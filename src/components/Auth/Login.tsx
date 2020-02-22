@@ -49,10 +49,6 @@ const Login = (props: Props) => {
         }
     }, []);
 
-    useEffect(() => {
-        console.log(data.newuser);
-    })
-
     const signinAction = (event) => {
         event.preventDefault();
 

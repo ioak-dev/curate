@@ -10,6 +10,7 @@ import OakText from '../../oakui/OakText';
 import OakButton from '../../oakui/OakButton';
 import { receiveMessage, sendMessage } from '../../events/MessageService';
 import OakPagination from '../../oakui/OakPagination';
+import OakTable from '../../oakui/OakTable';
 
 interface Props {
     selectBookmark: Function,
@@ -71,7 +72,6 @@ const BookmarkView = (props: Props) => {
     }
 
     function toggleEditDialog() {
-        console.log(editDialog);
         setEditDialog(!editDialog);
     }
 

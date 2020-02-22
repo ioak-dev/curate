@@ -41,6 +41,8 @@
                 // background-color: var(--color-body-dim);
                 padding: 10px 10px;
                 // border-radius: 10px;
+                margin-top: auto;
+                margin-bottom: auto;
             }
 
             .item-divider {
@@ -49,12 +51,12 @@
             
             .item-actions {
                 // background-color: var(--color-body-dim);
-                padding: 10px 5px;
+                padding: 5px 5px;
                 // border-radius: 10px;
                 width: 40px;
                 cursor: pointer;
                 display: grid;
-                grid-template-rows: 1fr 1fr;
+                grid-template-rows: 1fr 1fr 1fr;
                 color: var(--color-primary);
                 color: var(--color-body-invert-dim);
 

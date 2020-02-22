@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import './OakTable.scss';
 import OakPagination from './OakPagination';
 
@@ -24,77 +24,78 @@ interface State {
     sortAsc: boolean
 }
 
-class OakTable extends Component<Props, State> {
-    constructor(props: Props) {
-        super(props);
+const OakTable = (props: Props) => {
+    const [data, setData] = useState([]);
+    const [paginationPref, setPaginationPref] = useState({
+        pageNo: 1,
+        rowsPerPage: 6,
+        sortField: "",
+        sortAsc: true
+    })
+
+    const [headerMap, setHeaderMap] = useState({});
+
+    useEffect(() => {
+        setData(props.data);
         let headerMap = {};
         props.header.forEach(element => {
             headerMap[element.key] = element;
         });
-        
-        this.state = {
-            data: props.data,
-            headerMap: headerMap,
-            pageNo: 1,
-            rowsPerPage: 6,
-            sortField: "",
-            sortAsc: true
+        setHeaderMap(headerMap);
+    }, []);
+
+    useEffect(() => {
+        setData(props.data);
+    }, [props.data]);
+
+    useEffect(() => {
+        pageChanged();
+    }, [paginationPref]);
+
+    const pageChanged = () => {
+        if (props.onChangePage) {
+            props.onChangePage(paginationPref.pageNo, paginationPref.rowsPerPage, paginationPref.sortField, paginationPref.sortAsc);
+        } else if (paginationPref.sortField) {
+            setData(
+                data.sort((a: any, b: any) => compare(a, b))
+            );
         }
     }
 
-    pageChanged = () => {
-        if (this.props.onChangePage) {
-            this.props.onChangePage(this.state.pageNo, this.state.rowsPerPage, this.state.sortField, this.state.sortAsc);
-        } else if (this.state.sortField) {
-            this.setState({
-                data: this.state.data.sort((a,b) => this.compare(a, b))
-            });
-        }
-    }
-
-    compare = (a, b) => {
-        const sortField = this.state.sortField;
-        const sortAsc = this.state.sortAsc;
-        const headerElement = this.state.headerMap[sortField];
-        if (!headerElement.dtype || headerElement.dtype === 'string') {
+    function compare(a: any, b: any): number {
+        const sortField = paginationPref.sortField;
+        const sortAsc = paginationPref.sortAsc;
+        const headerElement = headerMap[sortField];
+        if (!headerElement?.dtype || headerElement?.dtype === 'string') {
             if (sortAsc) {
-                return a[this.state.sortField] > b[this.state.sortField] ? 1 : (a[this.state.sortField] < b[this.state.sortField] ? -1 : 0);
+                return a[paginationPref.sortField] > b[paginationPref.sortField] ? 1 : (a[paginationPref.sortField] < b[paginationPref.sortField] ? -1 : 0);
             } else {
-                return a[this.state.sortField] < b[this.state.sortField] ? 1 : (a[this.state.sortField] > b[this.state.sortField] ? -1 : 0);
+                return a[paginationPref.sortField] < b[paginationPref.sortField] ? 1 : (a[paginationPref.sortField] > b[paginationPref.sortField] ? -1 : 0);
             }
-        } else if (headerElement.dtype === 'number') {
+        // } else if (headerElement.dtype === 'number') {
+        } else {            
             if (sortAsc) {
-                return a[this.state.sortField] - b[this.state.sortField] > 0 ? 1 : (a[this.state.sortField] - b[this.state.sortField] < 0 ? -1 : 0);
+                return a[paginationPref.sortField] - b[paginationPref.sortField] > 0 ? 1 : (a[paginationPref.sortField] - b[paginationPref.sortField] < 0 ? -1 : 0);
             } else {
-                return a[this.state.sortField] - b[this.state.sortField] < 0 ? 1 : (a[this.state.sortField] - b[this.state.sortField] > 0 ? -1 : 0);
+                return a[paginationPref.sortField] - b[paginationPref.sortField] < 0 ? 1 : (a[paginationPref.sortField] - b[paginationPref.sortField] > 0 ? -1 : 0);
             }
         }
         
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.data && nextProps.data !== this.state.data) {
-            this.setState({
-                data: nextProps.data
-            })
-        }
+    const onChangePage = (pageNo: number, rowsPerPage: number) => {
+        setPaginationPref({
+            ...paginationPref, pageNo: pageNo, rowsPerPage: rowsPerPage
+        })
     }
 
-    onChangePage = (pageNo: number, rowsPerPage: number) => {
-        this.setState({
-            pageNo: pageNo,
-            rowsPerPage: rowsPerPage
-        }, () => this.pageChanged());
+    const sort = (fieldName) => {
+        setPaginationPref({
+            ...paginationPref, sortField: fieldName, sortAsc: paginationPref.sortField === fieldName ? !paginationPref.sortAsc : true
+        })
     }
 
-    sort = (fieldName) => {
-        this.setState({
-            sortField: fieldName,
-            sortAsc: this.state.sortField === fieldName ? !this.state.sortAsc : true
-        }, () => this.pageChanged());
-    }
-
-    formatDate = (dateText) => {
+    const formatDate = (dateText) => {
         if (!dateText || /^\s*$/.test(dateText)) {
             return '';
         } else {
@@ -104,81 +105,79 @@ class OakTable extends Component<Props, State> {
         }
     }
 
-    render() {
-        let view: any[] = [];
-        if (this.props.data && this.props.totalRows) {
-            view = this.props.data;
-        } else if (this.props.data && !this.props.totalRows) {
-            view = this.props.data.slice((this.state.pageNo - 1) * this.state.rowsPerPage, this.state.pageNo * this.state.rowsPerPage);
-        }
-        let key = 0;
+    let view: any[] = [];
+    if (props.data && props.totalRows) {
+        view = props.data;
+    } else if (props.data && !props.totalRows) {
+        view = props.data.slice((paginationPref.pageNo - 1) * paginationPref.rowsPerPage, paginationPref.pageNo * paginationPref.rowsPerPage);
+    }
+    let key = 0;
 
-        return (
-            <div className={this.props.material ? "oak-table material" : "oak-table"}>
-                <div className="desktop-view">
-                    <div className="table-container">
-                        <table className = {this.props.dense ? "dense" : ""}>
-                            <thead>
-                                <tr>
-                                    {this.props.header && this.props.header.map(item =>
-                                        <>
-                                        
-                                        <th key={item.key}>
-                                            <div className = "label" onClick={() => this.sort(item.key)}>
-                                                {item.label}
-                                                {this.state.sortField === item.key && this.state.sortAsc && 
-                                                    <i className="material-icons">keyboard_arrow_up</i>}
-                                                {this.state.sortField === item.key && !this.state.sortAsc && 
-                                                    <i className="material-icons">keyboard_arrow_down</i>}
-                                            </div>
-                                        </th>
-                                        </>
-                                        )
-                                    }
-                                </tr>
-                            </thead>
-                            <tbody>
-                            {this.props.data && view.map(row => 
-                                <tr key={key=key+1}>
-                                    {this.props.header && this.props.header.map(column =>
-                                        <>
-                                        {(!this.state.headerMap[column.key].dtype || this.state.headerMap[column.key].dtype === 'string') && 
-                                            <td key={key=key+1}>{row[column.key]}</td>
-                                        }
-                                        {this.state.headerMap[column.key].dtype === 'date' && 
-                                            <td key={key=key+1} className="date">{this.formatDate(row[column.key])}</td>
-                                        }
-                                        {this.state.headerMap[column.key].dtype === 'number' && 
-                                            <td key={key=key+1} className="number">{row[column.key]}</td>
-                                        }
-                                        </>)
-                                    }
-                                </tr>
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
-                    <OakPagination onChangePage={this.onChangePage} totalRows={this.props.totalRows ? this.props.totalRows : this.props.data.length} />
-                </div>
-
-                <div className="mobile-view">
-                    <div className="card-container">
-                        {this.props.data && view.map(row => 
-                            <div className="card" key={key=key+1}>
-                                {this.props.header && this.props.header.map(column =>
-                                    <div key={key=key+1}>
-                                        <b>{column.label}</b>: {row[column.key]}
-                                    </div>
+    return (
+        <div className={props.material ? "oak-table material" : "oak-table"}>
+            <div className="desktop-view">
+                <div className="table-container">
+                    <table className = {props.dense ? "dense" : ""}>
+                        <thead>
+                            <tr>
+                                {props.header && props.header.map(item =>
+                                    <>
+                                    
+                                    <th key={item.key}>
+                                        <div className = "label" onClick={() => sort(item.key)}>
+                                            {item.label}
+                                            {paginationPref.sortField === item.key && paginationPref.sortAsc && 
+                                                <i className="material-icons">keyboard_arrow_up</i>}
+                                            {paginationPref.sortField === item.key && !paginationPref.sortAsc && 
+                                                <i className="material-icons">keyboard_arrow_down</i>}
+                                        </div>
+                                    </th>
+                                    </>
                                     )
                                 }
-                            </div>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {props.data && view.map(row => 
+                            <tr key={key=key+1}>
+                                {props.header && props.header.map(column =>
+                                    <>
+                                    {(!headerMap[column.key]?.dtype || headerMap[column.key]?.dtype === 'string') && 
+                                        <td key={key=key+1}>{row[column.key]}</td>
+                                    }
+                                    {headerMap[column.key]?.dtype === 'date' && 
+                                        <td key={key=key+1} className="date">{formatDate(row[column.key])}</td>
+                                    }
+                                    {headerMap[column.key]?.dtype === 'number' && 
+                                        <td key={key=key+1} className="number">{row[column.key]}</td>
+                                    }
+                                    </>)
+                                }
+                            </tr>
                             )}
-                    </div>
-                    <OakPagination onChangePage={this.onChangePage} totalRows={this.props.totalRows ? this.props.totalRows : this.props.data.length} label="Rows"/>
+                        </tbody>
+                    </table>
                 </div>
+                <OakPagination onChangePage={onChangePage} totalRows={props.totalRows ? props.totalRows : props.data.length} />
             </div>
-        )
-    }
+
+            <div className="mobile-view">
+                <div className="card-container">
+                    {props.data && view.map(row => 
+                        <div className="card" key={key=key+1}>
+                            {props.header && props.header.map(column =>
+                                <div key={key=key+1}>
+                                    <b>{column.label}</b>: {row[column.key]}
+                                </div>
+                                )
+                            }
+                        </div>
+                        )}
+                </div>
+                <OakPagination onChangePage={onChangePage} totalRows={props.totalRows ? props.totalRows : props.data.length} label="Rows"/>
+            </div>
+        </div>
+    )
 }
 
 export default OakTable;
