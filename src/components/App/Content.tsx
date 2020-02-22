@@ -1,4 +1,4 @@
-import React, { Component, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Route } from 'react-router-dom';
 import './style.scss';
 import Home from '../Home';
@@ -56,12 +56,6 @@ interface Props {
     authorization: Authorization
 }
 
-interface State {
-    authorization: Authorization,
-    profile: any,
-    event: any
-}
-
 const Content = (props: Props) => {
     useEffect(() => {
         props.getProfile();
@@ -69,13 +63,14 @@ const Content = (props: Props) => {
     }, []);
 
     useEffect(() => {
-        receiveMessage().subscribe(
+        const eventBus = receiveMessage().subscribe(
             message => {
                 if (message.name === 'session expired') {
                     logout(null, 'failure', 'Session expired. Login again');
                 }
             }
-        )
+        );
+        return () => eventBus.unsubscribe();
     });
     
     const logout = (event, type = 'success', message = 'You have been logged out') => {

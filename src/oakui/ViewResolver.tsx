@@ -26,11 +26,12 @@ const ViewResolver = (props: Props) => {
         viewPort.addListener(() => setMobileViewPort(viewPort.matches));
         setViews(props.children);
         
-        receiveMessage().subscribe(message => {
+        const eventBus = receiveMessage().subscribe(message => {
             if (message.name === 'sidebar') {
                 setShowSide(message.signal);
             }
-        })
+        });
+        return () => eventBus.unsubscribe();
     }, [])
 
     useEffect(() => {

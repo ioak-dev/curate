@@ -11,7 +11,7 @@ interface Props {
     showTag: boolean
 }
 
-const NoteRef = (props: Props) => {
+const NoteLink = (props: Props) => {
 
     const selectNote = () => {
         props.selectNote(props.id);
@@ -25,7 +25,7 @@ const NoteRef = (props: Props) => {
     }
     return (
         <>
-        <div className={props.selected ? "noteref selected" : "noteref"} onClick={selectNote}>
+        <div className={props.selected ? "notelink selected" : "notelink"} onClick={selectNote}>
             <div className="content">
                 {props.note.flag && <div className={"flag-palette " + props.note.flag} />}
                 {props.showTag && <div className="notebook">
@@ -45,4 +45,4 @@ const NoteRef = (props: Props) => {
     )
 }
 
-export default NoteRef;
+export default NoteLink;

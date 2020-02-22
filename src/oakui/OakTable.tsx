@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import './OakTable.scss';
 import OakPagination from './OakPagination';
 
@@ -13,15 +13,6 @@ interface Props {
     onChangePage?: any,
     totalRows?: number,
     material?: boolean
-}
-
-interface State {
-    data: any,
-    headerMap: any,
-    pageNo: number,
-    rowsPerPage: number,
-    sortField: string,
-    sortAsc: boolean
 }
 
 const OakTable = (props: Props) => {

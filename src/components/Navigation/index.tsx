@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import {withRouter} from 'react-router'
 import { getProfile, setProfile, reloadProfile } from '../../actions/ProfileActions';
@@ -33,140 +33,110 @@ interface Props {
     match: any
 }
 
-interface State {
-    visible: boolean,
-    mobilemenu: string,
-    chooseTheme: boolean,
-    showSettings: boolean,
-    transparentNavBar: boolean,
-    firstLoad: boolean
-}
+const Navigation = (props: Props) => {
+    const [data, setData] = useState({
+        visible: false,
+        mobilemenu: 'hide',
+        chooseTheme: false,
+        showSettings: false,
+        transparentNavBar: false,
+        firstLoad: true
+    });
 
-class Navigation extends Component<Props, State> {
-    constructor(props) {
-        super(props);
-        this.props.getProfile();
-        this.state = {
-            visible: false,
-            mobilemenu: 'hide',
-            chooseTheme: false,
-            showSettings: false,
-            transparentNavBar: false,
-            firstLoad: true
-        }
-    }
+    useEffect(() => {
+        props.getProfile();
+    }, []);
 
-    componentDidMount() {
-        receiveMessage().subscribe(
+    useEffect(() => {
+        const eventBus = receiveMessage().subscribe(
             message => {
                 if (message.name === 'navbar-transparency') {
-                    this.setState({
-                        transparentNavBar: message.signal
-                    })
+                    setData({...data, transparentNavBar: message.signal});
                 }
 
                 if (message.name === 'loggedin') {
-                    this.props.reloadProfile(this.props.authorization);
-                    this.setState({
-                        firstLoad: false
-                    })
+                    props.reloadProfile(props.authorization);
+                    setData({...data, firstLoad: false});
                 }
 
                 if (message.name === 'loggedout') {
-                    this.props.history.push('/home');
+                    props.history.push('/home');
                 }
             }
-        )
-    }
+        );
+        return () => eventBus.unsubscribe();
+    });
 
-    componentWillReceiveProps(nextProps) {
-        if (this.state.firstLoad && nextProps.authorization && nextProps.authorization.isAut) {
-            this.props.reloadProfile(nextProps.authorization);
-            this.setState({
-                firstLoad: false
-            })
+    useEffect(() => {
+        if (data.firstLoad && props.authorization?.isAuth) {
+            props.reloadProfile(props.authorization);
+            setData({...data, firstLoad: false});
         }
-    }
+    }, [props.authorization]);
 
-    toggleDarkMode = () => {
-        if (this.props.profile.theme === 'theme_dark') {
-            this.props.setProfile({
-                ...this.props.profile,
-                theme: 'theme_light'
-            })   
+    const toggleDarkMode = () => {
+        if (props.profile.theme === 'theme_dark') {
+            props.setProfile({...props.profile, theme: 'theme_light'})   
         } else  {
-            this.props.setProfile({
-                ...this.props.profile,
-                theme: 'theme_dark'
-            })   
+            props.setProfile({...props.profile, theme: 'theme_dark'})   
         }
     }
 
-    changeTextSize = (size) => {
-        this.props.setProfile({
-            ...this.props.profile,
-            textSize: size
-        })
+    const changeTextSize = (size) => {
+        props.setProfile({...props.profile, textSize: size});
     }
 
-    changeThemeColor = (color) => {
-        this.props.setProfile({
-            ...this.props.profile,
-            themeColor: color
-        })
+    const changeThemeColor = (color) => {
+        props.setProfile({...props.profile, themeColor: color});
     }
 
-    login = (type) => {
-        this.props.history.push('/login?type=' + type);
+    const login = (type) => {
+        props.history.push('/login?type=' + type);
     }
 
-    toggleSettings = () => {
-        this.setState({
-            showSettings: !this.state.showSettings
-        })
+    const toggleSettings = () => {
+        setData({...data, showSettings: !data.showSettings});
     }
 
-    render() {
-        return (
-            <div className="nav">
-                <Desktop {...this.props} logout={this.props.logout} login={this.login} toggleSettings={this.toggleSettings} transparent={this.state.transparentNavBar} />
-                <Mobile {...this.props} logout={this.props.logout} login={this.login} toggleSettings={this.toggleSettings} transparent={this.state.transparentNavBar} />
+    return (
+        <div className="nav">
+            <Desktop {...props} logout={() => props.logout()} login={login} toggleSettings={() => toggleSettings()} transparent={data.transparentNavBar} />
+            <Mobile {...props} logout={() => props.logout()} login={login} toggleSettings={() => toggleSettings()} transparent={data.transparentNavBar} />
 
-                <OakDialog visible={this.state.showSettings} toggleVisibility={this.toggleSettings}>
-                    <div className="dialog-body">
-                        <div className="settings">
-                            <div>Dark mode</div>
-                            <div>
-                                <Switch
-                                checked={this.props.profile.theme === 'theme_dark'}
-                                onChange={this.toggleDarkMode}
-                                inputProps={{ 'aria-label': 'primary checkbox' }}/>
-                            </div>
-                            
-                            <div>Text Size</div>
-                            <div>
-                                <div className={"text-size size-1 space-right-1 " + (this.props.profile.textSize === 'textsize_tiny' ? 'active' : '')} onClick={() => this.changeTextSize('textsize_tiny')}>Az</div>
-                                <div className={"text-size size-2 space-right-1 " + (this.props.profile.textSize === 'textsize_small' ? 'active' : '')} onClick={() => this.changeTextSize('textsize_small')}>Az</div>
-                                <div className={"text-size size-3 space-right-1 " + (this.props.profile.textSize === 'textsize_medium' ? 'active' : '')} onClick={() => this.changeTextSize('textsize_medium')}>Az</div>
-                                <div className={"text-size size-4 " + (this.props.profile.textSize === 'textsize_large' ? 'active' : '')} onClick={() => this.changeTextSize('textsize_large')}>Az</div>
-                            </div>
+            <OakDialog visible={data.showSettings} toggleVisibility={() => toggleSettings()}>
+                <div className="dialog-body">
+                    <div className="settings">
+                        <div>Dark mode</div>
+                        <div>
+                            <Switch
+                            checked={props.profile.theme === 'theme_dark'}
+                            onChange={() => toggleDarkMode()}
+                            inputProps={{ 'aria-label': 'primary checkbox' }}/>
+                        </div>
+                        
+                        <div>Text Size</div>
+                        <div>
+                            <div className={"text-size size-1 space-right-1 " + (props.profile.textSize === 'textsize_tiny' ? 'active' : '')} onClick={() => changeTextSize('textsize_tiny')}>Az</div>
+                            <div className={"text-size size-2 space-right-1 " + (props.profile.textSize === 'textsize_small' ? 'active' : '')} onClick={() => changeTextSize('textsize_small')}>Az</div>
+                            <div className={"text-size size-3 space-right-1 " + (props.profile.textSize === 'textsize_medium' ? 'active' : '')} onClick={() => changeTextSize('textsize_medium')}>Az</div>
+                            <div className={"text-size size-4 " + (props.profile.textSize === 'textsize_large' ? 'active' : '')} onClick={() => changeTextSize('textsize_large')}>Az</div>
+                        </div>
 
-                            <div className="typography-5">Color Scheme</div>
-                            <div>
-                                <div className="theme-color color-1" onClick={() => this.changeThemeColor('themecolor_1')}><i className="material-icons">{this.props.profile.themeColor === 'themecolor_1' && 'check'}</i></div>
-                                <div className="theme-color color-2" onClick={() => this.changeThemeColor('themecolor_2')}><i className="material-icons">{this.props.profile.themeColor === 'themecolor_2' && 'check'}</i></div>
-                                <div className="theme-color color-3" onClick={() => this.changeThemeColor('themecolor_3')}><i className="material-icons">{this.props.profile.themeColor === 'themecolor_3' && 'check'}</i></div>
-                                <div className="theme-color color-4" onClick={() => this.changeThemeColor('themecolor_4')}><i className="material-icons">{this.props.profile.themeColor === 'themecolor_4' && 'check'}</i></div>
-                            </div>
+                        <div className="typography-5">Color Scheme</div>
+                        <div>
+                            <div className="theme-color color-1" onClick={() => changeThemeColor('themecolor_1')}><i className="material-icons">{props.profile.themeColor === 'themecolor_1' && 'check'}</i></div>
+                            <div className="theme-color color-2" onClick={() => changeThemeColor('themecolor_2')}><i className="material-icons">{props.profile.themeColor === 'themecolor_2' && 'check'}</i></div>
+                            <div className="theme-color color-3" onClick={() => changeThemeColor('themecolor_3')}><i className="material-icons">{props.profile.themeColor === 'themecolor_3' && 'check'}</i></div>
+                            <div className="theme-color color-4" onClick={() => changeThemeColor('themecolor_4')}><i className="material-icons">{props.profile.themeColor === 'themecolor_4' && 'check'}</i></div>
                         </div>
                     </div>
-                    <div className="dialog-footer">
-                        <OakButton theme="primary" variant="animate none" action={this.toggleSettings}>Close</OakButton>
-                    </div>
-                </OakDialog>
-            </div>
-        );
-    }
+                </div>
+                <div className="dialog-footer">
+                    <OakButton theme="primary" variant="animate none" action={() => toggleSettings()}>Close</OakButton>
+                </div>
+            </OakDialog>
+        </div>
+    );
 }
 
 const mapStateToProps = state => ({

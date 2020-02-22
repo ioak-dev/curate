@@ -48,7 +48,7 @@ const NoteItem = (props: Props) => {
     const [newNotebook, setNewNotebook] = useState("");
 
     const deleteNote = () => {
-        props.deleteNote(props.note._id);
+        props.deleteNote(props.note._id || props.note.id);
     }
 
     const saveNote = () => {
@@ -71,7 +71,7 @@ const NoteItem = (props: Props) => {
         <>
         <OakPrompt visible={showDeletePrompt} toggleVisibility={() => setShowDeletePrompt(!showDeletePrompt)} action={deleteNote} text="Are you sure, you want to delete the bookmark?" />
         {!props.editNote && 
-        <>
+        <div className="noteitem">
             <div className="notebook"><i className="material-icons">insert_drive_file</i>{props.note.notebook}</div>
             {/* <div className="space-bottom-2" /> */}
             <div className="typography-3 space-bottom-1">
@@ -85,10 +85,10 @@ const NoteItem = (props: Props) => {
             
             <Showdown source={props.note.content} />
 
-        </>}
+        </div>}
         
         {props.editNote && 
-            <div>
+            <div className="noteitem">
                 <div className="typography-3 space-bottom-1">{props.note.title}</div>
                 
                 <OakButton action={saveNote} theme="primary" variant="animate in" align="left"><i className="material-icons">double_arrow</i>Save</OakButton>

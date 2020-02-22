@@ -218,17 +218,6 @@ const NoteController = (props: Props) => {
         setFilterPref({...filterPref, [event.currentTarget.name]: event.currentTarget.value, filterActivator: !filterPref.filterActivator});
     }
 
-    // const noteview = 
-    //     <>
-    //         {note.type !== 'Artboard' && <Link key={note.id} note={note} saveNote={saveNote} deleteNote={deleteNote} notebooks={existingNotebookList}/>}
-    //         {note.type === 'Artboard' && <Artboard key={note.id} note={note} saveNote={saveNote} deleteNote={deleteNote} notebooks={existingNotebookList}/>}
-    //     </>;
-    // const listNoteRef = view?.map((item: any) => (
-    //     <div key={item._id}>
-    //         {/* <NoteRef selected={selectedNote?.id === item._id ? true : false} id={item._id} note={item} selectNote={() => selectNote(item)} showTag={notebookFilter === 'all notebooks'}/> */}
-    //     </div>
-    // ))
-
     return (
         <NoteView view={view} notebooks={existingNotebookList} searchResults={searchResults}
             note={note} handleNoteDataChange={handleNoteDataChange} selectNote={selectNote} deleteNote={deleteNote} saveNote={saveNote}

@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { getAuth, addAuth, removeAuth } from '../../actions/AuthActions';
 import { withCookies } from 'react-cookie';
@@ -20,14 +20,6 @@ interface Props {
     history: any,
     location: any,
     authorization: Authorization
-}
-
-interface State {
-    newuser: boolean,
-    name: string,
-    email: string,
-    password: string,
-    resetCode: string
 }
 
 const Login = (props: Props) => {

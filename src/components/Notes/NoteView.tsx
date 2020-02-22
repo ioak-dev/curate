@@ -10,7 +10,7 @@ import OakText from '../../oakui/OakText';
 import OakButton from '../../oakui/OakButton';
 import { receiveMessage, sendMessage } from '../../events/MessageService';
 import OakSelect from '../../oakui/OakSelect';
-import NoteRef from './NoteRef';
+import NoteLink from './NoteLink';
 
 
 const sortTypes = 
@@ -188,8 +188,8 @@ const NoteView = (props: Props) => {
                                 {
                                     props.view?.map((item: any) => (
                                         <div key={item._id ? item._id : item.id}>
-                                            {/* <NoteRef selected={props.note?.id === item._id ? true : false} id={item._id} note={item} selectNote={() => selectNote(item)} showTag={notebookFilter === 'all notebooks'}/> */}
-                                            <NoteRef selected={props.note?._id === item._id || props.note?.id === item._id ? true : false} id={item._id} note={item} selectNote={() => selectNote(item)} showTag={true} />
+                                            {/* <NoteLink selected={props.note?.id === item._id ? true : false} id={item._id} note={item} selectNote={() => selectNote(item)} showTag={notebookFilter === 'all notebooks'}/> */}
+                                            <NoteLink selected={props.note?._id === item._id || props.note?.id === item._id ? true : false} id={item._id} note={item} selectNote={() => selectNote(item)} showTag={true} />
                                         </div>
                                     ))
                                 }

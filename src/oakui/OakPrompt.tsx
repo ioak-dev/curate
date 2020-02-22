@@ -11,9 +11,6 @@ interface Props {
     children?: any
 }
 
-interface State {
-}
-
 const OakPrompt = (props: Props) => { 
     // useEffect(() => {
     //     document.addEventListener("keydown", escFunction, false);

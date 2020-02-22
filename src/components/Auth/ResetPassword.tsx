@@ -15,12 +15,6 @@ interface Props {
     location: any
 }
 
-interface State {
-    password: string;
-    repeatPassword: string;
-    resetCode: string;
-}
-
 const ResetPassword = (props: Props) => {
 
     const [data, setData] = useState({

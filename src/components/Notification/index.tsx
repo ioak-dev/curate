@@ -5,17 +5,12 @@ import { receiveMessage, sendMessage } from '../../events/MessageService';
 interface Props {
 }
 
-interface State {
-    notification: any,
-    spinner: boolean
-}
-
 const Notification= (props: Props) => {
     const [spinner, setSpinner] = useState(false);
     const [notification, setNotification] = useState({type: undefined, message: undefined});
 
     useEffect(() => {
-        receiveMessage().subscribe(message => {
+        const eventBus = receiveMessage().subscribe(message => {
             if (message.name === 'notification') {
                 if (!message.signal) {
                     setNotification({type: undefined, message: undefined});
@@ -35,6 +30,7 @@ const Notification= (props: Props) => {
                 setSpinner(message.signal)
             }
         });
+        return () => eventBus.unsubscribe();
     }, []);
 
     return (
