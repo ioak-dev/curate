@@ -1,5 +1,5 @@
 import { httpGet, httpPut } from '../components/Lib/RestTemplate';
-import { constants } from '../components/Constants';
+import constants from '../components/Constants';
 import { GET_PROFILE, SET_PROFILE } from './types';
 
 export const getProfile = () => dispatch => {

@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import { withCookies } from 'react-cookie';
 import {
   getProfile,
   setProfile,
@@ -7,8 +9,6 @@ import {
 import './style.scss';
 import View from '../../oakui/View';
 import ViewResolver from '../../oakui/ViewResolver';
-import { connect } from 'react-redux';
-import { withCookies } from 'react-cookie';
 import { updateUserDetails } from '../Auth/AuthService';
 import { Authorization, Profile } from '../Types/GeneralTypes';
 import { sendMessage } from '../../events/MessageService';

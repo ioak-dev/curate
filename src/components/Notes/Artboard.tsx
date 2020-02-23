@@ -72,7 +72,7 @@ class Artboard extends Component<Props, State> {
     };
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     receiveMessage().subscribe(message => {
       if (message.name === 'closeNoteEditView' && message.signal) {
         this.hideEdit();
@@ -98,10 +98,10 @@ class Artboard extends Component<Props, State> {
   };
 
   save = () => {
-    let { notebook } = this.state;
+    let notebookName = this.state.notebook;
 
-    if (notebook === '<create new>') {
-      notebook = this.state.newNotebook;
+    if (notebookName === '<create new>') {
+      notebookName = this.state.newNotebook;
     }
 
     this.props.saveNote(
@@ -112,7 +112,7 @@ class Artboard extends Component<Props, State> {
         content: this.state.content,
         tags: this.state.tags,
         flag: this.state.flag,
-        notebook,
+        notebook: notebookName,
       },
       true
     );

@@ -42,7 +42,17 @@
     "@typescript-eslint/no-use-before-define": "off",
     "jsx-a11y/no-static-element-interactions": "off",
     "jsx-a11y/click-events-have-key-events": "off",
-    "react/jsx-props-no-spreading": "off"
+    "react/jsx-props-no-spreading": "off",
+    "no-param-reassign": "off",
+    "array-callback-return": "off",
+    "no-underscore-dangle": "off",
+    "no-useless-concat": "off",
+    "react/no-access-state-in-setstate": "off",
+    "no-useless-escape": "off",
+    "@typescript-eslint/no-var-requires": "off",
+    "no-shadow": "off",
+    "consistent-return": "off",
+    "no-unused-expressions": "off"
     // "import/extensions": [
     //   "error",
     //   "ignorePackages",

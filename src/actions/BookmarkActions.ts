@@ -1,7 +1,7 @@
 import { httpGet, httpPut, httpDelete } from '../components/Lib/RestTemplate';
-import { constants } from '../components/Constants';
+import constants from '../components/Constants';
 import { FETCH_BOOKMARK } from './types';
-import { sendMessage, receiveMessage } from '../events/MessageService';
+import { sendMessage } from '../events/MessageService';
 
 const domain = 'bookmark';
 

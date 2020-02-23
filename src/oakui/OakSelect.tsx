@@ -61,8 +61,12 @@ const OakSelect = (props: Props) => {
   return (
     <>
       <div className={`oak-select ${getStyle()}`}>
-        {props.label && <label>{props.label}</label>}
-        <div className="select-button" onClick={() => setShow(!show)}>
+        {props.label && <label htmlFor={props.id}>{props.label}</label>}
+        <div
+          className="select-button"
+          id={props.id}
+          onClick={() => setShow(!show)}
+        >
           {props.elements && <div>{props.data[props.id]}</div>}
           {props.objects && (
             <div>

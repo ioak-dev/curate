@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { withCookies } from 'react-cookie';
+import { Switch } from '@material-ui/core';
 import {
   getProfile,
   setProfile,
@@ -11,7 +12,6 @@ import {
 import './style.scss';
 import Desktop from './Desktop';
 import Mobile from './Mobile';
-import { Switch } from '@material-ui/core';
 import OakDialog from '../../oakui/OakDialog';
 import { Authorization, Profile } from '../Types/GeneralTypes';
 import { receiveMessage } from '../../events/MessageService';

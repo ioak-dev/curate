@@ -38,11 +38,8 @@ const OakButton = (props: Props) => {
   };
 
   return (
-    <button
-      type={props.type ? props.type : 'button'}
-      className={`oak-button ${getStyle()}`}
-      onClick={props.action}
-    >
+    // eslint-disable-next-line react/button-has-type
+    <button className={`oak-button ${getStyle()}`} onClick={props.action}>
       {props.icon && <i className="material-icons">{props.icon}</i>}
       {props.children && props.children}
     </button>

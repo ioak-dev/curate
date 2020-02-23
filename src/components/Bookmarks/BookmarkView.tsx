@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { Switch } from '@material-ui/core';
 import BookmarkItem from './BookmarkItem';
 import OakDialog from '../../oakui/OakDialog';
 import ViewResolver from '../../oakui/ViewResolver';
 import View from '../../oakui/View';
 import './style.scss';
-import { Switch } from '@material-ui/core';
 import Sidebar from '../../oakui/Sidebar';
 import OakText from '../../oakui/OakText';
 import OakButton from '../../oakui/OakButton';
 import { receiveMessage, sendMessage } from '../../events/MessageService';
 import OakPagination from '../../oakui/OakPagination';
-import OakTable from '../../oakui/OakTable';
 
 interface Props {
   selectBookmark: Function;

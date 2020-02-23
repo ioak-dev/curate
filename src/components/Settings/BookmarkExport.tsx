@@ -3,8 +3,8 @@ import './style.scss';
 import { Authorization } from '../Types/GeneralTypes';
 import { sendMessage } from '../../events/MessageService';
 import { httpGet } from '../Lib/RestTemplate';
-import { constants } from '../Constants';
-import { sendBookmarkExportEmail } from './SettingsService';
+import constants from '../Constants';
+import sendBookmarkExportEmail from './SettingsService';
 import OakButton from '../../oakui/OakButton';
 
 interface Props {
@@ -23,7 +23,7 @@ const BookmarkExport = (props: Props) => {
         '<META HTTP-EQUIV="Content-Type" CONTENT="text/html;' +
         ' charset=UTF-8"><TITLE>Bookmarks</TITLE><H1>Bookmarks</H1>';
 
-      response.data.map(function(bookmark, i) {
+      response.data.map(function(bookmark) {
         const htmlContent =
           `${'<DL><p>' + '<DT>' + '<A ' + 'HREF="'}${bookmark.href}">${
             bookmark.title

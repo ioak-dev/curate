@@ -1,7 +1,7 @@
 import sjcl from 'ioak-sjcl';
 import CryptoJS from 'crypto-js';
 import { httpGet, httpPost, httpPut } from '../Lib/RestTemplate';
-import { constants } from '../Constants';
+import constants from '../Constants';
 
 export function preSignup() {
   return httpGet(constants.API_URL_PRESIGNUP, null).then(function(response) {

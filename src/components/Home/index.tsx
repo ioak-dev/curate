@@ -58,7 +58,7 @@ const Home = (props: Props) => {
 
         <div className="section parallax bg4" />
         <div className="section static bg4 even">
-          <h3>Don't mix up personal and business</h3>
+          <h3>Don&apos;t mix up personal and business</h3>
           <p>
             With the help of workspaces, you can now work in isolated containers
           </p>

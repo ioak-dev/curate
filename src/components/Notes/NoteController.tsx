@@ -90,8 +90,10 @@ const NoteController = (props: Props) => {
       filterActivator: !searchPref.filterActivator,
     });
 
-    const existingNotebookList: any = [];
-    props.note?.items?.map(item => existingNotebookList.push(item.notebook));
+    const existingNotebookListTemp: any = [];
+    props.note?.items?.map(item =>
+      existingNotebookListTemp.push(item.notebook)
+    );
     setExistingNotebookList(Array.from(new Set(existingNotebookList)));
   }, [props.note]);
 
@@ -103,11 +105,11 @@ const NoteController = (props: Props) => {
     filter();
   }, [filterPref.filterActivator]);
 
-  const selectNote = note => {
-    setNote(note);
+  const selectNote = (selectedNote: any) => {
+    setNote(selectedNote);
   };
 
-  const deleteNote = bookmarkId => {
+  const deleteNote = (bookmarkId: string) => {
     props.deleteNote(props.authorization, bookmarkId);
   };
 

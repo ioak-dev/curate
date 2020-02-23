@@ -24,13 +24,6 @@ interface State {
 export default class Canvas extends Component<Props, State> {
   viewPort = window.matchMedia('(max-width: 767px)');
 
-  viewPortChange = port => {
-    this.setState({
-      width: port.matches ? window.innerWidth - 100 : window.innerWidth - 1000,
-      height: port.matches ? window.innerHeight - 100 : window.innerHeight,
-    });
-  };
-
   constructor(props) {
     super(props);
     this.state = {
@@ -45,7 +38,17 @@ export default class Canvas extends Component<Props, State> {
     this.refreshCanvas();
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidMount() {
+    const canvas = this.refreshCanvas();
+    this.mouseDown(canvas);
+    this.mouseMove(canvas);
+    this.mouseUp(canvas);
+
+    this.refreshCanvas();
+    this.viewPort.addListener(this.viewPortChange);
+  }
+
+  UNSAFE_componentWillReceiveProps(nextProps) {
     this.setState(
       {
         backgroundColor:
@@ -58,15 +61,59 @@ export default class Canvas extends Component<Props, State> {
     );
   }
 
-  componentDidMount() {
-    const canvas = this.refreshCanvas();
-    this.mouseDown(canvas);
-    this.mouseMove(canvas);
-    this.mouseUp(canvas);
+  viewPortChange = port => {
+    this.setState({
+      width: port.matches ? window.innerWidth - 100 : window.innerWidth - 1000,
+      height: port.matches ? window.innerHeight - 100 : window.innerHeight,
+    });
+  };
 
-    this.refreshCanvas();
-    this.viewPort.addListener(this.viewPortChange);
-  }
+  mouseDown = canvas => {
+    canvas.on('mouse:down', o => {
+      canvas.backgroundColor = this.state.backgroundColor;
+      isDown = true;
+      const pointer = canvas.getPointer(o.e);
+      origX = pointer.x;
+      origY = pointer.y;
+      stroke = new fabric.Line({
+        strokeWidth: 5,
+      });
+      canvas.add(stroke);
+    });
+  };
+
+  mouseMove = canvas => {
+    canvas.on('mouse:move', o => {
+      if (isDown) {
+        const pointer = canvas.getPointer(o.e);
+
+        if (origX > pointer.x) {
+          stroke.set({ left: Math.abs(pointer.x) });
+        }
+        if (origY > pointer.y) {
+          stroke.set({ top: Math.abs(pointer.y) });
+        }
+
+        stroke.set({ width: Math.abs(origX - pointer.x) });
+        stroke.set({ height: Math.abs(origY - pointer.y) });
+      }
+    });
+  };
+
+  mouseUp = canvas => {
+    canvas.on('mouse:up', o => {
+      isDown = false;
+      // sessionStorage.setItem('canvas', JSON.stringify(canvas));
+      this.props.handleChange(
+        {
+          height: this.state.height,
+          width: this.state.width,
+          backgroundColor: this.state.backgroundColor,
+        },
+        JSON.stringify(canvas)
+      );
+    });
+  };
 
   refreshCanvas() {
     // this.viewPortChange(this.viewPort);
@@ -95,55 +142,6 @@ export default class Canvas extends Component<Props, State> {
     canvas.renderAll();
 
     return canvas;
-  }
-
-  mouseDown(canvas) {
-    const that = this;
-    canvas.on('mouse:down', function(o) {
-      canvas.backgroundColor = that.state.backgroundColor;
-      isDown = true;
-      const pointer = canvas.getPointer(o.e);
-      origX = pointer.x;
-      origY = pointer.y;
-      stroke = new fabric.Line({
-        strokeWidth: 5,
-      });
-      canvas.add(stroke);
-    });
-  }
-
-  mouseMove(canvas) {
-    canvas.on('mouse:move', function(o) {
-      if (isDown) {
-        const pointer = canvas.getPointer(o.e);
-
-        if (origX > pointer.x) {
-          stroke.set({ left: Math.abs(pointer.x) });
-        }
-        if (origY > pointer.y) {
-          stroke.set({ top: Math.abs(pointer.y) });
-        }
-
-        stroke.set({ width: Math.abs(origX - pointer.x) });
-        stroke.set({ height: Math.abs(origY - pointer.y) });
-      }
-    });
-  }
-
-  mouseUp(canvas) {
-    const that = this;
-    canvas.on('mouse:up', function(o) {
-      isDown = false;
-      // sessionStorage.setItem('canvas', JSON.stringify(canvas));
-      that.props.handleChange(
-        {
-          height: that.state.height,
-          width: that.state.width,
-          backgroundColor: that.state.backgroundColor,
-        },
-        JSON.stringify(canvas)
-      );
-    });
   }
 
   // generateUUID() {

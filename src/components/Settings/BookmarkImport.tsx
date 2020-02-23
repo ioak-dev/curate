@@ -1,6 +1,6 @@
 import React from 'react';
 import './style.scss';
-import { importBookmarks } from '../Bookmarks/BookmarkService';
+import importBookmarks from '../Bookmarks/BookmarkService';
 import { Authorization } from '../Types/GeneralTypes';
 import { sendMessage } from '../../events/MessageService';
 

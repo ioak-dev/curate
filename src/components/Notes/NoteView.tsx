@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { Switch } from '@material-ui/core';
 import NoteItem from './NoteItem';
 import OakDialog from '../../oakui/OakDialog';
 import ViewResolver from '../../oakui/ViewResolver';
 import View from '../../oakui/View';
 import './style.scss';
-import { Switch } from '@material-ui/core';
 import Sidebar from '../../oakui/Sidebar';
 import OakText from '../../oakui/OakText';
 import OakButton from '../../oakui/OakButton';

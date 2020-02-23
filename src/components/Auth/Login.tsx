@@ -268,7 +268,7 @@ const Login = (props: Props) => {
             </OakButton>
             <br />
             <br />
-            Don't have an account? &nbsp;{' '}
+            Don&apos;t have an account? &nbsp;{' '}
             <OakButton theme="secondary" variant="outline" action={toggle}>
               Sign Up
             </OakButton>
