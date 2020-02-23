@@ -21,6 +21,8 @@ interface Props {
   toggleSettings: any;
 }
 
+
+
 const Desktop = (props: Props) => {
   useEffect(() => {
     props.getProfile();
