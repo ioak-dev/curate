@@ -5,27 +5,29 @@ import { getAuth } from '../../actions/AuthActions';
 import { Authorization } from '../Types/GeneralTypes';
 
 interface Props {
-  authorization: Authorization,
-  getAuth: Function,
-  path: string,
-  render: any
+  authorization: Authorization;
+  getAuth: Function;
+  path: string;
+  render: any;
 }
 
 const PrivateRoute = (props: Props) => {
-    useEffect(() => {
-      props.getAuth();
-    }, [props.authorization.isAuth]);
-    
-    return (
-      <>
-        {props.authorization.isAuth && <Route path={props.path} render={props.render} />}
-        {/* {!this.props.authorization.isAuth && <Redirect to={{pathname: "/login"}} />} */}
-      </>
-    );
-}
+  useEffect(() => {
+    props.getAuth();
+  }, [props.authorization.isAuth]);
+
+  return (
+    <>
+      {props.authorization.isAuth && (
+        <Route path={props.path} render={props.render} />
+      )}
+      {/* {!this.props.authorization.isAuth && <Redirect to={{pathname: "/login"}} />} */}
+    </>
+  );
+};
 
 const mapStateToProps = state => ({
-  authorization: state.authorization
-})
+  authorization: state.authorization,
+});
 
 export default connect(mapStateToProps, { getAuth })(PrivateRoute);
