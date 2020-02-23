@@ -37,11 +37,22 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "deploy": "npm run build&&gh-pages -d build",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx,.scss",
-    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix"
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,json,css,scss,html}": [
+      "eslint . --ext .js,.jsx,.ts,.tsx,.scss --fix",
+      "git add"
+    ]
   },
   "browserslist": {
     "production": [
@@ -70,6 +81,8 @@
     "eslint-plugin-react": "^7.14.3",
     "eslint-plugin-react-hooks": "^1.7.0",
     "gh-pages": "^2.0.1",
+    "husky": "^4.2.3",
+    "lint-staged": "^10.0.7",
     "node-sass": "^4.12.0",
     "prettier": "^1.19.1",
     "prettier-eslint": "^9.0.1",

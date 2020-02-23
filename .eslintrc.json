@@ -23,8 +23,29 @@
   },
   "rules": {
     "prettier/prettier": "error",
+    "react/destructuring-assignment": ["error", "never"],
+    "react/jsx-filename-extension": [
+      2,
+      { "extensions": [".js", ".jsx", ".ts", ".tsx"] }
+    ],
     "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+    "import/no-unresolved": "off",
     "no-console": "off",
-    "func-names": "off"
+    "func-names": "off",
+    "import/extensions": "off",
+    "no-return-assign": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "no-nested-ternary": "off",
+    "@typescript-eslint/explicit-function-return-type": "off"
+    // "import/extensions": [
+    //   "error",
+    //   "ignorePackages",
+    //   {
+    //     "js": "never",
+    //     "jsx": "never",
+    //     "ts": "never",
+    //     "tsx": "never"
+    //   }
+    // ]
   }
 }
