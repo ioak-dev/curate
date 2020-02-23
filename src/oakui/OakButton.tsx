@@ -16,6 +16,7 @@ interface Props {
   small?: boolean;
   invert?: boolean;
   children?: ReactNode;
+  type?: 'button' | 'submit';
 }
 
 const OakButton = (props: Props) => {
@@ -37,7 +38,11 @@ const OakButton = (props: Props) => {
   };
 
   return (
-    <button className={`oak-button ${getStyle()}`} onClick={props.action}>
+    <button
+      type={props.type ? props.type : 'button'}
+      className={`oak-button ${getStyle()}`}
+      onClick={props.action}
+    >
       {props.icon && <i className="material-icons">{props.icon}</i>}
       {props.children && props.children}
     </button>

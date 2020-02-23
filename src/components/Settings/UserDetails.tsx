@@ -1,23 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import {
-  getProfile,
-  setProfile,
-  persistProfile,
-} from '../../actions/ProfileActions';
 import './style.scss';
-import View from '../../oakui/View';
-import ViewResolver from '../../oakui/ViewResolver';
-import { connect } from 'react-redux';
 import { withCookies } from 'react-cookie';
 import { isEmptyOrSpaces } from '../Utils';
-import { signin, updateUserDetails, preSignin } from '../Auth/AuthService';
-import { Authorization, Profile } from '../Types/GeneralTypes';
+import { Authorization } from '../Types/GeneralTypes';
 import { sendMessage } from '../../events/MessageService';
 import OakText from '../../oakui/OakText';
 import OakButton from '../../oakui/OakButton';
-import BookmarkImport from './BookmarkImport';
-import BookmarkExport from './BookmarkExport';
-import Appearance from './Appearance';
 
 interface Props {
   updateUserDetailsImpl: Function;

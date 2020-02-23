@@ -15,7 +15,7 @@ interface Props {
 const OakText = (props: Props) => {
   return (
     <div className="oak-text-field">
-      <label>{props.label}</label>
+      <label htmlFor={props.id}>{props.label}</label>
       {!props.multiline && (
         <input
           disabled={props.disabled}
@@ -26,6 +26,7 @@ const OakText = (props: Props) => {
           }
           type={props.type ? props.type : 'text'}
           name={props.id}
+          id={props.id}
           value={props.data[props.id]}
           onChange={props.handleChange}
         />
@@ -38,6 +39,7 @@ const OakText = (props: Props) => {
             (props.errorFields && props.errorFields[props.id] ? 'error' : '') +
             (props.disabled ? ' disabled' : '')
           }
+          id={props.id}
           name={props.id}
           value={props.data[props.id]}
           onChange={props.handleChange}

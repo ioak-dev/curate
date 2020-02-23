@@ -91,34 +91,34 @@ const Appearance = (props: Props) => {
         <div>
           <div
             className="theme-color color-1"
-            onClick={() => changeThemeColor('themecolor_1')}
+            onClick={() => changeThemeColor('themecolor1')}
           >
             <i className="material-icons">
-              {props.profile.themeColor === 'themecolor_1' && 'check'}
+              {props.profile.themeColor === 'themecolor1' && 'check'}
             </i>
           </div>
           <div
             className="theme-color color-2"
-            onClick={() => changeThemeColor('themecolor_2')}
+            onClick={() => changeThemeColor('themecolor2')}
           >
             <i className="material-icons">
-              {props.profile.themeColor === 'themecolor_2' && 'check'}
+              {props.profile.themeColor === 'themecolor2' && 'check'}
             </i>
           </div>
           <div
             className="theme-color color-3"
-            onClick={() => changeThemeColor('themecolor_3')}
+            onClick={() => changeThemeColor('themecolor3')}
           >
             <i className="material-icons">
-              {props.profile.themeColor === 'themecolor_3' && 'check'}
+              {props.profile.themeColor === 'themecolor3' && 'check'}
             </i>
           </div>
           <div
             className="theme-color color-4"
-            onClick={() => changeThemeColor('themecolor_4')}
+            onClick={() => changeThemeColor('themecolor4')}
           >
             <i className="material-icons">
-              {props.profile.themeColor === 'themecolor_4' && 'check'}
+              {props.profile.themeColor === 'themecolor4' && 'check'}
             </i>
           </div>
         </div>

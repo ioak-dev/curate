@@ -14,19 +14,31 @@ const ActionButton = (props: Props) => {
   return (
     <div className="action-button">
       {props.leftLabel && props.rightLabel && (
-        <button className={`left ${props.type}`} onClick={props.leftAction}>
+        <button
+          type="button"
+          className={`left ${props.type}`}
+          onClick={props.leftAction}
+        >
           {props.icon && icon}
           {props.leftLabel}
         </button>
       )}
       {props.leftLabel && props.rightLabel && (
-        <button className={`right ${props.type}`} onClick={props.rightAction}>
+        <button
+          type="button"
+          className={`right ${props.type}`}
+          onClick={props.rightAction}
+        >
           {props.icon && icon}
           {props.rightLabel}
         </button>
       )}
       {props.leftLabel && !props.rightLabel && (
-        <button className={`center ${props.type}`} onClick={props.leftAction}>
+        <button
+          type="button"
+          className={`center ${props.type}`}
+          onClick={props.leftAction}
+        >
           {props.icon && icon}
           {props.leftLabel}
         </button>

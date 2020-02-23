@@ -23,10 +23,10 @@ import { sendMessage, receiveMessage } from '../../events/MessageService';
 import ResetPassword from '../Auth/ResetPassword';
 
 const themes = {
-  themecolor_1: getTheme('#69A7BF'),
-  themecolor_2: getTheme('#99587B'),
-  themecolor_3: getTheme('#A66C26'),
-  themecolor_4: getTheme('#37AE82'),
+  themecolor1: getTheme('#69A7BF'),
+  themecolor2: getTheme('#99587B'),
+  themecolor3: getTheme('#A66C26'),
+  themecolor4: getTheme('#37AE82'),
 };
 
 function getTheme(color) {

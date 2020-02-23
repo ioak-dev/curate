@@ -53,7 +53,7 @@
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,css,scss,html}": [
       "npm run pretty:quick",
-      "npm run lint",
+      "npm run lint:fix",
       "git add"
     ]
   },

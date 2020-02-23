@@ -1,24 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import {
-  getProfile,
-  setProfile,
-  persistProfile,
-} from '../../actions/ProfileActions';
+import React, { useState } from 'react';
 import './style.scss';
-import View from '../../oakui/View';
-import ViewResolver from '../../oakui/ViewResolver';
-import { connect } from 'react-redux';
-import { withCookies } from 'react-cookie';
 import { isEmptyOrSpaces } from '../Utils';
-import { signin, updateUserDetails, preSignin } from '../Auth/AuthService';
-import { Authorization, Profile } from '../Types/GeneralTypes';
+import { signin, preSignin } from '../Auth/AuthService';
+import { Authorization } from '../Types/GeneralTypes';
 import { sendMessage } from '../../events/MessageService';
 import OakText from '../../oakui/OakText';
 import OakButton from '../../oakui/OakButton';
-import BookmarkImport from './BookmarkImport';
-import BookmarkExport from './BookmarkExport';
-import Appearance from './Appearance';
-import UserDetails from './UserDetails';
 
 interface Props {
   authorization: Authorization;
@@ -81,8 +68,8 @@ const ChangePassword = (props: Props) => {
           },
           response.data
         )
-          .then(response => {
-            if (response.status === 200) {
+          .then(innerResponse => {
+            if (innerResponse.status === 200) {
               props.updateUserDetailsImpl(
                 {
                   password: data.newPassword,
@@ -90,7 +77,7 @@ const ChangePassword = (props: Props) => {
                 'password'
               );
               // sendMessage('notification', true, {message: 'Passphrase updated successfully', type: 'success', duration: 3000});
-            } else if (response.status === 401) {
+            } else if (innerResponse.status === 401) {
               sendMessage('notification', true, {
                 message: 'Incorrect passphrase',
                 type: 'failure',

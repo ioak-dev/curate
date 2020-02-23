@@ -9,14 +9,14 @@ interface Props {
 }
 
 const BookmarkImport = (props: Props) => {
-  const fileChoosen = event => {
+  const fileChoosen = (event: any) => {
     event.preventDefault();
     const reader = new FileReader();
     sendMessage('spinner');
-    reader.onload = function(event: any) {
+    reader.onload = function(eventInner: any) {
       importBookmarks(
         {
-          content: event.target.result,
+          content: eventInner.target.result,
         },
         props.authorization.token
       ).then(response => {
@@ -35,8 +35,13 @@ const BookmarkImport = (props: Props) => {
     <>
       <div className="typography-3">Import Bookmarks</div>
       <div className="space-top-2">
-        <label className="file-upload">
-          <input type="file" name="file" onChange={fileChoosen} />
+        <label htmlFor="import_bookmark" className="file-upload">
+          <input
+            id="import_bookmark"
+            type="file"
+            name="file"
+            onChange={fileChoosen}
+          />
           Import
         </label>
       </div>

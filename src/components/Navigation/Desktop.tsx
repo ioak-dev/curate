@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 
 import './style.scss';
-import curate_white from '../../images/curate_white.svg';
-import curate_black from '../../images/curate_black.svg';
+import curateWhite from '../../images/curate_white.svg';
+import curateBlack from '../../images/curate_black.svg';
 import Links from './Links';
 import { Authorization, Profile } from '../Types/GeneralTypes';
 import OakButton from '../../oakui/OakButton';
@@ -34,10 +34,10 @@ const Desktop = (props: Props) => {
     >
       <div className="left">
         {!props.transparent && props.profile.theme === 'theme_light' && (
-          <img className="logo" src={curate_black} alt="Curate logo" />
+          <img className="logo" src={curateBlack} alt="Curate logo" />
         )}
         {(props.transparent || props.profile.theme === 'theme_dark') && (
-          <img className="logo" src={curate_white} alt="Curate logo" />
+          <img className="logo" src={curateWhite} alt="Curate logo" />
         )}
         <Links authorization={props.authorization} profile={props.profile} />
       </div>
