@@ -94,7 +94,7 @@ const NoteController = (props: Props) => {
     props.note?.items?.map(item =>
       existingNotebookListTemp.push(item.notebook)
     );
-    setExistingNotebookList(Array.from(new Set(existingNotebookList)));
+    setExistingNotebookList(Array.from(new Set(existingNotebookListTemp)));
   }, [props.note]);
 
   useEffect(() => {
