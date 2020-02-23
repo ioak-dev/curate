@@ -6,12 +6,12 @@ import './button-oval.scss';
 import './metric.scss';
 import Content from './Content';
 
-const App = (props) => {
+const App = props => {
   return (
     <Provider store={store}>
       <Content {...props} />
     </Provider>
   );
-}
+};
 
 export default App;

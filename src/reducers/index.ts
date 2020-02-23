@@ -5,8 +5,8 @@ import BookmarkReducer from './BookmarkReducer';
 import NoteReducer from './NoteReducer';
 
 export default combineReducers({
-    authorization: AuthReducer,
-    profile: ProfileReducer,
-    bookmark: BookmarkReducer,
-    note: NoteReducer
-})
+  authorization: AuthReducer,
+  profile: ProfileReducer,
+  bookmark: BookmarkReducer,
+  note: NoteReducer,
+});
