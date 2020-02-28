@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import './oak-button-oval.scss';
+import './styles/oak-button-oval.scss';
 
 interface Props {
   icon?: string;
