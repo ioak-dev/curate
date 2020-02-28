@@ -55,6 +55,9 @@
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,css,scss,html}": [
       "npm run pretty:quick",
+      "git add"
+    ],
+    "*.{js,jsx,ts,tsx}": [
       "npm run lint:fix",
       "git add"
     ]

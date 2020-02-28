@@ -1,5 +1,5 @@
 import React from 'react';
-import './OakText.scss';
+import './styles/oak-text-oval.scss';
 
 interface Props {
   label: string;

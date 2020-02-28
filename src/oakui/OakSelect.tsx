@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './OakSelect.scss';
+import './styles/oak-select-oval.scss';
 
 interface Props {
   id: string;
