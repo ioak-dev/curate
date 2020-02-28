@@ -38,7 +38,7 @@ const OakSidebar = (props: Props) => {
 
   let key = 0;
   const elements = elementList.map((item: any) => (
-    <div key={key = key + 1} className="element" onClick={item.action}>
+    <div key={(key += 1)} className="element" onClick={item.action}>
       <i className="material-icons">{item.icon}</i>
       {item.label}
     </div>
