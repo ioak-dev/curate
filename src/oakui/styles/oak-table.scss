@@ -33,7 +33,7 @@
         th, td {
             padding: 0px 15px 0px 15px;
             text-align: left;
-            border-bottom: 1px solid var(--color-body-dim);
+            border-bottom: 1px solid var(--color-background-2);
             // width: auto;
         }
 
@@ -46,7 +46,7 @@
             }
             .material-icons {
                 vertical-align: middle;
-                color: var(--color-body-invert-dim);
+                color: var(--color-foreground-2);
             }
         }
 
@@ -95,7 +95,7 @@
 
           &.disabled {
               cursor: auto;
-              color: var(--color-body-dim);
+              color: var(--color-background-2);
           }
         }
     }

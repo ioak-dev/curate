@@ -9,7 +9,6 @@ import Home from '../Home';
 import BookmarkController from '../Bookmarks/BookmarkController';
 import NoteController from '../Notes/NoteController';
 import Login from '../Auth/Login';
-import PrivateRoute from '../Auth/PrivateRoute';
 import AuthInit from '../Auth/AuthInit';
 import { getAuth, addAuth, removeAuth } from '../../actions/AuthActions';
 import { getProfile } from '../../actions/ProfileActions';
@@ -21,6 +20,7 @@ import Settings from '../Settings';
 import { Authorization } from '../Types/GeneralTypes';
 import { sendMessage, receiveMessage } from '../../events/MessageService';
 import ResetPassword from '../Auth/ResetPassword';
+import OakRoute from '../Auth/OakRoute';
 
 const themes = {
   themecolor1: getTheme('#69A7BF'),
@@ -105,55 +105,82 @@ const Content = (props: Props) => {
                 exact
                 path="/"
                 render={propsLocal => (
-                  <Home {...props} {...propsLocal} logout={() => logout} />
+                  <OakRoute
+                    {...propsLocal}
+                    {...props}
+                    logout={() => logout}
+                    component={Home}
+                  />
                 )}
               />
               <Route
                 path="/home"
+                exact
                 render={propsLocal => (
-                  <Home {...props} {...propsLocal} logout={() => logout} />
+                  <OakRoute
+                    {...propsLocal}
+                    {...props}
+                    logout={() => logout}
+                    component={Home}
+                  />
                 )}
               />
               <Route
                 path="/login"
                 render={propsLocal => (
-                  <Login {...props} {...propsLocal} logout={() => logout} />
+                  <OakRoute
+                    {...propsLocal}
+                    {...props}
+                    logout={() => logout}
+                    component={Login}
+                  />
                 )}
               />
               <Route
                 path="/reset"
                 render={propsLocal => (
-                  <ResetPassword
-                    {...props}
+                  <OakRoute
                     {...propsLocal}
+                    {...props}
                     logout={() => logout}
+                    component={ResetPassword}
                   />
                 )}
               />
-              <PrivateRoute
+              <Route
                 path="/bookmarks"
                 render={propsLocal => (
-                  <BookmarkController
-                    {...props}
+                  <OakRoute
                     {...propsLocal}
-                    logout={logout}
+                    {...props}
+                    logout={() => logout}
+                    component={BookmarkController}
+                    middleware={['isAuthenticated']}
                   />
                 )}
               />
-              <PrivateRoute
+              <Route
                 path="/notes"
                 render={propsLocal => (
-                  <NoteController
-                    {...props}
+                  <OakRoute
                     {...propsLocal}
+                    {...props}
                     logout={() => logout}
+                    component={NoteController}
+                    middleware={['isAuthenticated']}
                   />
                 )}
               />
               <Route
                 path="/settings"
                 render={propsLocal => (
-                  <Settings {...props} {...propsLocal} logout={() => logout} />
+                  <OakRoute
+                    {...propsLocal}
+                    {...props}
+                    logout={() => logout}
+                    component={Settings}
+                    middleware={['isAuthenticated']}
+                  />
                 )}
               />
             </MuiThemeProvider>
